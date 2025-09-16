@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+  <model name="my_floorplan">
+    <static>true</static>
+    <link name="floor">
+      <pose>30 -2 0 0 0 1.5708</pose>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://floor_plan/meshes/EVfloor9_L.dae</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0.6 0.6 0.6 1</ambient>
+          <diffuse>0.8 0.8 0.8 1</diffuse>
+        </material>
+      </visual>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://floor_plan/meshes/EVfloor9_L.dae</uri>
+          </mesh>
+        </geometry>
+      </collision>
+    </link>
+  </model>
+</sdf>

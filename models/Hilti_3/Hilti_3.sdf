@@ -1,0 +1,488 @@
+<?xml version="1.0"?>
+<sdf version='1.7'>
+  <model name='Hilti_3'>
+
+    <link name="base_footprint"/>
+      <pose>0 0 0.1 0 0 0</pose>
+
+    <joint name="base_joint" type="fixed">
+      <parent>base_footprint</parent>
+      <child>base_link</child>
+      <pose>0.0 0.0 0.3 0 0 0</pose>
+    </joint>
+    
+    <link name='base_link'>
+      <pose>0 0 0.1 -1.5708 0 1.5708</pose>
+      <inertial>
+        <mass>4.4707</mass>
+        <inertia>
+          <ixx>2.04523</ixx>
+          <ixy>1.9018e-06</ixy>
+          <ixz>6.95551e-06</ixz>
+          <iyy>2.56757</iyy>
+          <iyz>-0.00604303</iyz>
+          <izz>1.86063</izz>
+        </inertia>
+      </inertial>
+      <collision name='base_link_collision'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Hilti_3/meshes/base_link.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='base_link_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Hilti_3/meshes/base_link.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>1.0 0.0 0.0 1</ambient>   <!-- red in ambient light -->
+          <diffuse>1.0 0.0 0.0 1</diffuse>   <!-- red in direct light -->
+          <specular>0.5 0.5 0.5 1</specular> <!-- slight shine -->
+          <emissive>0.0 0.0 0.0 1</emissive> <!-- no glow -->
+        </material>
+      </visual>
+    </link>
+
+<link name="imu_link">
+      <sensor name="tb3_imu" type="imu">
+        <always_on>true</always_on>
+        <update_rate>100</update_rate>
+        <imu>
+          <angular_velocity>
+            <x>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>2e-4</stddev>
+              </noise>
+            </x>
+            <y>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>2e-4</stddev>
+              </noise>
+            </y>
+            <z>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>2e-4</stddev>
+              </noise>
+            </z>
+          </angular_velocity>
+          <linear_acceleration>
+            <x>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>1.7e-2</stddev>
+              </noise>
+            </x>
+            <y>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>1.7e-2</stddev>
+              </noise>
+            </y>
+            <z>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>1.7e-2</stddev>
+              </noise>
+            </z>
+          </linear_acceleration>
+        </imu>
+        <plugin name="turtlebot3_imu" filename="libgazebo_ros_imu_sensor.so">
+          <ros>
+            <remapping>~/out:=imu</remapping>
+          </ros>
+        </plugin>
+      </sensor>
+    </link>
+
+    <joint name="imu_joint" type="fixed">
+      <parent>base_link</parent>
+      <child>imu_link</child>
+      <pose relative_to='base_link'>-0.032 0 0.068 0 0 0</pose>
+      <axis>
+        <xyz>0 0 1</xyz>
+      </axis>
+    </joint>
+
+    <joint name='Front_sensor_joint' type='fixed'>
+      <pose relative_to='base_link'>-0.37655 -0.15906 -0.17868 1.5708 -0 -3.14159</pose>
+      <parent>base_link</parent>
+      <child>Front_sensor_link</child>
+    </joint>
+
+    <link name='Front_sensor_link'>
+      <pose relative_to='Front_sensor_joint'>0 0 0 0 0 0</pose>
+      <!-- <inertial>
+        <pose>-0.01 0.01 0.01 0 -0 0</pose>
+        <mass>0.008</mass>
+        <inertia>
+          <ixx>5.3333e-07</ixx>
+          <ixy>-4.9553e-23</ixy>
+          <ixz>1.3878e-23</ixz>
+          <iyy>5.3333e-07</iyy>
+          <iyz>-7.2933e-23</iyz>
+          <izz>5.3333e-07</izz>
+        </inertia>
+      </inertial>
+      <collision name='Front_sensor_link_collision'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Hilti_3/meshes/Front_sensor_link.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='Front_sensor_link_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Hilti_3/meshes/Front_sensor_link.STL</uri>
+          </mesh>
+        </geometry>
+      </visual> -->
+      <sensor name="front_laser" type="ray">
+        <always_on>true</always_on>
+        <visualize>false</visualize>
+        <!-- <pose relative_to='front_sensor_Link'>-0.032 0 0.171 0 0 0 </pose> -->
+        <pose relative_to='Front_sensor_link'>0 0 0 0 0 0</pose>
+        <update_rate>100</update_rate>
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>360</samples>
+              <resolution>1.000000</resolution>
+              <!-- <min_angle>0</min_angle>
+              <max_angle>3.1415926</max_angle> -->
+              <min_angle>-2.09439</min_angle>
+              <max_angle>-1.04719</max_angle>
+            </horizontal>
+          </scan>
+          <range>
+            <min>0.120000</min>
+            <max>3.3</max>
+            <resolution>0.015000</resolution>
+          </range>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.01</stddev>
+          </noise>
+        </ray>
+        <plugin name="front_laserscan" filename="libgazebo_ros_ray_sensor.so">
+          <ros>
+            <remapping>~/out:=scan</remapping>
+            <visualize>false</visualize>
+          </ros>
+          <output_type>sensor_msgs/LaserScan</output_type>
+          <frame_name>Front_sensor_link</frame_name>
+        </plugin>
+      </sensor>
+    </link>
+
+    <joint name='left_wheel_joint_1' type='revolute'>
+      <pose relative_to='base_link'>-0.95249 -0.11906 1.2948 1.5708 -0 1.5708</pose>
+      <parent>base_link</parent>
+      <child>left_wheel_link_1</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='left_wheel_link_1'>
+      <pose relative_to='left_wheel_joint_1'>0 0 0 0 -0 0</pose>
+      <inertial>
+        <pose>-0 0 -0.09375 0 -0 0</pose>
+        <!-- <mass>72.804</mass>
+        <inertia>
+          <ixx>2.4629</ixx>
+          <ixy>0</ixy>
+          <ixz>-2.4074e-33</ixz>
+          <iyy>2.4629</iyy>
+          <iyz>-4.6371e-33</iyz>
+          <izz>4.4992</izz>
+        </inertia> -->
+        <mass>5.6549</mass>
+        <inertia>
+          <ixx>0.034825</ixx>
+          <ixy>8.3524e-50</ixy>
+          <ixz>8.4701e-34</ixz>
+          <iyy>0.034825</iyy>
+          <iyz>-6.5567e-35</iyz>
+          <izz>0.063617</izz>
+        </inertia>
+      </inertial>
+      <collision name='left_wheel_link_1_collision'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Hilti_3/meshes/left_wheel_link_1.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='left_wheel_link_1_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Hilti_3/meshes/left_wheel_link_1.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>1.0 0.0 0.0 1</ambient>   <!-- red in ambient light -->
+          <diffuse>1.0 0.0 0.0 1</diffuse>   <!-- red in direct light -->
+          <specular>0.5 0.5 0.5 1</specular> <!-- slight shine -->
+          <emissive>0.0 0.0 0.0 1</emissive> <!-- no glow -->
+        </material>
+      </visual>
+    </link>
+    <joint name='left_wheel_joint_2' type='revolute'>
+      <pose relative_to='base_link'>-0.95249 -0.11906 -0.30587 1.5708 -0 1.5708</pose>
+      <parent>base_link</parent>
+      <child>left_wheel_link_2</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='left_wheel_link_2'>
+      <pose relative_to='left_wheel_joint_2'>0 0 0 0 -0 0</pose>
+      <inertial>
+        <pose>-0 0 -0.09375 0 -0 0</pose>
+        <!-- <mass>72.804</mass>
+        <inertia>
+          <ixx>2.4629</ixx>
+          <ixy>0</ixy>
+          <ixz>-2.4074e-33</ixz>
+          <iyy>2.4629</iyy>
+          <iyz>-4.6371e-33</iyz>
+          <izz>4.4992</izz>
+        </inertia> -->
+        <mass>5.6549</mass>
+        <inertia>
+          <ixx>0.034825</ixx>
+          <ixy>8.3524e-50</ixy>
+          <ixz>8.4701e-34</ixz>
+          <iyy>0.034825</iyy>
+          <iyz>-6.5567e-35</iyz>
+          <izz>0.063617</izz>
+        </inertia>
+      </inertial>
+      <collision name='left_wheel_link_2_collision'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Hilti_3/meshes/left_wheel_link_2.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='left_wheel_link_2_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Hilti_3/meshes/left_wheel_link_2.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+            <ambient>1.0 0.0 0.0 1</ambient>   <!-- red in ambient light -->
+            <diffuse>1.0 0.0 0.0 1</diffuse>   <!-- red in direct light -->
+            <specular>0.5 0.5 0.5 1</specular> <!-- slight shine -->
+            <emissive>0.0 0.0 0.0 1</emissive> <!-- no glow -->
+        </material>
+      </visual>
+    </link>
+    <joint name='right_wheel_joint_1' type='revolute'>
+      <pose relative_to='base_link'>0.21938 -0.11906 1.2948 -1.5708 -0 -1.5708</pose>
+      <parent>base_link</parent>
+      <child>right_wheel_link_1</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='right_wheel_link_1'>
+      <pose relative_to='right_wheel_joint_1'>0 0 0 0 -0 0</pose>
+      <inertial>
+        <pose>0 0 0.09375 0 -0 0</pose>
+        <!-- <mass>72.804</mass>
+        <inertia>
+          <ixx>2.4629</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>2.4629</iyy>
+          <iyz>-4.6371e-33</iyz>
+          <izz>4.4992</izz>
+        </inertia> -->
+        <mass>5.6549</mass>
+        <inertia>
+          <ixx>0.034825</ixx>
+          <ixy>8.3524e-50</ixy>
+          <ixz>8.4701e-34</ixz>
+          <iyy>0.034825</iyy>
+          <iyz>-6.5567e-35</iyz>
+          <izz>0.063617</izz>
+        </inertia>
+      </inertial>
+      <collision name='right_wheel_link_1_collision'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Hilti_3/meshes/right_wheel_link_1.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='right_wheel_link_1_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Hilti_3/meshes/right_wheel_link_1.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>1.0 0.0 0.0 1</ambient>   <!-- red in ambient light -->
+          <diffuse>1.0 0.0 0.0 1</diffuse>   <!-- red in direct light -->
+          <specular>0.5 0.5 0.5 1</specular> <!-- slight shine -->
+          <emissive>0.0 0.0 0.0 1</emissive> <!-- no glow -->
+        </material>
+      </visual>
+    </link>
+    <joint name='right_wheel_joint_2' type='revolute'>
+      <pose relative_to='base_link'>0.21938 -0.11906 -0.30587 -1.5708 -0 -1.5708</pose>
+      <parent>base_link</parent>
+      <child>right_wheel_Link_2</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='right_wheel_Link_2'>
+      <pose relative_to='right_wheel_joint_2'>0 0 0 0 -0 0</pose>
+      <inertial>
+        <pose>0 0 0.09375 0 -0 0</pose>
+        <!-- <mass>72.804</mass>
+        <inertia>
+          <ixx>2.4629</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>2.4629</iyy>
+          <iyz>-4.6371e-33</iyz>
+          <izz>4.4992</izz>
+        </inertia> -->
+        <mass>5.6549</mass>
+        <inertia>
+          <ixx>0.034825</ixx>
+          <ixy>8.3524e-50</ixy>
+          <ixz>8.4701e-34</ixz>
+          <iyy>0.034825</iyy>
+          <iyz>-6.5567e-35</iyz>
+          <izz>0.063617</izz>
+        </inertia>
+      </inertial>
+      <collision name='right_wheel_Link_2_collision'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Hilti_3/meshes/right_wheel_Link_2.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='right_wheel_Link_2_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Hilti_3/meshes/right_wheel_Link_2.STL</uri>
+          </mesh>
+        </geometry>
+          <material>
+            <ambient>1.0 0.0 0.0 1</ambient>   <!-- red in ambient light -->
+            <diffuse>1.0 0.0 0.0 1</diffuse>   <!-- red in direct light -->
+            <specular>0.5 0.5 0.5 1</specular> <!-- slight shine -->
+            <emissive>0.0 0.0 0.0 1</emissive> <!-- no glow -->
+          </material>
+      </visual>
+    </link>
+
+    <plugin name="turtlebot3_diff_drive" filename="libgazebo_ros_diff_drive.so">
+      <ros>
+        <remapping>/tf:=tf</remapping>
+      </ros>
+      <update_rate>100</update_rate>
+      <left_joint>right_wheel_joint_1</left_joint>
+      <right_joint>left_wheel_joint_1</right_joint>
+
+      <wheel_separation>5.0</wheel_separation>
+      <wheel_diameter>0.35</wheel_diameter>
+    
+
+      <max_wheel_torque>300</max_wheel_torque>
+      <max_wheel_acceleration>20</max_wheel_acceleration>
+
+      <command_topic>cmd_vel</command_topic>
+      <publish_odom>true</publish_odom>
+      <publish_odom_tf>true</publish_odom_tf>
+      <publish_wheel_tf>false</publish_wheel_tf>
+      
+      <odometry_topic>odom</odometry_topic>
+      <odometry_frame>odom</odometry_frame>
+      <robot_base_frame>base_footprint</robot_base_frame>
+    </plugin>
+
+    <plugin name="turtlebot3_joint_state" filename="libgazebo_ros_joint_state_publisher.so">
+      <ros>
+        <remapping>~/out:=joint_states</remapping>
+      </ros>
+      <update_rate>100</update_rate>
+      <joint_name>left_wheel_joint_1</joint_name>
+      <joint_name>left_wheel_joint_2</joint_name>
+      <joint_name>right_wheel_joint_1</joint_name>
+      <joint_name>right_wheel_joint_2</joint_name>
+    </plugin>
+
+
+  </model>
+</sdf>

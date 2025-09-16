@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot name="Hilti">
+
+  <link name="base_footprint"/>
+
+  <joint name="base_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+    <origin xyz="0.0 0.0 0.01" rpy="-1.5708 0 1.5708"/>
+  </joint>
+
+  <link name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.0306833512689578 -0.169370689536898 0.046148138146647"
+        rpy="0 0 0" />
+      <mass
+        value="79.553901533946" />
+      <inertia
+        ixx="2.04522605062913"
+        ixy="1.90180064735701E-06"
+        ixz="6.95550881300709E-06"
+        iyy="2.56757248784682"
+        iyz="-0.00604303001949413"
+        izz="1.86062902700593" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://crs_multibot/models/Hilti/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://crs_multibot/models/Hilti/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="left_wheel_Link_1">
+    <inertial>
+      <origin
+        xyz="2.6021E-18 5.5511E-17 -0.04"
+        rpy="0 0 0" />
+      <mass
+        value="5.6549" />
+      <inertia
+        ixx="0.034825"
+        ixy="8.3524E-50"
+        ixz="8.4701E-34"
+        iyy="0.034825"
+        iyz="-6.5567E-35"
+        izz="0.063617" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://crs_multibot/models/Hilti/meshes/left_wheel_Link_1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://crs_multibot/models/Hilti/meshes/left_wheel_Link_1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_wheel_joint_1"
+    type="continuous">
+    <origin
+      xyz="-0.28062 -0.005 0.35413"
+      rpy="1.5708 0 1.5708" />
+    <parent
+      link="base_link" />
+    <child
+      link="left_wheel_Link_1" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="left_wheel_Link_2">
+    <inertial>
+      <origin
+        xyz="2.6021E-18 0 -0.04"
+        rpy="0 0 0" />
+      <mass
+        value="5.6549" />
+      <inertia
+        ixx="0.034825"
+        ixy="8.3524E-50"
+        ixz="8.4701E-34"
+        iyy="0.034825"
+        iyz="-6.5567E-35"
+        izz="0.063617" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://crs_multibot/models/Hilti/meshes/left_wheel_Link_2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://crs_multibot/models/Hilti/meshes/left_wheel_Link_2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_wheel_joint_2"
+    type="continuous">
+    <origin
+      xyz="-0.28062 -0.005 -0.30587"
+      rpy="1.5708 0 1.5708" />
+    <parent
+      link="base_link" />
+    <child
+      link="left_wheel_Link_2" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="right_wheel_Link_1">
+    <inertial>
+      <origin
+        xyz="3.4694E-18 -5.5511E-17 0.04"
+        rpy="0 0 0" />
+      <mass
+        value="5.6549" />
+      <inertia
+        ixx="0.034825"
+        ixy="-1.7968E-33"
+        ixz="-6.9067E-34"
+        iyy="0.034825"
+        iyz="1.8808E-34"
+        izz="0.063617" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://crs_multibot/models/Hilti/meshes/right_wheel_Link_1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://crs_multibot/models/Hilti/meshes/right_wheel_Link_1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_wheel_joint_1"
+    type="continuous">
+    <origin
+      xyz="0.21938 -0.005 0.35413"
+      rpy="-1.5708 0 -1.5708" />
+    <parent
+      link="base_link" />
+    <child
+      link="right_wheel_Link_1" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="right_wheel_Link_2">
+    <inertial>
+      <origin
+        xyz="3.4694E-18 0 0.04"
+        rpy="0 0 0" />
+      <mass
+        value="5.6549" />
+      <inertia
+        ixx="0.034825"
+        ixy="-8.3524E-50"
+        ixz="-6.9067E-34"
+        iyy="0.034825"
+        iyz="-6.5567E-35"
+        izz="0.063617" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://crs_multibot/models/Hilti/meshes/right_wheel_Link_2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://crs_multibot/models/Hilti/meshes/right_wheel_Link_2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_wheel_joint_2"
+    type="continuous">
+    <origin
+      xyz="0.21938 -0.005 -0.30587"
+      rpy="-1.5708 0 -1.5708" />
+    <parent
+      link="base_link" />
+    <child
+      link="right_wheel_Link_2" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+    <origin xyz="-0.032 0 0.068" rpy="0 0 0"/>
+  </joint>
+
+  <link name="imu_link"/>
+  
+  <link
+    name="front_sensor_Link">
+    <inertial>
+      <origin
+        xyz="-0.01 0.01 0.01"
+        rpy="0 0 0" />
+      <mass
+        value="0.008" />
+      <inertia
+        ixx="5.3333E-07"
+        ixy="4.5958E-23"
+        ixz="4.6001E-23"
+        iyy="5.3333E-07"
+        iyz="-2.6075E-23"
+        izz="5.3333E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://crs_multibot/models/Hilti/meshes/front_sensor_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://crs_multibot/models/Hilti/meshes/front_sensor_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="front_sensor_joint"
+    type="fixed">
+    <origin
+      xyz="-0.040616 -0.045 -0.27587"
+      rpy="1.5708 0 3.1416" />
+    <parent
+      link="base_link" />
+    <child
+      link="front_sensor_Link" />
+    <axis
+      xyz="0 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+</robot>
