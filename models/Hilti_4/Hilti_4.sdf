@@ -428,7 +428,7 @@
       <left_joint>right_wheel_joint_1</left_joint>
       <right_joint>left_wheel_joint_1</right_joint>
 
-      <wheel_separation>5.0</wheel_separation>
+      <wheel_separation>1.17188</wheel_separation>
       <wheel_diameter>0.35</wheel_diameter>
     
 

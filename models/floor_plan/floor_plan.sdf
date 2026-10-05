@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version='1.0' encoding='utf-8'?>
 <sdf version="1.6">
   <model name="my_floorplan">
     <static>true</static>
@@ -7,7 +7,7 @@
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>model://floor_plan/meshes/EVfloor9_L.dae</uri>
+            <uri>model://floor_plan/meshes/EVfloor9_outer_only.dae</uri>
           </mesh>
         </geometry>
         <material>
@@ -18,7 +18,7 @@
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>model://floor_plan/meshes/EVfloor9_L.dae</uri>
+            <uri>model://floor_plan/meshes/EVfloor9_outer_only.dae</uri>
           </mesh>
         </geometry>
       </collision>

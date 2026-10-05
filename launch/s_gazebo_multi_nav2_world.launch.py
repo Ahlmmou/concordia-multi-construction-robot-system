@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-#
+from launch.actions import DeclareLaunchArgument, RegisterEventHandler, TimerAction
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -18,7 +18,7 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, RegisterEventHandler
+from launch.actions import DeclareLaunchArgument, RegisterEventHandler, TimerAction
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch.actions import IncludeLaunchDescription, ExecuteProcess
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -79,7 +79,7 @@ def generate_launch_description():
     )
 
     world = os.path.join(
-        get_package_share_directory('s_turtlebot3_multi_robot'),
+        s_turtlebot3_multi_robot,
         'worlds', 'ev_9.world')
 
     gzserver_cmd = IncludeLaunchDescription(
@@ -112,7 +112,7 @@ def generate_launch_description():
     #                  },],
     #     remappings=remappings)
     goal_listener_and_sender = Node(
-            package='s_turtlebot3_multi_robot',
+            package='crs_multibot',
             executable='goal_listener_and_sender.py',
             output='screen',
         )
@@ -122,7 +122,7 @@ def generate_launch_description():
             executable='map_server',
             name='map_server',
             output='screen',
-            parameters=[{'yaml_filename': os.path.join(get_package_share_directory('s_turtlebot3_multi_robot'), 'config', 'EVfloor-Floor-Plan-Level-1.yaml'),}],  
+            parameters=[{'yaml_filename': os.path.join(s_turtlebot3_multi_robot, 'config', 'EVfloor9_outer_only.yaml'),}],
             remappings=remappings
     )
         #map_file = os.path.join(get_package_share_directory('nav2_project'), 'config', 'turtlebot3_house.yaml')
@@ -214,7 +214,7 @@ def generate_launch_description():
         )
 
         # scan_filter_node = Node(
-        #     package='s_turtlebot3_multi_robot',
+        #     package='crs_multibot',
         #     executable='scan_filter.py',
         #     namespace=namespace,
         #     output='screen',
@@ -255,9 +255,14 @@ def generate_launch_description():
             spawn_turtlebot3_event = RegisterEventHandler(
                 event_handler=OnProcessExit(
                     target_action=last_action,
-                    on_exit=[spawn_turtlebot3_burger,
-                            turtlebot_state_publisher,
-                            bringup_cmd],
+                    on_exit=[
+			spawn_turtlebot3_burger,
+			turtlebot_state_publisher,
+			TimerAction(
+				period=8.0,
+				actions=[bringup_cmd]
+			),
+		    ],
                             # scan_filter_node,
                 )
             )

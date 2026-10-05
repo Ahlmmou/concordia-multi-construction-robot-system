@@ -28,7 +28,7 @@ from nav2_common.launch import RewrittenYaml
 
 def generate_launch_description():
     # Get the launch directory
-    bringup_dir = get_package_share_directory('turtlebot3_multi_robot')
+    bringup_dir = get_package_share_directory('crs_multibot')
 
     namespace = LaunchConfiguration('namespace')
     map_yaml_file = LaunchConfiguration('map')
@@ -144,7 +144,8 @@ def generate_launch_description():
                 arguments=['--ros-args', '--log-level', log_level],
                 parameters=[{'use_sim_time': use_sim_time},
                             {'autostart': autostart},
-                            {'node_names': ['amcl']}]),
+                            {'node_names': ['amcl']},
+			    {'bond_timeout': 10.0}]),
              Node(
                 condition=IfCondition(map_server),
                 package='nav2_lifecycle_manager',

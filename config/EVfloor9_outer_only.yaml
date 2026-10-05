@@ -1,0 +1,9 @@
+image: ./EVfloor9_outer_only.pgm
+resolution: 0.0257
+origin:
+- -37.17785
+- -33.8028
+- 0.0
+negate: 0
+occupied_thresh: 0.65
+free_thresh: 0.196
