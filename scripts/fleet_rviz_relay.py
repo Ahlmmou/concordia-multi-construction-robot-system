@@ -7,7 +7,8 @@ from rclpy.node import Node
 from rclpy.qos import QoSProfile, DurabilityPolicy, ReliabilityPolicy, qos_profile_sensor_data
 from tf2_msgs.msg import TFMessage
 from sensor_msgs.msg import LaserScan
-from nav_msgs.msg import Path
+from nav_msgs.msg import Path, OccupancyGrid
+from map_msgs.msg import OccupancyGridUpdate
 
 
 ROOT = '/fleet_visualization'
@@ -39,6 +40,16 @@ class FleetRvizRelay(Node):
                 publisher = self.create_publisher(Path, f'{ROOT}/{robot}/{suffix}', 10)
                 self.subscriptions_kept.append(self.create_subscription(Path, f'/{robot}/{suffix}',
                     partial(self.relay, robot=robot, publisher=publisher), qos_profile_sensor_data))
+            for scope in ('global_costmap', 'local_costmap'):
+                suffix = f'{scope}/costmap'
+                publisher = self.create_publisher(OccupancyGrid, f'{ROOT}/{robot}/{suffix}', static_qos)
+                self.subscriptions_kept.append(self.create_subscription(
+                    OccupancyGrid, f'/{robot}/{suffix}',
+                    partial(self.relay, robot=robot, publisher=publisher), static_qos))
+                updates = self.create_publisher(OccupancyGridUpdate, f'{ROOT}/{robot}/{suffix}_updates', 10)
+                self.subscriptions_kept.append(self.create_subscription(
+                    OccupancyGridUpdate, f'/{robot}/{suffix}_updates',
+                    partial(self.relay, robot=robot, publisher=updates), qos_profile_sensor_data))
         self.get_logger().info('Fleet visualization relay ready for tb1–tb5')
 
     def transform(self, message, robot, static):

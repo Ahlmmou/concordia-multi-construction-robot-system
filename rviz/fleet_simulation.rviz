@@ -177,6 +177,34 @@ Visualization Manager:
       Line Style: Billboards
       Line Width: 0.02
       Pose Style: None
+    - Class: rviz_default_plugins/Map
+      Name: tb1 Global Costmap
+      Enabled: true
+      Value: true
+      Alpha: 0.45
+      Color Scheme: costmap
+      Draw Behind: false
+      Use Timestamp: false
+      Topic:
+        Value: /fleet_visualization/tb1/global_costmap/costmap
+        Depth: 1
+        History Policy: Keep Last
+        Durability Policy: Transient Local
+        Reliability Policy: Reliable
+    - Class: rviz_default_plugins/Map
+      Name: tb1 Local Costmap
+      Enabled: true
+      Value: true
+      Alpha: 0.45
+      Color Scheme: costmap
+      Draw Behind: false
+      Use Timestamp: false
+      Topic:
+        Value: /fleet_visualization/tb1/local_costmap/costmap
+        Depth: 1
+        History Policy: Keep Last
+        Durability Policy: Transient Local
+        Reliability Policy: Reliable
   - Class: rviz_common/Group
     Name: tb2
     Enabled: true
@@ -285,6 +313,34 @@ Visualization Manager:
       Line Style: Billboards
       Line Width: 0.02
       Pose Style: None
+    - Class: rviz_default_plugins/Map
+      Name: tb2 Global Costmap
+      Enabled: true
+      Value: true
+      Alpha: 0.45
+      Color Scheme: costmap
+      Draw Behind: false
+      Use Timestamp: false
+      Topic:
+        Value: /fleet_visualization/tb2/global_costmap/costmap
+        Depth: 1
+        History Policy: Keep Last
+        Durability Policy: Transient Local
+        Reliability Policy: Reliable
+    - Class: rviz_default_plugins/Map
+      Name: tb2 Local Costmap
+      Enabled: true
+      Value: true
+      Alpha: 0.45
+      Color Scheme: costmap
+      Draw Behind: false
+      Use Timestamp: false
+      Topic:
+        Value: /fleet_visualization/tb2/local_costmap/costmap
+        Depth: 1
+        History Policy: Keep Last
+        Durability Policy: Transient Local
+        Reliability Policy: Reliable
   - Class: rviz_common/Group
     Name: tb3
     Enabled: true
@@ -393,6 +449,34 @@ Visualization Manager:
       Line Style: Billboards
       Line Width: 0.02
       Pose Style: None
+    - Class: rviz_default_plugins/Map
+      Name: tb3 Global Costmap
+      Enabled: true
+      Value: true
+      Alpha: 0.45
+      Color Scheme: costmap
+      Draw Behind: false
+      Use Timestamp: false
+      Topic:
+        Value: /fleet_visualization/tb3/global_costmap/costmap
+        Depth: 1
+        History Policy: Keep Last
+        Durability Policy: Transient Local
+        Reliability Policy: Reliable
+    - Class: rviz_default_plugins/Map
+      Name: tb3 Local Costmap
+      Enabled: true
+      Value: true
+      Alpha: 0.45
+      Color Scheme: costmap
+      Draw Behind: false
+      Use Timestamp: false
+      Topic:
+        Value: /fleet_visualization/tb3/local_costmap/costmap
+        Depth: 1
+        History Policy: Keep Last
+        Durability Policy: Transient Local
+        Reliability Policy: Reliable
   - Class: rviz_common/Group
     Name: tb4
     Enabled: true
@@ -501,6 +585,34 @@ Visualization Manager:
       Line Style: Billboards
       Line Width: 0.02
       Pose Style: None
+    - Class: rviz_default_plugins/Map
+      Name: tb4 Global Costmap
+      Enabled: true
+      Value: true
+      Alpha: 0.45
+      Color Scheme: costmap
+      Draw Behind: false
+      Use Timestamp: false
+      Topic:
+        Value: /fleet_visualization/tb4/global_costmap/costmap
+        Depth: 1
+        History Policy: Keep Last
+        Durability Policy: Transient Local
+        Reliability Policy: Reliable
+    - Class: rviz_default_plugins/Map
+      Name: tb4 Local Costmap
+      Enabled: true
+      Value: true
+      Alpha: 0.45
+      Color Scheme: costmap
+      Draw Behind: false
+      Use Timestamp: false
+      Topic:
+        Value: /fleet_visualization/tb4/local_costmap/costmap
+        Depth: 1
+        History Policy: Keep Last
+        Durability Policy: Transient Local
+        Reliability Policy: Reliable
   - Class: rviz_common/Group
     Name: tb5
     Enabled: true
@@ -609,6 +721,34 @@ Visualization Manager:
       Line Style: Billboards
       Line Width: 0.02
       Pose Style: None
+    - Class: rviz_default_plugins/Map
+      Name: tb5 Global Costmap
+      Enabled: true
+      Value: true
+      Alpha: 0.45
+      Color Scheme: costmap
+      Draw Behind: false
+      Use Timestamp: false
+      Topic:
+        Value: /fleet_visualization/tb5/global_costmap/costmap
+        Depth: 1
+        History Policy: Keep Last
+        Durability Policy: Transient Local
+        Reliability Policy: Reliable
+    - Class: rviz_default_plugins/Map
+      Name: tb5 Local Costmap
+      Enabled: true
+      Value: true
+      Alpha: 0.45
+      Color Scheme: costmap
+      Draw Behind: false
+      Use Timestamp: false
+      Topic:
+        Value: /fleet_visualization/tb5/local_costmap/costmap
+        Depth: 1
+        History Policy: Keep Last
+        Durability Policy: Transient Local
+        Reliability Policy: Reliable
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
