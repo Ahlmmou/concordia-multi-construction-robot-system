@@ -1,0 +1,14 @@
+base_link base_link_collision [-0.82024365 -0.64218151  0.16816449] [1.31179438 0.52969951 3.19193196]
+left_wheel_link_1 left_wheel_link_1_collision [-1.15059862 -0.82968523 -0.03933544] [-0.44987493 -0.64218265  0.66379025]
+left_wheel_link_2 left_wheel_link_2_collision [ 0.45002138 -0.82967935 -0.03932956] [ 1.15074507 -0.64217677  0.66379613]
+right_wheel_link_1 right_wheel_link_1_collision [-1.15060292  0.52969477 -0.03933544] [-0.44987924  0.71719735  0.66379025]
+right_wheel_Link_2 right_wheel_Link_2_collision [ 0.45001708  0.52970065 -0.03932956] [1.15074076 0.71720323 0.66379613]
+models/Hilti_4/Hilti_4.sdf BOUNDS [-1.15060292 -0.82968523 -0.03933544] [1.31179438 0.71720323 3.19193196] TURN_RADIUS 1.418654316560445
+base_link base_collision [-0.075 -0.195  0.   ] [0.475 0.195 0.16 ]
+base_scan lidar_sensor_collision [-0.24313783 -0.20318446  0.106     ] [0.1632     0.20318446 0.216     ]
+wheel_left_link_1 wheel_left_collision [ 3.05942747e-05  2.19920377e-01 -3.00002827e-02] [0.2        0.24007962 0.17000028]
+wheel_left_link_2 wheel_left_collision [-0.29996941  0.21992038 -0.03000028] [-0.1         0.24007962  0.17000028]
+wheel_right_link_1 wheel_right_collision [ 3.05942747e-05 -2.40079623e-01 -3.00002827e-02] [ 0.2        -0.21992038  0.17000028]
+wheel_right_link_2 wheel_right_collision [-0.29996941 -0.24007962 -0.03000028] [-0.1        -0.21992038  0.17000028]
+caster_back_link collision [-0.182      -0.02001592 -0.02801592] [-0.142       0.02001592  0.01201592]
+models/turtlebot3_burger/model_scaled_x2.sdf BOUNDS [-0.29996941 -0.24007962 -0.03000028] [0.475      0.24007962 0.216     ] TURN_RADIUS 0.5134685968976097

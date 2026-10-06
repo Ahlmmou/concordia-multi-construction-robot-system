@@ -33,6 +33,7 @@ install(DIRECTORY config/
 install(PROGRAMS
   scripts/goal_listener_and_sender.py
   scripts/spawn.py
+  scripts/fleet_rviz_relay.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

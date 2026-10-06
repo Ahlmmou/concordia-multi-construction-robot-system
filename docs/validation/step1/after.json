@@ -1,0 +1,2063 @@
+{
+  "robots": {
+    "tb1": {
+      "tf_edges": [
+        [
+          "map",
+          "odom"
+        ],
+        [
+          "base_link",
+          "Front_sensor_link"
+        ],
+        [
+          "base_footprint",
+          "base_link"
+        ],
+        [
+          "base_link",
+          "imu_link"
+        ],
+        [
+          "odom",
+          "base_footprint"
+        ],
+        [
+          "base_link",
+          "left_wheel_link_1"
+        ],
+        [
+          "base_link",
+          "left_wheel_link_2"
+        ],
+        [
+          "base_link",
+          "right_wheel_link_1"
+        ],
+        [
+          "base_link",
+          "right_wheel_Link_2"
+        ]
+      ],
+      "scan": {
+        "frame": "Front_sensor_link",
+        "rays": 360,
+        "finite_returns": 0,
+        "stamp": 7.289
+      },
+      "odom": {
+        "frame": "odom",
+        "child": "base_footprint",
+        "x": 0.4999763178989885,
+        "y": 1.6000819652045963
+      },
+      "map_pose": {
+        "x": 0.49997337665261543,
+        "y": 1.6000595485382023,
+        "yaw": 1.4706902376111267e-06,
+        "base_frame": "base_footprint"
+      }
+    },
+    "tb2": {
+      "tf_edges": [
+        [
+          "base_link",
+          "wheel_left_link_1"
+        ],
+        [
+          "base_link",
+          "wheel_left_link_2"
+        ],
+        [
+          "base_link",
+          "wheel_right_link_1"
+        ],
+        [
+          "base_link",
+          "wheel_right_link_2"
+        ],
+        [
+          "base_footprint",
+          "base_link"
+        ],
+        [
+          "base_link",
+          "caster_back_link"
+        ],
+        [
+          "base_link",
+          "imu_link"
+        ],
+        [
+          "base_link",
+          "base_scan"
+        ],
+        [
+          "odom",
+          "base_footprint"
+        ],
+        [
+          "map",
+          "odom"
+        ]
+      ],
+      "odom": {
+        "frame": "odom",
+        "child": "base_footprint",
+        "x": 4.710986288370515,
+        "y": 5.000002520349448
+      },
+      "scan": {
+        "frame": "base_scan",
+        "rays": 360,
+        "finite_returns": 0,
+        "stamp": 7.209
+      },
+      "map_pose": {
+        "x": 4.706419693601018,
+        "y": 5.000000973453801,
+        "yaw": -1.7631354112184922e-05,
+        "base_frame": "base_footprint"
+      }
+    },
+    "tb3": {
+      "tf_edges": [
+        [
+          "base_link",
+          "wheel_left_link_1"
+        ],
+        [
+          "base_link",
+          "wheel_left_link_2"
+        ],
+        [
+          "base_link",
+          "wheel_right_link_1"
+        ],
+        [
+          "base_link",
+          "wheel_right_link_2"
+        ],
+        [
+          "base_footprint",
+          "base_link"
+        ],
+        [
+          "base_link",
+          "caster_back_link"
+        ],
+        [
+          "base_link",
+          "imu_link"
+        ],
+        [
+          "base_link",
+          "base_scan"
+        ],
+        [
+          "odom",
+          "base_footprint"
+        ],
+        [
+          "map",
+          "odom"
+        ]
+      ],
+      "scan": {
+        "frame": "base_scan",
+        "rays": 360,
+        "finite_returns": 100,
+        "stamp": 7.119
+      },
+      "odom": {
+        "frame": "odom",
+        "child": "base_footprint",
+        "x": -3.689473018446426,
+        "y": -1.7999961236889719
+      },
+      "map_pose": {
+        "x": -3.694189608331718,
+        "y": -1.7999979748733583,
+        "yaw": -1.447645785361915e-05,
+        "base_frame": "base_footprint"
+      }
+    },
+    "tb4": {
+      "tf_edges": [
+        [
+          "base_footprint",
+          "base_link"
+        ],
+        [
+          "base_link",
+          "caster_back_link"
+        ],
+        [
+          "base_link",
+          "imu_link"
+        ],
+        [
+          "base_link",
+          "base_scan"
+        ],
+        [
+          "odom",
+          "base_footprint"
+        ],
+        [
+          "base_link",
+          "wheel_left_link_1"
+        ],
+        [
+          "base_link",
+          "wheel_left_link_2"
+        ],
+        [
+          "base_link",
+          "wheel_right_link_1"
+        ],
+        [
+          "base_link",
+          "wheel_right_link_2"
+        ],
+        [
+          "map",
+          "odom"
+        ]
+      ],
+      "scan": {
+        "frame": "base_scan",
+        "rays": 360,
+        "finite_returns": 114,
+        "stamp": 7.21
+      },
+      "odom": {
+        "frame": "odom",
+        "child": "base_footprint",
+        "x": 4.710066884955243,
+        "y": -1.799995017058196
+      },
+      "map_pose": {
+        "x": 4.704734593675376,
+        "y": -1.7999967884418469,
+        "yaw": -1.8282086036845002e-05,
+        "base_frame": "base_footprint"
+      }
+    },
+    "tb5": {
+      "tf_edges": [
+        [
+          "odom",
+          "base_footprint"
+        ],
+        [
+          "base_footprint",
+          "base_link"
+        ],
+        [
+          "base_link",
+          "caster_back_link"
+        ],
+        [
+          "base_link",
+          "imu_link"
+        ],
+        [
+          "base_link",
+          "base_scan"
+        ],
+        [
+          "base_link",
+          "wheel_left_link_1"
+        ],
+        [
+          "base_link",
+          "wheel_left_link_2"
+        ],
+        [
+          "base_link",
+          "wheel_right_link_1"
+        ],
+        [
+          "base_link",
+          "wheel_right_link_2"
+        ],
+        [
+          "map",
+          "odom"
+        ]
+      ],
+      "odom": {
+        "frame": "odom",
+        "child": "base_footprint",
+        "x": -3.690393817435542,
+        "y": 5.000004766753972
+      },
+      "scan": {
+        "frame": "base_scan",
+        "rays": 360,
+        "finite_returns": 0,
+        "stamp": 7.3
+      },
+      "map_pose": {
+        "x": -3.696334576397385,
+        "y": 5.000003205314857,
+        "yaw": -2.1888979653031102e-05,
+        "base_frame": "base_footprint"
+      }
+    }
+  },
+  "maps": {
+    "/tb1/local_costmap/costmap": {
+      "frame": "odom",
+      "width": 160,
+      "height": 160,
+      "resolution": 0.05000000074505806,
+      "origin": [
+        -3.4500000003725293,
+        -2.350000000372529
+      ],
+      "occupied_cells": 0,
+      "inflated_cells": 0,
+      "unknown_cells": 0,
+      "sha256": "c65206769723a13afe80c0d925531639ceef9c2eb97eee3b1b542739ec40597f"
+    },
+    "/map": {
+      "frame": "map",
+      "width": 4215,
+      "height": 2980,
+      "resolution": 0.025699999183416367,
+      "origin": [
+        -37.17785,
+        -33.8028
+      ],
+      "occupied_cells": 81157,
+      "inflated_cells": 0,
+      "unknown_cells": 0,
+      "sha256": "c1b93292daec813478856110da457d061903c0929825abadce81c252869d993a"
+    },
+    "/tb3/global_costmap/costmap": {
+      "frame": "map",
+      "width": 4215,
+      "height": 2980,
+      "resolution": 0.025699999183416367,
+      "origin": [
+        -37.17785,
+        -33.8028
+      ],
+      "occupied_cells": 502842,
+      "inflated_cells": 492184,
+      "unknown_cells": 0,
+      "sha256": "dd7f93b8bababf1ad8f171fcc7c1b507de601711062978f6c2e5924f06d228a1",
+      "map_wall_cells_present": 81157,
+      "map_wall_cells_total": 81157
+    },
+    "/tb4/local_costmap/costmap": {
+      "frame": "odom",
+      "width": 80,
+      "height": 80,
+      "resolution": 0.05000000074505806,
+      "origin": [
+        2.699999999627471,
+        -3.750000000372529
+      ],
+      "occupied_cells": 403,
+      "inflated_cells": 128,
+      "unknown_cells": 0,
+      "sha256": "7a76d37d56767d8787c515ff538cbc20189d53b5ea7160e1371abbc1badd8f57"
+    },
+    "/tb5/local_costmap/costmap": {
+      "frame": "odom",
+      "width": 80,
+      "height": 80,
+      "resolution": 0.05000000074505806,
+      "origin": [
+        -5.650000000372529,
+        2.999999999627471
+      ],
+      "occupied_cells": 0,
+      "inflated_cells": 0,
+      "unknown_cells": 0,
+      "sha256": "56a43ef88ddfcd0f56f7dd973312c0e73d62f59655c01d7b4e59aaa3be8b3fb6"
+    },
+    "/tb4/global_costmap/costmap": {
+      "frame": "map",
+      "width": 4215,
+      "height": 2980,
+      "resolution": 0.025699999183416367,
+      "origin": [
+        -37.17785,
+        -33.8028
+      ],
+      "occupied_cells": 502842,
+      "inflated_cells": 492184,
+      "unknown_cells": 0,
+      "sha256": "b10a23af15786a1f9953a0f282e414cf5c9aa10188a76a76bf22645d1680a5ed",
+      "map_wall_cells_present": 81157,
+      "map_wall_cells_total": 81157
+    },
+    "/tb5/global_costmap/costmap": {
+      "frame": "map",
+      "width": 4215,
+      "height": 2980,
+      "resolution": 0.025699999183416367,
+      "origin": [
+        -37.17785,
+        -33.8028
+      ],
+      "occupied_cells": 502842,
+      "inflated_cells": 492184,
+      "unknown_cells": 0,
+      "sha256": "978f25537b629eac038f30c2ab2749ff228a86ff98965c198d61992050181bb3",
+      "map_wall_cells_present": 81157,
+      "map_wall_cells_total": 81157
+    },
+    "/tb2/local_costmap/costmap": {
+      "frame": "odom",
+      "width": 80,
+      "height": 80,
+      "resolution": 0.05000000074505806,
+      "origin": [
+        2.699999999627471,
+        2.999999999627471
+      ],
+      "occupied_cells": 0,
+      "inflated_cells": 0,
+      "unknown_cells": 0,
+      "sha256": "56a43ef88ddfcd0f56f7dd973312c0e73d62f59655c01d7b4e59aaa3be8b3fb6"
+    },
+    "/tb1/global_costmap/costmap": {
+      "frame": "map",
+      "width": 4215,
+      "height": 2980,
+      "resolution": 0.025699999183416367,
+      "origin": [
+        -37.17785,
+        -33.8028
+      ],
+      "occupied_cells": 995026,
+      "inflated_cells": 0,
+      "unknown_cells": 0,
+      "sha256": "d14a85ebb00d005f0b4edf76a9a09d64edef77c415200138ee7638b9ee76e88b",
+      "map_wall_cells_present": 81157,
+      "map_wall_cells_total": 81157
+    },
+    "/tb3/local_costmap/costmap": {
+      "frame": "odom",
+      "width": 80,
+      "height": 80,
+      "resolution": 0.05000000074505806,
+      "origin": [
+        -5.650000000372529,
+        -3.750000000372529
+      ],
+      "occupied_cells": 0,
+      "inflated_cells": 0,
+      "unknown_cells": 0,
+      "sha256": "56a43ef88ddfcd0f56f7dd973312c0e73d62f59655c01d7b4e59aaa3be8b3fb6"
+    },
+    "/tb2/global_costmap/costmap": {
+      "frame": "map",
+      "width": 4215,
+      "height": 2980,
+      "resolution": 0.025699999183416367,
+      "origin": [
+        -37.17785,
+        -33.8028
+      ],
+      "occupied_cells": 502842,
+      "inflated_cells": 492184,
+      "unknown_cells": 0,
+      "sha256": "978f25537b629eac038f30c2ab2749ff228a86ff98965c198d61992050181bb3",
+      "map_wall_cells_present": 81157,
+      "map_wall_cells_total": 81157
+    }
+  },
+  "services": {
+    "/map_server/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/map_server/get_parameters": {
+      "use_sim_time": true,
+      "yaml_filename": "/home/umroot/crs_ws/install/crs_multibot/share/crs_multibot/config/EVfloor9_outer_only.yaml",
+      "frame_id": "map"
+    },
+    "/tb1/amcl/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb1/amcl/get_parameters": {
+      "use_sim_time": true,
+      "global_frame_id": "map",
+      "odom_frame_id": "odom",
+      "base_frame_id": "base_footprint",
+      "scan_topic": "scan",
+      "map_topic": "/map",
+      "set_initial_pose": true
+    },
+    "/tb1/controller_server/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb1/controller_server/get_parameters": {
+      "use_sim_time": true,
+      "FollowPath.max_vel_x": 0.15,
+      "FollowPath.max_speed_xy": 0.15,
+      "goal_checker_plugins": [
+        "goal_checker"
+      ],
+      "goal_checker.xy_goal_tolerance": 0.3,
+      "FollowPath.xy_goal_tolerance": 0.3
+    },
+    "/tb1/planner_server/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb1/planner_server/get_parameters": {
+      "use_sim_time": true
+    },
+    "/tb1/bt_navigator/get_state": {
+      "error": "no response within audit window"
+    },
+    "/tb1/velocity_smoother/get_state": {
+      "error": "no response within audit window"
+    },
+    "/tb1/global_costmap/global_costmap/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb1/global_costmap/global_costmap/get_parameters": {
+      "use_sim_time": true,
+      "global_frame": "map",
+      "robot_base_frame": "base_footprint",
+      "footprint": "[[-1.20,-0.85],[-1.20,0.85],[1.40,0.85],[1.40,-0.85]]",
+      "plugins": [
+        "static_layer",
+        "obstacle_layer",
+        "inflation_layer"
+      ],
+      "static_layer.map_topic": "",
+      "obstacle_layer.scan.topic": "/scan"
+    },
+    "/tb1/local_costmap/local_costmap/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb1/local_costmap/local_costmap/get_parameters": {
+      "use_sim_time": true,
+      "global_frame": "odom",
+      "robot_base_frame": "base_footprint",
+      "footprint": "[[-1.20,-0.85],[-1.20,0.85],[1.40,0.85],[1.40,-0.85]]",
+      "plugins": [
+        "voxel_layer",
+        "inflation_layer"
+      ],
+      "voxel_layer.scan.topic": "/scan"
+    },
+    "/tb2/amcl/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb2/controller_server/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb2/controller_server/get_parameters": {
+      "use_sim_time": true,
+      "FollowPath.max_vel_x": 0.2,
+      "FollowPath.max_speed_xy": 0.2,
+      "goal_checker_plugins": [
+        "goal_checker"
+      ],
+      "goal_checker.xy_goal_tolerance": 0.3,
+      "FollowPath.xy_goal_tolerance": 0.3
+    },
+    "/tb2/planner_server/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb2/planner_server/get_parameters": {
+      "use_sim_time": true
+    },
+    "/tb2/bt_navigator/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb2/bt_navigator/get_parameters": {
+      "use_sim_time": true,
+      "global_frame": "map",
+      "robot_base_frame": "base_footprint",
+      "odom_topic": "odom"
+    },
+    "/tb2/velocity_smoother/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb2/velocity_smoother/get_parameters": {
+      "use_sim_time": false,
+      "max_velocity": [
+        0.2,
+        0.0,
+        0.25
+      ],
+      "odom_topic": "odom"
+    },
+    "/tb2/global_costmap/global_costmap/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb2/global_costmap/global_costmap/get_parameters": {
+      "use_sim_time": true,
+      "global_frame": "map",
+      "robot_base_frame": "base_footprint",
+      "footprint": "[[-0.30,-0.30],[-0.30,0.30],[0.475,0.30],[0.475,-0.30]]",
+      "plugins": [
+        "static_layer",
+        "obstacle_layer",
+        "inflation_layer"
+      ],
+      "static_layer.map_topic": "",
+      "obstacle_layer.scan.topic": "/scan"
+    },
+    "/tb2/local_costmap/local_costmap/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb2/local_costmap/local_costmap/get_parameters": {
+      "use_sim_time": true,
+      "global_frame": "odom",
+      "robot_base_frame": "base_footprint",
+      "footprint": "[[-0.30,-0.30],[-0.30,0.30],[0.475,0.30],[0.475,-0.30]]",
+      "plugins": [
+        "voxel_layer",
+        "inflation_layer"
+      ],
+      "voxel_layer.scan.topic": "/scan"
+    },
+    "/tb3/amcl/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb3/amcl/get_parameters": {
+      "use_sim_time": true,
+      "global_frame_id": "map",
+      "odom_frame_id": "odom",
+      "base_frame_id": "base_footprint",
+      "scan_topic": "scan",
+      "map_topic": "/map",
+      "set_initial_pose": true
+    },
+    "/tb3/planner_server/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb3/planner_server/get_parameters": {
+      "use_sim_time": true
+    },
+    "/tb3/global_costmap/global_costmap/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb3/global_costmap/global_costmap/get_parameters": {
+      "use_sim_time": true,
+      "global_frame": "map",
+      "robot_base_frame": "base_footprint",
+      "footprint": "[[-0.30,-0.30],[-0.30,0.30],[0.475,0.30],[0.475,-0.30]]",
+      "plugins": [
+        "static_layer",
+        "obstacle_layer",
+        "inflation_layer"
+      ],
+      "static_layer.map_topic": "",
+      "obstacle_layer.scan.topic": "/scan"
+    },
+    "/tb4/controller_server/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb4/controller_server/get_parameters": {
+      "use_sim_time": true,
+      "FollowPath.max_vel_x": 0.2,
+      "FollowPath.max_speed_xy": 0.2,
+      "goal_checker_plugins": [
+        "goal_checker"
+      ],
+      "goal_checker.xy_goal_tolerance": 0.3,
+      "FollowPath.xy_goal_tolerance": 0.3
+    },
+    "/tb4/local_costmap/local_costmap/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb4/local_costmap/local_costmap/get_parameters": {
+      "use_sim_time": true,
+      "global_frame": "odom",
+      "robot_base_frame": "base_footprint",
+      "footprint": "[[-0.30,-0.30],[-0.30,0.30],[0.475,0.30],[0.475,-0.30]]",
+      "plugins": [
+        "voxel_layer",
+        "inflation_layer"
+      ],
+      "voxel_layer.scan.topic": "/scan"
+    },
+    "/tb5/planner_server/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb5/planner_server/get_parameters": {
+      "use_sim_time": true
+    },
+    "/tb5/velocity_smoother/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb5/velocity_smoother/get_parameters": {
+      "use_sim_time": false,
+      "max_velocity": [
+        0.2,
+        0.0,
+        0.25
+      ],
+      "odom_topic": "odom"
+    },
+    "/tb5/global_costmap/global_costmap/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb5/global_costmap/global_costmap/get_parameters": {
+      "use_sim_time": true,
+      "global_frame": "map",
+      "robot_base_frame": "base_footprint",
+      "footprint": "[[-0.30,-0.30],[-0.30,0.30],[0.475,0.30],[0.475,-0.30]]",
+      "plugins": [
+        "static_layer",
+        "obstacle_layer",
+        "inflation_layer"
+      ],
+      "static_layer.map_topic": "",
+      "obstacle_layer.scan.topic": "/scan"
+    },
+    "/tb1/bt_navigator/get_parameters": {
+      "use_sim_time": true,
+      "global_frame": "map",
+      "robot_base_frame": "base_footprint",
+      "odom_topic": "odom"
+    },
+    "/tb1/velocity_smoother/get_parameters": {
+      "use_sim_time": false,
+      "max_velocity": [
+        0.15,
+        0.0,
+        0.25
+      ],
+      "odom_topic": "odom"
+    },
+    "/tb2/amcl/get_parameters": {
+      "use_sim_time": true,
+      "global_frame_id": "map",
+      "odom_frame_id": "odom",
+      "base_frame_id": "base_footprint",
+      "scan_topic": "scan",
+      "map_topic": "/map",
+      "set_initial_pose": true
+    },
+    "/tb3/controller_server/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb3/controller_server/get_parameters": {
+      "use_sim_time": true,
+      "FollowPath.max_vel_x": 0.2,
+      "FollowPath.max_speed_xy": 0.2,
+      "goal_checker_plugins": [
+        "goal_checker"
+      ],
+      "goal_checker.xy_goal_tolerance": 0.3,
+      "FollowPath.xy_goal_tolerance": 0.3
+    },
+    "/tb3/bt_navigator/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb3/bt_navigator/get_parameters": {
+      "use_sim_time": true,
+      "global_frame": "map",
+      "robot_base_frame": "base_footprint",
+      "odom_topic": "odom"
+    },
+    "/tb3/velocity_smoother/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb3/velocity_smoother/get_parameters": {
+      "use_sim_time": false,
+      "max_velocity": [
+        0.2,
+        0.0,
+        0.25
+      ],
+      "odom_topic": "odom"
+    },
+    "/tb3/local_costmap/local_costmap/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb3/local_costmap/local_costmap/get_parameters": {
+      "use_sim_time": true,
+      "global_frame": "odom",
+      "robot_base_frame": "base_footprint",
+      "footprint": "[[-0.30,-0.30],[-0.30,0.30],[0.475,0.30],[0.475,-0.30]]",
+      "plugins": [
+        "voxel_layer",
+        "inflation_layer"
+      ],
+      "voxel_layer.scan.topic": "/scan"
+    },
+    "/tb4/amcl/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb4/amcl/get_parameters": {
+      "use_sim_time": true,
+      "global_frame_id": "map",
+      "odom_frame_id": "odom",
+      "base_frame_id": "base_footprint",
+      "scan_topic": "scan",
+      "map_topic": "/map",
+      "set_initial_pose": true
+    },
+    "/tb4/planner_server/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb4/planner_server/get_parameters": {
+      "use_sim_time": true
+    },
+    "/tb4/bt_navigator/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb4/bt_navigator/get_parameters": {
+      "use_sim_time": true,
+      "global_frame": "map",
+      "robot_base_frame": "base_footprint",
+      "odom_topic": "odom"
+    },
+    "/tb4/velocity_smoother/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb4/velocity_smoother/get_parameters": {
+      "use_sim_time": false,
+      "max_velocity": [
+        0.2,
+        0.0,
+        0.25
+      ],
+      "odom_topic": "odom"
+    },
+    "/tb4/global_costmap/global_costmap/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb4/global_costmap/global_costmap/get_parameters": {
+      "use_sim_time": true,
+      "global_frame": "map",
+      "robot_base_frame": "base_footprint",
+      "footprint": "[[-0.30,-0.30],[-0.30,0.30],[0.475,0.30],[0.475,-0.30]]",
+      "plugins": [
+        "static_layer",
+        "obstacle_layer",
+        "inflation_layer"
+      ],
+      "static_layer.map_topic": "",
+      "obstacle_layer.scan.topic": "/scan"
+    },
+    "/tb5/amcl/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb5/amcl/get_parameters": {
+      "use_sim_time": true,
+      "global_frame_id": "map",
+      "odom_frame_id": "odom",
+      "base_frame_id": "base_footprint",
+      "scan_topic": "scan",
+      "map_topic": "/map",
+      "set_initial_pose": true
+    },
+    "/tb5/controller_server/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb5/controller_server/get_parameters": {
+      "use_sim_time": true,
+      "FollowPath.max_vel_x": 0.2,
+      "FollowPath.max_speed_xy": 0.2,
+      "goal_checker_plugins": [
+        "goal_checker"
+      ],
+      "goal_checker.xy_goal_tolerance": 0.3,
+      "FollowPath.xy_goal_tolerance": 0.3
+    },
+    "/tb5/bt_navigator/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb5/local_costmap/local_costmap/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb5/local_costmap/local_costmap/get_parameters": {
+      "use_sim_time": true,
+      "global_frame": "odom",
+      "robot_base_frame": "base_footprint",
+      "footprint": "[[-0.30,-0.30],[-0.30,0.30],[0.475,0.30],[0.475,-0.30]]",
+      "plugins": [
+        "voxel_layer",
+        "inflation_layer"
+      ],
+      "voxel_layer.scan.topic": "/scan"
+    },
+    "/tb5/bt_navigator/get_parameters": {
+      "use_sim_time": true,
+      "global_frame": "map",
+      "robot_base_frame": "base_footprint",
+      "odom_topic": "odom"
+    }
+  },
+  "clock": [
+    5.5,
+    7.3
+  ],
+  "nodes": [
+    "/tb1/controller_server",
+    "/tb1/local_costmap/local_costmap",
+    "/tb1/transform_listener_impl_76e958007250",
+    "/tb2/controller_server",
+    "/tb2/local_costmap/local_costmap",
+    "/tb2/transform_listener_impl_7e6ae801cee0",
+    "/tb1/lifecycle_manager_localization",
+    "/tb4/lifecycle_manager_localization",
+    "/tb3/robot_state_publisher",
+    "/tb5/planner_server",
+    "/tb5/global_costmap/global_costmap",
+    "/tb5/transform_listener_impl_76c7cc047da0",
+    "/tb1/robot_state_publisher",
+    "/tb2/lifecycle_manager_localization",
+    "/tb4/behavior_server",
+    "/tb4/transform_listener_impl_7489a8008850",
+    "/mcp_service_lister",
+    "/tb3/controller_server",
+    "/tb3/local_costmap/local_costmap",
+    "/tb3/transform_listener_impl_7dfc74006340",
+    "/tb4/planner_server",
+    "/tb4/global_costmap/global_costmap",
+    "/tb4/transform_listener_impl_5be880c03c10",
+    "/tb4/waypoint_follower",
+    "/tb4/smoother_server",
+    "/tb4/transform_listener_impl_5650b95789e0",
+    "/tb3/behavior_server",
+    "/tb3/transform_listener_impl_752d3c02b450",
+    "/tb5/smoother_server",
+    "/tb5/transform_listener_impl_74aa74039ea0",
+    "/tb1/smoother_server",
+    "/tb1/transform_listener_impl_76521c01df10",
+    "/tb5/lifecycle_manager_localization",
+    "/gazebo",
+    "/gazebo/gazebo_ros_state",
+    "/tb1/turtlebot3_imu",
+    "/tb1/front_laserscan",
+    "/tb1/turtlebot3_diff_drive",
+    "/tb1/turtlebot3_joint_state",
+    "/tb2/turtlebot3_imu",
+    "/tb2/turtlebot3_laserscan",
+    "/tb2/turtlebot3_diff_drive",
+    "/tb2/turtlebot3_joint_state",
+    "/tb3/turtlebot3_imu",
+    "/tb3/turtlebot3_laserscan",
+    "/tb3/turtlebot3_diff_drive",
+    "/tb3/turtlebot3_joint_state",
+    "/tb4/turtlebot3_imu",
+    "/tb4/turtlebot3_laserscan",
+    "/tb4/turtlebot3_diff_drive",
+    "/tb4/turtlebot3_joint_state",
+    "/tb5/turtlebot3_imu",
+    "/tb5/turtlebot3_laserscan",
+    "/tb5/turtlebot3_diff_drive",
+    "/tb5/turtlebot3_joint_state",
+    "/tb4/bt_navigator",
+    "/tb4/bt_navigator_navigate_to_pose_rclcpp_node",
+    "/tb4/bt_navigator_navigate_through_poses_rclcpp_node",
+    "/tb5/velocity_smoother",
+    "/tb5/controller_server",
+    "/tb5/local_costmap/local_costmap",
+    "/tb5/transform_listener_impl_5c7b1d2c9b50",
+    "/tb2/amcl",
+    "/tb2/transform_listener_impl_7e0f6c002fc0",
+    "/tb3/bt_navigator",
+    "/tb3/bt_navigator_navigate_to_pose_rclcpp_node",
+    "/tb3/bt_navigator_navigate_through_poses_rclcpp_node",
+    "/tb1/lifecycle_manager_navigation",
+    "/tb2/velocity_smoother",
+    "/fleet_read_only_audit",
+    "/tb5/bt_navigator",
+    "/tb5/bt_navigator_navigate_to_pose_rclcpp_node",
+    "/tb5/bt_navigator_navigate_through_poses_rclcpp_node",
+    "/tb3/velocity_smoother",
+    "/tb2/waypoint_follower",
+    "/tb1/waypoint_follower",
+    "/tb2/smoother_server",
+    "/tb2/transform_listener_impl_7675dc009b60",
+    "/tb3/amcl",
+    "/tb3/transform_listener_impl_7627a8003780",
+    "/tb3/waypoint_follower",
+    "/tb5/robot_state_publisher",
+    "/tb3/smoother_server",
+    "/tb3/transform_listener_impl_730ef401e740",
+    "/tb3/lifecycle_manager_localization",
+    "/tb4/lifecycle_manager_navigation",
+    "/tb4/velocity_smoother",
+    "/tb1/behavior_server",
+    "/tb1/transform_listener_impl_7fc73800ca50",
+    "/tb4/amcl",
+    "/tb4/transform_listener_impl_7960d80054a0",
+    "/tb2/behavior_server",
+    "/tb2/transform_listener_impl_7c80a00058f0",
+    "/tb4/robot_state_publisher",
+    "/lifecycle_manager_map_server",
+    "/tb5/waypoint_follower",
+    "/tb2/planner_server",
+    "/tb2/global_costmap/global_costmap",
+    "/tb2/transform_listener_impl_557f20be4a70",
+    "/tb1/bt_navigator",
+    "/tb1/bt_navigator_navigate_to_pose_rclcpp_node",
+    "/tb1/bt_navigator_navigate_through_poses_rclcpp_node",
+    "/tb3/planner_server",
+    "/tb3/global_costmap/global_costmap",
+    "/tb3/transform_listener_impl_564279fbffd0",
+    "/tb1/velocity_smoother",
+    "/tb5/behavior_server",
+    "/tb5/transform_listener_impl_702a70007a90",
+    "/gazebo_mcp_bridge",
+    "/tb2/lifecycle_manager_navigation",
+    "/map_server",
+    "/tb5/amcl",
+    "/tb5/transform_listener_impl_7c7fa402b8c0",
+    "/tb3/lifecycle_manager_navigation",
+    "/tb5/lifecycle_manager_navigation",
+    "/tb1/planner_server",
+    "/tb1/global_costmap/global_costmap",
+    "/tb1/transform_listener_impl_61fab08733a0",
+    "/tb2/bt_navigator",
+    "/tb2/bt_navigator_navigate_to_pose_rclcpp_node",
+    "/tb2/bt_navigator_navigate_through_poses_rclcpp_node",
+    "/tb4/controller_server",
+    "/tb4/local_costmap/local_costmap",
+    "/tb4/transform_listener_impl_6435fe6b5bc0",
+    "/tb1/amcl",
+    "/tb1/transform_listener_impl_5e4b582ac6f0",
+    "/tb2/robot_state_publisher"
+  ],
+  "endpoints": {
+    "/map": {
+      "publishers": [
+        {
+          "node": "/map_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb5/global_costmap/global_costmap",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        },
+        {
+          "node": "/tb4/global_costmap/global_costmap",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        },
+        {
+          "node": "/tb2/amcl",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        },
+        {
+          "node": "/fleet_read_only_audit",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        },
+        {
+          "node": "/tb3/amcl",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        },
+        {
+          "node": "/tb4/amcl",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        },
+        {
+          "node": "/tb2/global_costmap/global_costmap",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        },
+        {
+          "node": "/tb3/global_costmap/global_costmap",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        },
+        {
+          "node": "/tb5/amcl",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        },
+        {
+          "node": "/tb1/global_costmap/global_costmap",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        },
+        {
+          "node": "/tb1/amcl",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        }
+      ]
+    },
+    "/clock": {
+      "publishers": [
+        {
+          "node": "/gazebo",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb1/controller_server",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/local_costmap/local_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/controller_server",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/local_costmap/local_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/lifecycle_manager_localization",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/lifecycle_manager_localization",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/robot_state_publisher",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/planner_server",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/global_costmap/global_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/robot_state_publisher",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/lifecycle_manager_localization",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/controller_server",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/local_costmap/local_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/planner_server",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/global_costmap/global_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/lifecycle_manager_localization",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/gazebo",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/gazebo/gazebo_ros_state",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/turtlebot3_imu",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/front_laserscan",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/turtlebot3_diff_drive",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/turtlebot3_joint_state",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/turtlebot3_imu",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/turtlebot3_laserscan",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/turtlebot3_diff_drive",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/turtlebot3_joint_state",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/turtlebot3_imu",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/turtlebot3_laserscan",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/turtlebot3_diff_drive",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/turtlebot3_joint_state",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/turtlebot3_imu",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/turtlebot3_laserscan",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/turtlebot3_diff_drive",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/turtlebot3_joint_state",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/turtlebot3_imu",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/turtlebot3_laserscan",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/turtlebot3_diff_drive",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/turtlebot3_joint_state",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/bt_navigator",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/controller_server",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/local_costmap/local_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/amcl",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/bt_navigator",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/lifecycle_manager_navigation",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/fleet_read_only_audit",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/fleet_read_only_audit",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/bt_navigator",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/amcl",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/robot_state_publisher",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/lifecycle_manager_localization",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/lifecycle_manager_navigation",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/amcl",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/robot_state_publisher",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/lifecycle_manager_map_server",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/planner_server",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/global_costmap/global_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/bt_navigator",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/planner_server",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/global_costmap/global_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/lifecycle_manager_navigation",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/map_server",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/amcl",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/lifecycle_manager_navigation",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/lifecycle_manager_navigation",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/planner_server",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/global_costmap/global_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/bt_navigator",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/controller_server",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/local_costmap/local_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/amcl",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/robot_state_publisher",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/scan": {
+      "publishers": [],
+      "subscribers": []
+    },
+    "/tb1/cmd_vel": {
+      "publishers": [
+        {
+          "node": "/tb1/velocity_smoother",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb1/turtlebot3_diff_drive",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb1/cmd_vel_nav": {
+      "publishers": [
+        {
+          "node": "/tb1/controller_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb1/velocity_smoother",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb1/cmd_vel_uncoordinated": {
+      "publishers": [],
+      "subscribers": []
+    },
+    "/tb1/goal_pose": {
+      "publishers": [],
+      "subscribers": [
+        {
+          "node": "/tb1/bt_navigator",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb1/scan": {
+      "publishers": [
+        {
+          "node": "/tb1/front_laserscan",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb1/local_costmap/local_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/fleet_read_only_audit",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/global_costmap/global_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/amcl",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb1/robot_description": {
+      "publishers": [
+        {
+          "node": "/tb1/robot_state_publisher",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        }
+      ],
+      "subscribers": []
+    },
+    "/tb2/cmd_vel": {
+      "publishers": [
+        {
+          "node": "/tb2/velocity_smoother",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb2/turtlebot3_diff_drive",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb2/cmd_vel_nav": {
+      "publishers": [
+        {
+          "node": "/tb2/controller_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb2/velocity_smoother",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb2/cmd_vel_uncoordinated": {
+      "publishers": [],
+      "subscribers": []
+    },
+    "/tb2/goal_pose": {
+      "publishers": [],
+      "subscribers": [
+        {
+          "node": "/tb2/bt_navigator",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb2/scan": {
+      "publishers": [
+        {
+          "node": "/tb2/turtlebot3_laserscan",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb2/local_costmap/local_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/amcl",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/fleet_read_only_audit",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/global_costmap/global_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb2/robot_description": {
+      "publishers": [
+        {
+          "node": "/tb2/robot_state_publisher",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        }
+      ],
+      "subscribers": []
+    },
+    "/tb3/cmd_vel": {
+      "publishers": [
+        {
+          "node": "/tb3/velocity_smoother",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb3/turtlebot3_diff_drive",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb3/cmd_vel_nav": {
+      "publishers": [
+        {
+          "node": "/tb3/controller_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb3/velocity_smoother",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb3/cmd_vel_uncoordinated": {
+      "publishers": [],
+      "subscribers": []
+    },
+    "/tb3/goal_pose": {
+      "publishers": [],
+      "subscribers": [
+        {
+          "node": "/tb3/bt_navigator",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb3/scan": {
+      "publishers": [
+        {
+          "node": "/tb3/turtlebot3_laserscan",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb3/local_costmap/local_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/fleet_read_only_audit",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/amcl",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/global_costmap/global_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb3/robot_description": {
+      "publishers": [
+        {
+          "node": "/tb3/robot_state_publisher",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        }
+      ],
+      "subscribers": []
+    },
+    "/tb4/cmd_vel": {
+      "publishers": [
+        {
+          "node": "/tb4/velocity_smoother",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb4/turtlebot3_diff_drive",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb4/cmd_vel_nav": {
+      "publishers": [
+        {
+          "node": "/tb4/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/controller_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb4/velocity_smoother",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb4/cmd_vel_uncoordinated": {
+      "publishers": [],
+      "subscribers": []
+    },
+    "/tb4/goal_pose": {
+      "publishers": [],
+      "subscribers": [
+        {
+          "node": "/tb4/bt_navigator",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb4/scan": {
+      "publishers": [
+        {
+          "node": "/tb4/turtlebot3_laserscan",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb4/global_costmap/global_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/fleet_read_only_audit",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/amcl",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/local_costmap/local_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb4/robot_description": {
+      "publishers": [
+        {
+          "node": "/tb4/robot_state_publisher",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        }
+      ],
+      "subscribers": []
+    },
+    "/tb5/cmd_vel": {
+      "publishers": [
+        {
+          "node": "/tb5/velocity_smoother",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb5/turtlebot3_diff_drive",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb5/cmd_vel_nav": {
+      "publishers": [
+        {
+          "node": "/tb5/controller_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb5/velocity_smoother",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb5/cmd_vel_uncoordinated": {
+      "publishers": [],
+      "subscribers": []
+    },
+    "/tb5/goal_pose": {
+      "publishers": [],
+      "subscribers": [
+        {
+          "node": "/tb5/bt_navigator",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb5/scan": {
+      "publishers": [
+        {
+          "node": "/tb5/turtlebot3_laserscan",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb5/global_costmap/global_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/local_costmap/local_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/fleet_read_only_audit",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/amcl",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb5/robot_description": {
+      "publishers": [
+        {
+          "node": "/tb5/robot_state_publisher",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        }
+      ],
+      "subscribers": []
+    }
+  },
+  "actions": [
+    {
+      "robot": "tb1",
+      "ready": true
+    },
+    {
+      "robot": "tb2",
+      "ready": true
+    },
+    {
+      "robot": "tb3",
+      "ready": true
+    },
+    {
+      "robot": "tb4",
+      "ready": true
+    },
+    {
+      "robot": "tb5",
+      "ready": true
+    }
+  ],
+  "map_file_comparison": {
+    "file": "config/EVfloor9_outer_only.yaml",
+    "same_shape": true,
+    "exact_match": true
+  }
+}

@@ -1,0 +1,229 @@
+{
+  "original": [
+    {
+      "name": "tb1",
+      "xy": [
+        0.7,
+        1.1
+      ],
+      "geometry_centre_distance": 5.1462343623019375,
+      "nearest_wall": "Basic Wall Generic - 8\" [125075]",
+      "map_centre_distance": 4.956985316281138,
+      "rotation_radius": 1.63783393541592,
+      "geometry_turn_clearance": 3.5084004268860176,
+      "map_turn_clearance": 3.3191513808652178
+    },
+    {
+      "name": "tb2",
+      "xy": [
+        4.9,
+        4.5
+      ],
+      "geometry_centre_distance": 7.8915590066592705,
+      "nearest_wall": "Basic Wall Generic - 8\" [125099]",
+      "map_centre_distance": 7.666998571285327,
+      "rotation_radius": 0.5618051263561058,
+      "geometry_turn_clearance": 7.329753880303165,
+      "map_turn_clearance": 7.105193444929221
+    },
+    {
+      "name": "tb3",
+      "xy": [
+        -3.5,
+        -2.3
+      ],
+      "geometry_centre_distance": 1.7462497897863096,
+      "nearest_wall": "Basic Wall Generic - 8\" [125075]",
+      "map_centre_distance": 1.5312786465035653,
+      "rotation_radius": 0.5618051263561058,
+      "geometry_turn_clearance": 1.1844446634302037,
+      "map_turn_clearance": 0.9694735201474595
+    },
+    {
+      "name": "tb4",
+      "xy": [
+        4.9,
+        -2.3
+      ],
+      "geometry_centre_distance": 1.3446846607170952,
+      "nearest_wall": "Basic Wall Generic - 8\" [125099]",
+      "map_centre_distance": 1.0710365241112854,
+      "rotation_radius": 0.5618051263561058,
+      "geometry_turn_clearance": 0.7828795343609894,
+      "map_turn_clearance": 0.5092313977551796
+    },
+    {
+      "name": "tb5",
+      "xy": [
+        -3.5,
+        4.5
+      ],
+      "geometry_centre_distance": 8.546249789740434,
+      "nearest_wall": "Basic Wall Generic - 8\" [125075]",
+      "map_centre_distance": 8.331277595260234,
+      "rotation_radius": 0.5618051263561058,
+      "geometry_turn_clearance": 7.984444663384329,
+      "map_turn_clearance": 7.769472468904128
+    }
+  ],
+  "translation": [
+    -0.2,
+    0.5
+  ],
+  "required_clearance": 0.65,
+  "revised": [
+    {
+      "name": "tb1",
+      "xy": [
+        0.49998564956358105,
+        1.600063088026669
+      ],
+      "geometry_centre_distance": 5.646298185018967,
+      "nearest_wall": "Basic Wall Generic - 8\" [125075]",
+      "map_centre_distance": 5.457051928373857,
+      "rotation_radius": 1.63783393541592,
+      "geometry_turn_clearance": 4.008464249603048,
+      "map_turn_clearance": 3.819217992957937,
+      "passes": true
+    },
+    {
+      "name": "tb2",
+      "xy": [
+        4.708239031322719,
+        5.00000341472773
+      ],
+      "geometry_centre_distance": 8.410334714152253,
+      "nearest_wall": "Basic Wall Generic - 8\" [125099]",
+      "map_centre_distance": 8.183215452720004,
+      "rotation_radius": 0.5618051263561058,
+      "geometry_turn_clearance": 7.848529587796147,
+      "map_turn_clearance": 7.621410326363899,
+      "passes": true
+    },
+    {
+      "name": "tb3",
+      "xy": [
+        -3.6922730445336485,
+        -1.7999956044571896
+      ],
+      "geometry_centre_distance": 2.2462548915840745,
+      "nearest_wall": "Basic Wall Generic - 8\" [125075]",
+      "map_centre_distance": 2.0313130520214506,
+      "rotation_radius": 0.5618051263561058,
+      "geometry_turn_clearance": 1.6844497652279689,
+      "map_turn_clearance": 1.469507925665345,
+      "passes": true
+    },
+    {
+      "name": "tb4",
+      "xy": [
+        4.7072760627366845,
+        -1.799997845991891
+      ],
+      "geometry_centre_distance": 1.862028500783803,
+      "nearest_wall": "Basic Wall Generic - 8\" [125099]",
+      "map_centre_distance": 1.5908349319793471,
+      "rotation_radius": 0.5618051263561058,
+      "geometry_turn_clearance": 1.3002233744276972,
+      "map_turn_clearance": 1.0290298056232414,
+      "passes": true
+    },
+    {
+      "name": "tb5",
+      "xy": [
+        -3.6931693520444493,
+        5.0000026752356455
+      ],
+      "geometry_centre_distance": 9.046253174523358,
+      "nearest_wall": "Basic Wall Generic - 8\" [125075]",
+      "map_centre_distance": 8.83128617814039,
+      "rotation_radius": 0.5618051263561058,
+      "geometry_turn_clearance": 8.484448048167252,
+      "map_turn_clearance": 8.269481051784284,
+      "passes": true
+    }
+  ],
+  "pairs": [
+    {
+      "robots": [
+        "tb1",
+        "tb2"
+      ],
+      "turn_envelope_gap": 3.2104432620207777,
+      "passes": true
+    },
+    {
+      "robots": [
+        "tb1",
+        "tb3"
+      ],
+      "turn_envelope_gap": 3.1980856506015924,
+      "passes": true
+    },
+    {
+      "robots": [
+        "tb1",
+        "tb4"
+      ],
+      "turn_envelope_gap": 3.2097700534472575,
+      "passes": true
+    },
+    {
+      "robots": [
+        "tb1",
+        "tb5"
+      ],
+      "turn_envelope_gap": 3.198706801933002,
+      "passes": true
+    },
+    {
+      "robots": [
+        "tb2",
+        "tb3"
+      ],
+      "turn_envelope_gap": 9.684192012203841,
+      "passes": true
+    },
+    {
+      "robots": [
+        "tb2",
+        "tb4"
+      ],
+      "turn_envelope_gap": 5.6763910761918455,
+      "passes": true
+    },
+    {
+      "robots": [
+        "tb2",
+        "tb5"
+      ],
+      "turn_envelope_gap": 7.27779813065499,
+      "passes": true
+    },
+    {
+      "robots": [
+        "tb3",
+        "tb4"
+      ],
+      "turn_envelope_gap": 7.275938854558422,
+      "passes": true
+    },
+    {
+      "robots": [
+        "tb3",
+        "tb5"
+      ],
+      "turn_envelope_gap": 5.676388086051752,
+      "passes": true
+    },
+    {
+      "robots": [
+        "tb4",
+        "tb5"
+      ],
+      "turn_envelope_gap": 9.684141144105359,
+      "passes": true
+    }
+  ],
+  "all_pass": true
+}

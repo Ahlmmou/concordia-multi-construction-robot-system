@@ -1,0 +1,52 @@
+{
+  "tb4": {
+    "frame": "map",
+    "checked_radius": 1.2118051263561058,
+    "checked_cells": 7197,
+    "lethal_cells": 0,
+    "inscribed_cells": 0,
+    "unknown_cells": 0,
+    "max_cost": 87,
+    "passes": true
+  },
+  "tb5": {
+    "frame": "map",
+    "checked_radius": 1.2118051263561058,
+    "checked_cells": 7199,
+    "lethal_cells": 0,
+    "inscribed_cells": 0,
+    "unknown_cells": 0,
+    "max_cost": 0,
+    "passes": true
+  },
+  "tb2": {
+    "frame": "map",
+    "checked_radius": 1.2118051263561058,
+    "checked_cells": 7198,
+    "lethal_cells": 0,
+    "inscribed_cells": 0,
+    "unknown_cells": 0,
+    "max_cost": 0,
+    "passes": true
+  },
+  "tb1": {
+    "frame": "map",
+    "checked_radius": 2.28783393541592,
+    "checked_cells": 25306,
+    "lethal_cells": 0,
+    "inscribed_cells": 0,
+    "unknown_cells": 0,
+    "max_cost": 0,
+    "passes": true
+  },
+  "tb3": {
+    "frame": "map",
+    "checked_radius": 1.2118051263561058,
+    "checked_cells": 7196,
+    "lethal_cells": 0,
+    "inscribed_cells": 0,
+    "unknown_cells": 0,
+    "max_cost": 24,
+    "passes": true
+  }
+}

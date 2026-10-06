@@ -1,0 +1,47 @@
+{
+  "tb1": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"success\": true,\n  \"data\": {\n    \"name\": \"tb1\",\n    \"pose\": {\n      \"position\": [\n        0.6967558567874422,\n        1.102352195896322,\n        0.039317523533625595\n      ],\n      \"orientation\": [\n        7.102316617438466e-7,\n        5.3206191731751015e-6,\n        -6.9735345453645635e-6,\n        0.9999999999612782\n      ]\n    },\n    \"twist\": {\n      \"linear\": [\n        -0.00009313766673882821,\n        0.0010520719905897714,\n        0.004882174955192834\n      ],\n      \"angular\": [\n        0.005779546678841335,\n        0.00006851146946045866,\n        0.00005979456745119084\n      ]\n    }\n  },\n  \"error\": null,\n  \"error_code\": null,\n  \"suggestions\": null,\n  \"example_fix\": null,\n  \"metadata\": null\n}"
+      }
+    ],
+    "isError": false
+  },
+  "tb2": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"success\": true,\n  \"data\": {\n    \"name\": \"tb2\",\n    \"pose\": {\n      \"position\": [\n        5.076726470309076,\n        4.500014954259392,\n        0.025444345963445164\n      ],\n      \"orientation\": [\n        -0.00006473015558453724,\n        0.011465314896065521,\n        -0.00025327935629052624,\n        0.9999342369445646\n      ]\n    },\n    \"twist\": {\n      \"linear\": [\n        0.000563675628650897,\n        -0.00002531485570803915,\n        -0.17828845360560666\n      ],\n      \"angular\": [\n        0.0008255773940663578,\n        0.020797901311848405,\n        0.00008480192701967643\n      ]\n    }\n  },\n  \"error\": null,\n  \"error_code\": null,\n  \"suggestions\": null,\n  \"example_fix\": null,\n  \"metadata\": null\n}"
+      }
+    ],
+    "isError": false
+  },
+  "tb3": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"success\": true,\n  \"data\": {\n    \"name\": \"tb3\",\n    \"pose\": {\n      \"position\": [\n        -3.3237837804543156,\n        -2.2999915029422517,\n        0.025409434159420208\n      ],\n      \"orientation\": [\n        0.000034429028849068444,\n        0.011459897584985631,\n        -0.0002528044602366233,\n        0.9999343006677432\n      ]\n    },\n    \"twist\": {\n      \"linear\": [\n        0.00003507343712032691,\n        0.00016066489892433667,\n        -0.1802448879488837\n      ],\n      \"angular\": [\n        -0.005970436253760785,\n        0.020187288617628342,\n        -0.00030773709238161504\n      ]\n    }\n  },\n  \"error\": null,\n  \"error_code\": null,\n  \"suggestions\": null,\n  \"example_fix\": null,\n  \"metadata\": null\n}"
+      }
+    ],
+    "isError": false
+  },
+  "tb4": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"success\": true,\n  \"data\": {\n    \"name\": \"tb4\",\n    \"pose\": {\n      \"position\": [\n        5.075837239244625,\n        -2.299989198910168,\n        0.025417073227356642\n      ],\n      \"orientation\": [\n        -0.000010941396951861624,\n        0.011461292744246652,\n        -0.0002466955468305747,\n        0.9999342867359954\n      ]\n    },\n    \"twist\": {\n      \"linear\": [\n        0.00039111044260225505,\n        -0.00020426498948956841,\n        -0.1670750218723316\n      ],\n      \"angular\": [\n        0.007107878164844033,\n        0.02270247256257275,\n        -9.301926239090787e-6\n      ]\n    }\n  },\n  \"error\": null,\n  \"error_code\": null,\n  \"suggestions\": null,\n  \"example_fix\": null,\n  \"metadata\": null\n}"
+      }
+    ],
+    "isError": false
+  },
+  "tb5": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"success\": true,\n  \"data\": {\n    \"name\": \"tb5\",\n    \"pose\": {\n      \"position\": [\n        -3.324513349155455,\n        4.500014990979403,\n        0.025413447632124494\n      ],\n      \"orientation\": [\n        -0.0000681057772729919,\n        0.0114582349472163,\n        -0.0002487418433268562,\n        0.9999343190135005\n      ]\n    },\n    \"twist\": {\n      \"linear\": [\n        0.00038137175930413186,\n        0.00011436438899521404,\n        -0.1681302213117151\n      ],\n      \"angular\": [\n        -0.003609625975318226,\n        0.0224570005978709,\n        0.00022636218354324546\n      ]\n    }\n  },\n  \"error\": null,\n  \"error_code\": null,\n  \"suggestions\": null,\n  \"example_fix\": null,\n  \"metadata\": null\n}"
+      }
+    ],
+    "isError": false
+  }
+}

@@ -9,6 +9,7 @@ from tf2_msgs.msg import TFMessage
 from sensor_msgs.msg import LaserScan
 from nav_msgs.msg import Path, OccupancyGrid
 from map_msgs.msg import OccupancyGridUpdate
+from geometry_msgs.msg import PolygonStamped
 
 
 ROOT = '/fleet_visualization'
@@ -41,6 +42,13 @@ class FleetRvizRelay(Node):
                 self.subscriptions_kept.append(self.create_subscription(Path, f'/{robot}/{suffix}',
                     partial(self.relay, robot=robot, publisher=publisher), qos_profile_sensor_data))
             for scope in ('global_costmap', 'local_costmap'):
+                footprint_topic = f'{scope}/published_footprint'
+                footprint_pub = self.create_publisher(
+                    PolygonStamped, f'{ROOT}/{robot}/{footprint_topic}', 10)
+                self.subscriptions_kept.append(self.create_subscription(
+                    PolygonStamped, f'/{robot}/{footprint_topic}',
+                    partial(self.relay, robot=robot, publisher=footprint_pub),
+                    qos_profile_sensor_data))
                 suffix = f'{scope}/costmap'
                 publisher = self.create_publisher(OccupancyGrid, f'{ROOT}/{robot}/{suffix}', static_qos)
                 self.subscriptions_kept.append(self.create_subscription(
