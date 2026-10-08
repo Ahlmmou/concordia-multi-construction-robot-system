@@ -33,7 +33,14 @@ install(DIRECTORY config/
 install(PROGRAMS
   scripts/goal_listener_and_sender.py
   scripts/spawn.py
+  scripts/fleet_mission_controller.py
+  scripts/formation_geometry.py
+  scripts/audit_fleet.py
+  scripts/validate_fleet_navigation.py
+  scripts/validate_fleet_mission.py
   scripts/fleet_rviz_relay.py
+  scripts/fleet_live_status.py
+  scripts/fleet_status_text.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

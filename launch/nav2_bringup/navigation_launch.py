@@ -30,6 +30,7 @@ def generate_launch_description():
     # Get the launch directory
     bringup_dir = get_package_share_directory('turtlebot3_gazebo')
 
+    velocity_output_topic = LaunchConfiguration('velocity_output_topic', default='cmd_vel')
     namespace = LaunchConfiguration('namespace')
     use_sim_time = LaunchConfiguration('use_sim_time')
     autostart = LaunchConfiguration('autostart')
@@ -152,7 +153,7 @@ def generate_launch_description():
                 respawn_delay=2.0,
                 parameters=[configured_params],
                 arguments=['--ros-args', '--log-level', log_level],
-                remappings=remappings),
+                remappings=remappings + [('cmd_vel', 'cmd_vel_nav')]),
             Node(
                 package='nav2_bt_navigator',
                 executable='bt_navigator',
@@ -183,7 +184,7 @@ def generate_launch_description():
                 parameters=[configured_params],
                 arguments=['--ros-args', '--log-level', log_level],
                 remappings=remappings +
-                        [('cmd_vel', 'cmd_vel_nav'), ('cmd_vel_smoothed', 'cmd_vel')]),
+                        [('cmd_vel', 'cmd_vel_nav'), ('cmd_vel_smoothed', velocity_output_topic)]),
             Node(
                 package='nav2_lifecycle_manager',
                 executable='lifecycle_manager',
@@ -223,7 +224,7 @@ def generate_launch_description():
                 plugin='behavior_server::BehaviorServer',
                 name='behavior_server',
                 parameters=[configured_params],
-                remappings=remappings),
+                remappings=remappings + [('cmd_vel', 'cmd_vel_nav')]),
             ComposableNode(
                 package='nav2_bt_navigator',
                 plugin='nav2_bt_navigator::BtNavigator',
@@ -242,7 +243,7 @@ def generate_launch_description():
                 name='velocity_smoother',
                 parameters=[configured_params],
                 remappings=remappings +
-                           [('cmd_vel', 'cmd_vel_nav'), ('cmd_vel_smoothed', 'cmd_vel')]),
+                           [('cmd_vel', 'cmd_vel_nav'), ('cmd_vel_smoothed', velocity_output_topic)]),
             ComposableNode(
                 package='nav2_lifecycle_manager',
                 plugin='nav2_lifecycle_manager::LifecycleManager',

@@ -181,7 +181,8 @@ def generate_launch_description():
                               'params_file': params_file,
                               'use_composition': use_composition,
                               'use_respawn': use_respawn,
-                              'container_name': 'nav2_container'}.items()),
+                              'container_name': 'nav2_container',
+                              'velocity_output_topic': LaunchConfiguration('velocity_output_topic', default='cmd_vel')}.items()),
     ])
 
     # Create the launch description and populate

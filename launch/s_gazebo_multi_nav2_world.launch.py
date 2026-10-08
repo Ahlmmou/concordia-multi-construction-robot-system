@@ -22,7 +22,7 @@ from nav2_common.launch import RewrittenYaml
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, RegisterEventHandler, TimerAction
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, PythonExpression
 from launch.actions import IncludeLaunchDescription, ExecuteProcess
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
@@ -99,9 +99,15 @@ def generate_launch_description():
     )
     
      
+    ld.add_action(DeclareLaunchArgument('simulation_localization', default_value='false'))
     ld.add_action(DeclareLaunchArgument('gazebo_gui', default_value='true'))
     ld.add_action(DeclareLaunchArgument('enable_legacy_formation', default_value='false'))
     ld.add_action(DeclareLaunchArgument('velocity_output_topic', default_value='cmd_vel'))
+    ld.add_action(DeclareLaunchArgument('auxiliary_navigation', default_value='true'))
+    ld.add_action(DeclareLaunchArgument('leader_params', default_value=os.path.join(
+        s_turtlebot3_multi_robot, 'params', 'nav2_params_hilti.yaml')))
+    ld.add_action(DeclareLaunchArgument('auxiliary_model', default_value=os.path.join(
+        s_turtlebot3_multi_robot, 'models', 'turtlebot3_burger', 'model_scaled_x2.sdf')))
     ld.add_action(declare_use_sim_time)
     ld.add_action(declare_enable_drive)
     ld.add_action(declare_enable_rviz)
@@ -181,9 +187,7 @@ def generate_launch_description():
                 s_turtlebot3_multi_robot, 'models', 'Hilti_4', 'Hilti_4.sdf'
                 )
 
-            params_file = os.path.join(
-                s_turtlebot3_multi_robot, 'params', 'nav2_params_hilti.yaml'
-                )
+            params_file = LaunchConfiguration('leader_params')
 
         else :
             urdf = os.path.join(
@@ -191,10 +195,7 @@ def generate_launch_description():
                 s_turtlebot3_multi_robot, 'urdf', 'turtlebot3_' + TURTLEBOT3_MODEL + '_scaled_x2.urdf'
                 )
             
-            model_sdf = os.path.join(
-                # s_turtlebot3_multi_robot,'models', 'turtlebot3_' + TURTLEBOT3_MODEL, 'model.sdf'
-                s_turtlebot3_multi_robot, 'models', 'turtlebot3_' + TURTLEBOT3_MODEL, 'model_scaled_x2.sdf'
-                )
+            model_sdf = LaunchConfiguration('auxiliary_model')
         
             params_file = os.path.join(
                 s_turtlebot3_multi_robot, 'params', 'nav2_params.yaml')
@@ -206,8 +207,16 @@ def generate_launch_description():
             param_rewrites={'amcl.ros__parameters.set_initial_pose': 'true',
                             'amcl.ros__parameters.initial_pose.x': robot['x_pose'],
                             'amcl.ros__parameters.initial_pose.y': robot['y_pose'],
-                            'amcl.ros__parameters.initial_pose.yaw': robot['yaw']},
+                            'amcl.ros__parameters.initial_pose.yaw': robot['yaw'],
+                            'amcl.ros__parameters.tf_broadcast': PythonExpression(["'", LaunchConfiguration('simulation_localization'), "'.lower() != 'true'"])},
             convert_types=True)
+
+        # Gazebo world odometry was verified to share the map axes and origin.
+        ld.add_action(Node(package='tf2_ros', executable='static_transform_publisher',
+            name='simulation_map_to_odom', namespace=namespace,
+            arguments=['--frame-id','map','--child-frame-id','odom'],
+            remappings=remappings, parameters=[{'use_sim_time': True}],
+            condition=IfCondition(LaunchConfiguration('simulation_localization'))))
 
         # Create state publisher node for that instance
         turtlebot_state_publisher = Node(
@@ -262,9 +271,11 @@ def generate_launch_description():
                                         get_package_share_directory('nav2_bt_navigator'),
                                         'behavior_trees', 'navigate_w_replanning_and_recovery.xml'),
                                     'autostart': 'true',
+                                    'use_respawn': 'true',
                                     'use_sim_time': use_sim_time, 'log_level': 'warn',
-                                    'velocity_output_topic': LaunchConfiguration('velocity_output_topic', default='cmd_vel')}.items()
-                                    )
+                                    'velocity_output_topic': LaunchConfiguration('velocity_output_topic', default='cmd_vel')}.items(),
+                condition=None if robot['name'] == 'tb1' else
+                IfCondition(LaunchConfiguration('auxiliary_navigation')))
 
         if last_action is None:
             # Call add_action directly for the first robot to facilitate chain instantiation via RegisterEventHandler
@@ -316,6 +327,8 @@ def generate_launch_description():
             default_flow_style=True)
 
         initial_pose_cmd = ExecuteProcess(
+            condition=None if robot['name'] == 'tb1' else
+            IfCondition(LaunchConfiguration('auxiliary_navigation')),
             cmd=['ros2', 'topic', 'pub', '-t', '3', '--qos-reliability', 'reliable', namespace + ['/initialpose'],
                 'geometry_msgs/PoseWithCovarianceStamped', message],
             output='screen'

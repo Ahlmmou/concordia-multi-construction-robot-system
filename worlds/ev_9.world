@@ -1,5 +1,10 @@
 <sdf version='1.6'>
   <world name='default'>
+  <physics name='fleet_physics' type='ode'>
+    <max_step_size>0.004</max_step_size>
+    <real_time_update_rate>250</real_time_update_rate>
+    <real_time_factor>1.0</real_time_factor>
+  </physics>
   <plugin name='gazebo_ros_state' filename='libgazebo_ros_state.so'><ros><namespace>/gazebo</namespace></ros><update_rate>60</update_rate></plugin>
   <gravity>0 0 -9.8</gravity>
   <model name="ground_plane">

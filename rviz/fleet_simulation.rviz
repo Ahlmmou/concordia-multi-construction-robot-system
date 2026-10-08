@@ -749,6 +749,16 @@ Visualization Manager:
         History Policy: Keep Last
         Durability Policy: Transient Local
         Reliability Policy: Reliable
+  - Class: rviz_default_plugins/MarkerArray
+    Name: Mission goal, formation, names and state
+    Enabled: true
+    Value: true
+    Topic:
+      Value: /formation/markers
+      Depth: 10
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+      Durability Policy: Volatile
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -759,6 +769,8 @@ Visualization Manager:
   - Class: rviz_default_plugins/Interact
   - Class: rviz_default_plugins/MoveCamera
   - Class: rviz_default_plugins/Select
+  - Class: rviz_default_plugins/SetGoal
+    Topic: /formation/primary_goal
   - Class: rviz_default_plugins/Measure
   Transformation:
     Current:

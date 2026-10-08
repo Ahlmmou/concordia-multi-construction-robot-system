@@ -28,6 +28,8 @@ class FleetRvizRelay(Node):
         self.subscriptions_kept = []
         static_qos = QoSProfile(depth=1, durability=DurabilityPolicy.TRANSIENT_LOCAL,
                                 reliability=ReliabilityPolicy.RELIABLE)
+        tf_static_qos = QoSProfile(depth=100, durability=DurabilityPolicy.TRANSIENT_LOCAL,
+                                  reliability=ReliabilityPolicy.RELIABLE)
         self.tf_pub = self.create_publisher(TFMessage, ROOT + '/tf', 100)
         self.static_pub = self.create_publisher(TFMessage, ROOT + '/tf_static', static_qos)
         data_robots = self.declare_parameter(
@@ -43,7 +45,7 @@ class FleetRvizRelay(Node):
                 self.static_cache[transform.child_frame_id] = transform
             self.static_pub.publish(TFMessage(transforms=list(self.static_cache.values())))
         for robot in ('tb1', 'tb2', 'tb3', 'tb4', 'tb5'):
-            for suffix, qos in (('tf', 100), ('tf_static', static_qos)):
+            for suffix, qos in (('tf', 100), ('tf_static', tf_static_qos)):
                 self.subscriptions_kept.append(self.create_subscription(
                     TFMessage, f'/{robot}/{suffix}', partial(self.transform, robot=robot,
                     static=suffix == 'tf_static'), qos))
