@@ -1,764 +1,1436 @@
 Panels:
-- Class: rviz_common/Displays
-  Help Height: 0
-  Name: Displays
-  Property Tree Widget:
+  - Class: rviz_common/Displays
+    Help Height: 0
+    Name: Displays
+    Property Tree Widget:
+      Expanded:
+        - /Global Options1
+        - /TF1/Frames1
+        - /TF1/Tree1
+      Splitter Ratio: 0.5833333134651184
+    Tree Height: 787
+  - Class: rviz_common/Selection
+    Name: Selection
+  - Class: rviz_common/Tool Properties
+    Expanded: ~
+    Name: Tool Properties
+    Splitter Ratio: 0.5886790156364441
+  - Class: rviz_common/Views
     Expanded:
-    - /Global Options1
-    - /TF1/Frames1
-    - /TF1/Tree1
-    Splitter Ratio: 0.5833333134651184
-  Tree Height: 606
-- Class: rviz_common/Selection
-  Name: Selection
-- Class: rviz_common/Tool Properties
-  Expanded:
-  - /Publish Point1
-  Name: Tool Properties
-  Splitter Ratio: 0.5886790156364441
-- Class: rviz_common/Views
-  Expanded:
-  - /Current View1
-  Name: Views
-  Splitter Ratio: 0.5
+      - /Current View1
+    Name: Views
+    Splitter Ratio: 0.5
 Visualization Manager:
-  Class: ''
+  Class: ""
   Displays:
-  - Alpha: 0.5
-    Cell Size: 1
-    Class: rviz_default_plugins/Grid
-    Color: 160; 160; 164
-    Enabled: true
-    Line Style:
-      Line Width: 0.029999999329447746
-      Value: Lines
-    Name: Grid
-    Normal Cell Count: 0
-    Offset:
-      X: 0
-      Y: 0
-      Z: 0
-    Plane: XY
-    Plane Cell Count: 10
-    Reference Frame: <Fixed Frame>
-    Value: true
-  - Alpha: 1
-    Class: rviz_default_plugins/Map
-    Color Scheme: map
-    Draw Behind: true
-    Enabled: true
-    Name: Map
-    Topic:
-      Value: /map
-      Depth: 5
-      History Policy: Keep Last
-      Durability Policy: Transient Local
-      Reliability Policy: Reliable
-    Use Timestamp: false
-    Value: true
-  - Class: rviz_default_plugins/TF
-    Enabled: true
-    Frame Timeout: 15
-    Frames:
-      All Enabled: true
-    Marker Scale: 0.3
-    Name: TF
-    Show Arrows: true
-    Show Axes: true
-    Show Names: true
-    Tree: {}
-    Update Interval: 0
-    Value: true
-  - Class: rviz_common/Group
-    Name: tb1
-    Enabled: true
-    Displays:
-    - Alpha: 1
-      Class: rviz_default_plugins/RobotModel
-      Collision Enabled: false
-      Description File: ''
-      Description Source: Topic
-      Description Topic:
-        Value: /tb1/robot_description
-        Depth: 5
-        History Policy: Keep Last
-        Durability Policy: Transient Local
-        Reliability Policy: Reliable
+    - Alpha: 0.5
+      Cell Size: 1
+      Class: rviz_default_plugins/Grid
+      Color: 160; 160; 164
       Enabled: true
-      Links:
-        All Links Enabled: true
-        Expand Joint Details: false
-        Expand Link Details: false
-        Expand Tree: false
-        Link Tree Style: ''
-      Name: tb1 Hilti
-      TF Prefix: tb1
+      Line Style:
+        Line Width: 0.029999999329447746
+        Value: Lines
+      Name: Grid
+      Normal Cell Count: 0
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Plane: XY
+      Plane Cell Count: 10
+      Reference Frame: <Fixed Frame>
+      Value: true
+    - Alpha: 1
+      Class: rviz_default_plugins/Map
+      Color Scheme: map
+      Draw Behind: true
+      Enabled: true
+      Name: Map
+      Topic:
+        Depth: 5
+        Durability Policy: Transient Local
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /map
+      Update Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /map_updates
+      Use Timestamp: false
+      Value: true
+    - Class: rviz_default_plugins/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: true
+        map:
+          Value: true
+        tb1/Front_sensor_link:
+          Value: true
+        tb1/base_footprint:
+          Value: true
+        tb1/base_link:
+          Value: true
+        tb1/imu_link:
+          Value: true
+        tb1/left_wheel_link_1:
+          Value: true
+        tb1/left_wheel_link_2:
+          Value: true
+        tb1/odom:
+          Value: true
+        tb1/right_wheel_Link_2:
+          Value: true
+        tb1/right_wheel_link_1:
+          Value: true
+        tb2/base_footprint:
+          Value: true
+        tb2/base_link:
+          Value: true
+        tb2/base_scan:
+          Value: true
+        tb2/caster_back_link:
+          Value: true
+        tb2/imu_link:
+          Value: true
+        tb2/odom:
+          Value: true
+        tb2/wheel_left_link_1:
+          Value: true
+        tb2/wheel_left_link_2:
+          Value: true
+        tb2/wheel_right_link_1:
+          Value: true
+        tb2/wheel_right_link_2:
+          Value: true
+        tb3/base_footprint:
+          Value: true
+        tb3/base_link:
+          Value: true
+        tb3/base_scan:
+          Value: true
+        tb3/caster_back_link:
+          Value: true
+        tb3/imu_link:
+          Value: true
+        tb3/odom:
+          Value: true
+        tb3/wheel_left_link_1:
+          Value: true
+        tb3/wheel_left_link_2:
+          Value: true
+        tb3/wheel_right_link_1:
+          Value: true
+        tb3/wheel_right_link_2:
+          Value: true
+        tb4/base_footprint:
+          Value: true
+        tb4/base_link:
+          Value: true
+        tb4/base_scan:
+          Value: true
+        tb4/caster_back_link:
+          Value: true
+        tb4/imu_link:
+          Value: true
+        tb4/odom:
+          Value: true
+        tb4/wheel_left_link_1:
+          Value: true
+        tb4/wheel_left_link_2:
+          Value: true
+        tb4/wheel_right_link_1:
+          Value: true
+        tb4/wheel_right_link_2:
+          Value: true
+        tb5/base_footprint:
+          Value: true
+        tb5/base_link:
+          Value: true
+        tb5/base_scan:
+          Value: true
+        tb5/caster_back_link:
+          Value: true
+        tb5/imu_link:
+          Value: true
+        tb5/odom:
+          Value: true
+        tb5/wheel_left_link_1:
+          Value: true
+        tb5/wheel_left_link_2:
+          Value: true
+        tb5/wheel_right_link_1:
+          Value: true
+        tb5/wheel_right_link_2:
+          Value: true
+      Marker Scale: 0.30000001192092896
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Tree:
+        map:
+          tb1/odom:
+            tb1/base_footprint:
+              tb1/base_link:
+                tb1/Front_sensor_link:
+                  {}
+                tb1/imu_link:
+                  {}
+                tb1/left_wheel_link_1:
+                  {}
+                tb1/left_wheel_link_2:
+                  {}
+                tb1/right_wheel_Link_2:
+                  {}
+                tb1/right_wheel_link_1:
+                  {}
+          tb2/odom:
+            tb2/base_footprint:
+              tb2/base_link:
+                tb2/base_scan:
+                  {}
+                tb2/caster_back_link:
+                  {}
+                tb2/imu_link:
+                  {}
+                tb2/wheel_left_link_1:
+                  {}
+                tb2/wheel_left_link_2:
+                  {}
+                tb2/wheel_right_link_1:
+                  {}
+                tb2/wheel_right_link_2:
+                  {}
+          tb3/odom:
+            tb3/base_footprint:
+              tb3/base_link:
+                tb3/base_scan:
+                  {}
+                tb3/caster_back_link:
+                  {}
+                tb3/imu_link:
+                  {}
+                tb3/wheel_left_link_1:
+                  {}
+                tb3/wheel_left_link_2:
+                  {}
+                tb3/wheel_right_link_1:
+                  {}
+                tb3/wheel_right_link_2:
+                  {}
+          tb4/odom:
+            tb4/base_footprint:
+              tb4/base_link:
+                tb4/base_scan:
+                  {}
+                tb4/caster_back_link:
+                  {}
+                tb4/imu_link:
+                  {}
+                tb4/wheel_left_link_1:
+                  {}
+                tb4/wheel_left_link_2:
+                  {}
+                tb4/wheel_right_link_1:
+                  {}
+                tb4/wheel_right_link_2:
+                  {}
+          tb5/odom:
+            tb5/base_footprint:
+              tb5/base_link:
+                tb5/base_scan:
+                  {}
+                tb5/caster_back_link:
+                  {}
+                tb5/imu_link:
+                  {}
+                tb5/wheel_left_link_1:
+                  {}
+                tb5/wheel_left_link_2:
+                  {}
+                tb5/wheel_right_link_1:
+                  {}
+                tb5/wheel_right_link_2:
+                  {}
       Update Interval: 0
       Value: true
-      Visual Enabled: true
-    - Alpha: 1
-      Autocompute Intensity Bounds: true
-      Autocompute Value Bounds:
-        Max Value: 10
-        Min Value: -10
-        Value: true
-      Axis: Z
-      Channel Name: intensity
-      Class: rviz_default_plugins/LaserScan
-      Color: 255; 80; 80
-      Color Transformer: FlatColor
-      Decay Time: 0
+    - Class: rviz_common/Group
+      Displays:
+        - Alpha: 1
+          Class: rviz_default_plugins/RobotModel
+          Collision Enabled: false
+          Description File: ""
+          Description Source: Topic
+          Description Topic:
+            Depth: 5
+            Durability Policy: Transient Local
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /tb1/robot_description
+          Enabled: true
+          Links:
+            All Links Enabled: true
+            Expand Joint Details: false
+            Expand Link Details: false
+            Expand Tree: false
+            Front_sensor_link:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            Link Tree Style: Links in Alphabetic Order
+            base_footprint:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+            base_link:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            imu_link:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+            left_wheel_link_1:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            left_wheel_link_2:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            right_wheel_Link_2:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            right_wheel_link_1:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+          Mass Properties:
+            Inertia: false
+            Mass: false
+          Name: tb1 Hilti
+          TF Prefix: tb1
+          Update Interval: 0
+          Value: true
+          Visual Enabled: true
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz_default_plugins/LaserScan
+          Color: 255; 80; 80
+          Color Transformer: FlatColor
+          Decay Time: 0
+          Enabled: true
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Max Intensity: 0
+          Min Color: 0; 0; 0
+          Min Intensity: 0
+          Name: tb1 Laser
+          Position Transformer: XYZ
+          Selectable: true
+          Size (Pixels): 3
+          Size (m): 0.03999999910593033
+          Style: Flat Squares
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Best Effort
+            Value: /fleet_visualization/tb1/scan
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: true
+        - Alpha: 1
+          Buffer Length: 1
+          Class: rviz_default_plugins/Path
+          Color: 255; 80; 80
+          Enabled: true
+          Head Diameter: 0.30000001192092896
+          Head Length: 0.20000000298023224
+          Length: 0.30000001192092896
+          Line Style: Billboards
+          Line Width: 0.03999999910593033
+          Name: tb1 Global Path
+          Offset:
+            X: 0
+            Y: 0
+            Z: 0
+          Pose Color: 255; 85; 255
+          Pose Style: None
+          Radius: 0.029999999329447746
+          Shaft Diameter: 0.10000000149011612
+          Shaft Length: 0.10000000149011612
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Best Effort
+            Value: /fleet_visualization/tb1/plan
+          Value: true
+        - Alpha: 1
+          Buffer Length: 1
+          Class: rviz_default_plugins/Path
+          Color: 255; 80; 80
+          Enabled: true
+          Head Diameter: 0.30000001192092896
+          Head Length: 0.20000000298023224
+          Length: 0.30000001192092896
+          Line Style: Billboards
+          Line Width: 0.019999999552965164
+          Name: tb1 Local Path
+          Offset:
+            X: 0
+            Y: 0
+            Z: 0
+          Pose Color: 255; 85; 255
+          Pose Style: None
+          Radius: 0.029999999329447746
+          Shaft Diameter: 0.10000000149011612
+          Shaft Length: 0.10000000149011612
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Best Effort
+            Value: /fleet_visualization/tb1/local_plan
+          Value: true
+        - Alpha: 1
+          Buffer Length: 1
+          Class: rviz_default_plugins/Path
+          Color: 255; 80; 80
+          Enabled: true
+          Head Diameter: 0.30000001192092896
+          Head Length: 0.20000000298023224
+          Length: 0.30000001192092896
+          Line Style: Billboards
+          Line Width: 0.019999999552965164
+          Name: tb1 Smoothed Path
+          Offset:
+            X: 0
+            Y: 0
+            Z: 0
+          Pose Color: 255; 85; 255
+          Pose Style: None
+          Radius: 0.029999999329447746
+          Shaft Diameter: 0.10000000149011612
+          Shaft Length: 0.10000000149011612
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Best Effort
+            Value: /fleet_visualization/tb1/plan_smoothed
+          Value: true
+        - Alpha: 0.44999998807907104
+          Class: rviz_default_plugins/Map
+          Color Scheme: costmap
+          Draw Behind: false
+          Enabled: true
+          Name: tb1 Global Costmap
+          Topic:
+            Depth: 1
+            Durability Policy: Transient Local
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /fleet_visualization/tb1/global_costmap/costmap
+          Update Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /fleet_visualization/tb1/global_costmap/costmap_updates
+          Use Timestamp: false
+          Value: true
+        - Alpha: 0.44999998807907104
+          Class: rviz_default_plugins/Map
+          Color Scheme: costmap
+          Draw Behind: false
+          Enabled: true
+          Name: tb1 Local Costmap
+          Topic:
+            Depth: 1
+            Durability Policy: Transient Local
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /fleet_visualization/tb1/local_costmap/costmap
+          Update Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /fleet_visualization/tb1/local_costmap/costmap_updates
+          Use Timestamp: false
+          Value: true
       Enabled: true
-      Invert Rainbow: false
-      Max Color: 255; 255; 255
-      Max Intensity: 0
-      Min Color: 0; 0; 0
-      Min Intensity: 0
-      Name: tb1 Laser
-      Position Transformer: XYZ
-      Selectable: true
-      Size (Pixels): 3
-      Size (m): 0.04
-      Style: Flat Squares
+      Name: tb1
+    - Class: rviz_common/Group
+      Displays:
+        - Alpha: 1
+          Class: rviz_default_plugins/RobotModel
+          Collision Enabled: false
+          Description File: ""
+          Description Source: Topic
+          Description Topic:
+            Depth: 5
+            Durability Policy: Transient Local
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /tb2/robot_description
+          Enabled: true
+          Links:
+            All Links Enabled: true
+            Expand Joint Details: false
+            Expand Link Details: false
+            Expand Tree: false
+            Link Tree Style: Links in Alphabetic Order
+            base_footprint:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+            base_link:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            base_scan:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            caster_back_link:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            imu_link:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+            wheel_left_link_1:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            wheel_left_link_2:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            wheel_right_link_1:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            wheel_right_link_2:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+          Mass Properties:
+            Inertia: false
+            Mass: false
+          Name: tb2 TurtleBot
+          TF Prefix: tb2
+          Update Interval: 0
+          Value: true
+          Visual Enabled: true
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz_default_plugins/LaserScan
+          Color: 80; 200; 255
+          Color Transformer: FlatColor
+          Decay Time: 0
+          Enabled: true
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Max Intensity: 0
+          Min Color: 0; 0; 0
+          Min Intensity: 0
+          Name: tb2 Laser
+          Position Transformer: XYZ
+          Selectable: true
+          Size (Pixels): 3
+          Size (m): 0.03999999910593033
+          Style: Flat Squares
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Best Effort
+            Value: /fleet_visualization/tb2/scan
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: true
+        - Alpha: 1
+          Buffer Length: 1
+          Class: rviz_default_plugins/Path
+          Color: 80; 200; 255
+          Enabled: true
+          Head Diameter: 0.30000001192092896
+          Head Length: 0.20000000298023224
+          Length: 0.30000001192092896
+          Line Style: Billboards
+          Line Width: 0.03999999910593033
+          Name: tb2 Global Path
+          Offset:
+            X: 0
+            Y: 0
+            Z: 0
+          Pose Color: 255; 85; 255
+          Pose Style: None
+          Radius: 0.029999999329447746
+          Shaft Diameter: 0.10000000149011612
+          Shaft Length: 0.10000000149011612
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Best Effort
+            Value: /fleet_visualization/tb2/plan
+          Value: true
+        - Alpha: 1
+          Buffer Length: 1
+          Class: rviz_default_plugins/Path
+          Color: 80; 200; 255
+          Enabled: true
+          Head Diameter: 0.30000001192092896
+          Head Length: 0.20000000298023224
+          Length: 0.30000001192092896
+          Line Style: Billboards
+          Line Width: 0.019999999552965164
+          Name: tb2 Local Path
+          Offset:
+            X: 0
+            Y: 0
+            Z: 0
+          Pose Color: 255; 85; 255
+          Pose Style: None
+          Radius: 0.029999999329447746
+          Shaft Diameter: 0.10000000149011612
+          Shaft Length: 0.10000000149011612
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Best Effort
+            Value: /fleet_visualization/tb2/local_plan
+          Value: true
+        - Alpha: 1
+          Buffer Length: 1
+          Class: rviz_default_plugins/Path
+          Color: 80; 200; 255
+          Enabled: true
+          Head Diameter: 0.30000001192092896
+          Head Length: 0.20000000298023224
+          Length: 0.30000001192092896
+          Line Style: Billboards
+          Line Width: 0.019999999552965164
+          Name: tb2 Smoothed Path
+          Offset:
+            X: 0
+            Y: 0
+            Z: 0
+          Pose Color: 255; 85; 255
+          Pose Style: None
+          Radius: 0.029999999329447746
+          Shaft Diameter: 0.10000000149011612
+          Shaft Length: 0.10000000149011612
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Best Effort
+            Value: /fleet_visualization/tb2/plan_smoothed
+          Value: true
+        - Alpha: 0.44999998807907104
+          Class: rviz_default_plugins/Map
+          Color Scheme: costmap
+          Draw Behind: false
+          Enabled: true
+          Name: tb2 Global Costmap
+          Topic:
+            Depth: 1
+            Durability Policy: Transient Local
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /fleet_visualization/tb2/global_costmap/costmap
+          Update Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /fleet_visualization/tb2/global_costmap/costmap_updates
+          Use Timestamp: false
+          Value: true
+        - Alpha: 0.44999998807907104
+          Class: rviz_default_plugins/Map
+          Color Scheme: costmap
+          Draw Behind: false
+          Enabled: true
+          Name: tb2 Local Costmap
+          Topic:
+            Depth: 1
+            Durability Policy: Transient Local
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /fleet_visualization/tb2/local_costmap/costmap
+          Update Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /fleet_visualization/tb2/local_costmap/costmap_updates
+          Use Timestamp: false
+          Value: true
+      Enabled: true
+      Name: tb2
+    - Class: rviz_common/Group
+      Displays:
+        - Alpha: 1
+          Class: rviz_default_plugins/RobotModel
+          Collision Enabled: false
+          Description File: ""
+          Description Source: Topic
+          Description Topic:
+            Depth: 5
+            Durability Policy: Transient Local
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /tb3/robot_description
+          Enabled: true
+          Links:
+            All Links Enabled: true
+            Expand Joint Details: false
+            Expand Link Details: false
+            Expand Tree: false
+            Link Tree Style: Links in Alphabetic Order
+            base_footprint:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+            base_link:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            base_scan:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            caster_back_link:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            imu_link:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+            wheel_left_link_1:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            wheel_left_link_2:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            wheel_right_link_1:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            wheel_right_link_2:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+          Mass Properties:
+            Inertia: false
+            Mass: false
+          Name: tb3 TurtleBot
+          TF Prefix: tb3
+          Update Interval: 0
+          Value: true
+          Visual Enabled: true
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz_default_plugins/LaserScan
+          Color: 80; 255; 120
+          Color Transformer: FlatColor
+          Decay Time: 0
+          Enabled: true
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Max Intensity: 0
+          Min Color: 0; 0; 0
+          Min Intensity: 0
+          Name: tb3 Laser
+          Position Transformer: XYZ
+          Selectable: true
+          Size (Pixels): 3
+          Size (m): 0.03999999910593033
+          Style: Flat Squares
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Best Effort
+            Value: /fleet_visualization/tb3/scan
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: true
+        - Alpha: 1
+          Buffer Length: 1
+          Class: rviz_default_plugins/Path
+          Color: 80; 255; 120
+          Enabled: true
+          Head Diameter: 0.30000001192092896
+          Head Length: 0.20000000298023224
+          Length: 0.30000001192092896
+          Line Style: Billboards
+          Line Width: 0.03999999910593033
+          Name: tb3 Global Path
+          Offset:
+            X: 0
+            Y: 0
+            Z: 0
+          Pose Color: 255; 85; 255
+          Pose Style: None
+          Radius: 0.029999999329447746
+          Shaft Diameter: 0.10000000149011612
+          Shaft Length: 0.10000000149011612
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Best Effort
+            Value: /fleet_visualization/tb3/plan
+          Value: true
+        - Alpha: 1
+          Buffer Length: 1
+          Class: rviz_default_plugins/Path
+          Color: 80; 255; 120
+          Enabled: true
+          Head Diameter: 0.30000001192092896
+          Head Length: 0.20000000298023224
+          Length: 0.30000001192092896
+          Line Style: Billboards
+          Line Width: 0.019999999552965164
+          Name: tb3 Local Path
+          Offset:
+            X: 0
+            Y: 0
+            Z: 0
+          Pose Color: 255; 85; 255
+          Pose Style: None
+          Radius: 0.029999999329447746
+          Shaft Diameter: 0.10000000149011612
+          Shaft Length: 0.10000000149011612
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Best Effort
+            Value: /fleet_visualization/tb3/local_plan
+          Value: true
+        - Alpha: 1
+          Buffer Length: 1
+          Class: rviz_default_plugins/Path
+          Color: 80; 255; 120
+          Enabled: true
+          Head Diameter: 0.30000001192092896
+          Head Length: 0.20000000298023224
+          Length: 0.30000001192092896
+          Line Style: Billboards
+          Line Width: 0.019999999552965164
+          Name: tb3 Smoothed Path
+          Offset:
+            X: 0
+            Y: 0
+            Z: 0
+          Pose Color: 255; 85; 255
+          Pose Style: None
+          Radius: 0.029999999329447746
+          Shaft Diameter: 0.10000000149011612
+          Shaft Length: 0.10000000149011612
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Best Effort
+            Value: /fleet_visualization/tb3/plan_smoothed
+          Value: true
+        - Alpha: 0.44999998807907104
+          Class: rviz_default_plugins/Map
+          Color Scheme: costmap
+          Draw Behind: false
+          Enabled: true
+          Name: tb3 Global Costmap
+          Topic:
+            Depth: 1
+            Durability Policy: Transient Local
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /fleet_visualization/tb3/global_costmap/costmap
+          Update Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /fleet_visualization/tb3/global_costmap/costmap_updates
+          Use Timestamp: false
+          Value: true
+        - Alpha: 0.44999998807907104
+          Class: rviz_default_plugins/Map
+          Color Scheme: costmap
+          Draw Behind: false
+          Enabled: true
+          Name: tb3 Local Costmap
+          Topic:
+            Depth: 1
+            Durability Policy: Transient Local
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /fleet_visualization/tb3/local_costmap/costmap
+          Update Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /fleet_visualization/tb3/local_costmap/costmap_updates
+          Use Timestamp: false
+          Value: true
+      Enabled: true
+      Name: tb3
+    - Class: rviz_common/Group
+      Displays:
+        - Alpha: 1
+          Class: rviz_default_plugins/RobotModel
+          Collision Enabled: false
+          Description File: ""
+          Description Source: Topic
+          Description Topic:
+            Depth: 5
+            Durability Policy: Transient Local
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /tb4/robot_description
+          Enabled: true
+          Links:
+            All Links Enabled: true
+            Expand Joint Details: false
+            Expand Link Details: false
+            Expand Tree: false
+            Link Tree Style: Links in Alphabetic Order
+            base_footprint:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+            base_link:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            base_scan:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            caster_back_link:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            imu_link:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+            wheel_left_link_1:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            wheel_left_link_2:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            wheel_right_link_1:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            wheel_right_link_2:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+          Mass Properties:
+            Inertia: false
+            Mass: false
+          Name: tb4 TurtleBot
+          TF Prefix: tb4
+          Update Interval: 0
+          Value: true
+          Visual Enabled: true
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz_default_plugins/LaserScan
+          Color: 255; 200; 60
+          Color Transformer: FlatColor
+          Decay Time: 0
+          Enabled: true
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Max Intensity: 0
+          Min Color: 0; 0; 0
+          Min Intensity: 0
+          Name: tb4 Laser
+          Position Transformer: XYZ
+          Selectable: true
+          Size (Pixels): 3
+          Size (m): 0.03999999910593033
+          Style: Flat Squares
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Best Effort
+            Value: /fleet_visualization/tb4/scan
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: true
+        - Alpha: 1
+          Buffer Length: 1
+          Class: rviz_default_plugins/Path
+          Color: 255; 200; 60
+          Enabled: true
+          Head Diameter: 0.30000001192092896
+          Head Length: 0.20000000298023224
+          Length: 0.30000001192092896
+          Line Style: Billboards
+          Line Width: 0.03999999910593033
+          Name: tb4 Global Path
+          Offset:
+            X: 0
+            Y: 0
+            Z: 0
+          Pose Color: 255; 85; 255
+          Pose Style: None
+          Radius: 0.029999999329447746
+          Shaft Diameter: 0.10000000149011612
+          Shaft Length: 0.10000000149011612
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Best Effort
+            Value: /fleet_visualization/tb4/plan
+          Value: true
+        - Alpha: 1
+          Buffer Length: 1
+          Class: rviz_default_plugins/Path
+          Color: 255; 200; 60
+          Enabled: true
+          Head Diameter: 0.30000001192092896
+          Head Length: 0.20000000298023224
+          Length: 0.30000001192092896
+          Line Style: Billboards
+          Line Width: 0.019999999552965164
+          Name: tb4 Local Path
+          Offset:
+            X: 0
+            Y: 0
+            Z: 0
+          Pose Color: 255; 85; 255
+          Pose Style: None
+          Radius: 0.029999999329447746
+          Shaft Diameter: 0.10000000149011612
+          Shaft Length: 0.10000000149011612
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Best Effort
+            Value: /fleet_visualization/tb4/local_plan
+          Value: true
+        - Alpha: 1
+          Buffer Length: 1
+          Class: rviz_default_plugins/Path
+          Color: 255; 200; 60
+          Enabled: true
+          Head Diameter: 0.30000001192092896
+          Head Length: 0.20000000298023224
+          Length: 0.30000001192092896
+          Line Style: Billboards
+          Line Width: 0.019999999552965164
+          Name: tb4 Smoothed Path
+          Offset:
+            X: 0
+            Y: 0
+            Z: 0
+          Pose Color: 255; 85; 255
+          Pose Style: None
+          Radius: 0.029999999329447746
+          Shaft Diameter: 0.10000000149011612
+          Shaft Length: 0.10000000149011612
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Best Effort
+            Value: /fleet_visualization/tb4/plan_smoothed
+          Value: true
+        - Alpha: 0.44999998807907104
+          Class: rviz_default_plugins/Map
+          Color Scheme: costmap
+          Draw Behind: false
+          Enabled: true
+          Name: tb4 Global Costmap
+          Topic:
+            Depth: 1
+            Durability Policy: Transient Local
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /fleet_visualization/tb4/global_costmap/costmap
+          Update Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /fleet_visualization/tb4/global_costmap/costmap_updates
+          Use Timestamp: false
+          Value: true
+        - Alpha: 0.44999998807907104
+          Class: rviz_default_plugins/Map
+          Color Scheme: costmap
+          Draw Behind: false
+          Enabled: true
+          Name: tb4 Local Costmap
+          Topic:
+            Depth: 1
+            Durability Policy: Transient Local
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /fleet_visualization/tb4/local_costmap/costmap
+          Update Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /fleet_visualization/tb4/local_costmap/costmap_updates
+          Use Timestamp: false
+          Value: true
+      Enabled: true
+      Name: tb4
+    - Class: rviz_common/Group
+      Displays:
+        - Alpha: 1
+          Class: rviz_default_plugins/RobotModel
+          Collision Enabled: false
+          Description File: ""
+          Description Source: Topic
+          Description Topic:
+            Depth: 5
+            Durability Policy: Transient Local
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /tb5/robot_description
+          Enabled: true
+          Links:
+            All Links Enabled: true
+            Expand Joint Details: false
+            Expand Link Details: false
+            Expand Tree: false
+            Link Tree Style: Links in Alphabetic Order
+            base_footprint:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+            base_link:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            base_scan:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            caster_back_link:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            imu_link:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+            wheel_left_link_1:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            wheel_left_link_2:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            wheel_right_link_1:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+            wheel_right_link_2:
+              Alpha: 1
+              Show Axes: false
+              Show Trail: false
+              Value: true
+          Mass Properties:
+            Inertia: false
+            Mass: false
+          Name: tb5 TurtleBot
+          TF Prefix: tb5
+          Update Interval: 0
+          Value: true
+          Visual Enabled: true
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz_default_plugins/LaserScan
+          Color: 210; 100; 255
+          Color Transformer: FlatColor
+          Decay Time: 0
+          Enabled: true
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Max Intensity: 0
+          Min Color: 0; 0; 0
+          Min Intensity: 0
+          Name: tb5 Laser
+          Position Transformer: XYZ
+          Selectable: true
+          Size (Pixels): 3
+          Size (m): 0.03999999910593033
+          Style: Flat Squares
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Best Effort
+            Value: /fleet_visualization/tb5/scan
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: true
+        - Alpha: 1
+          Buffer Length: 1
+          Class: rviz_default_plugins/Path
+          Color: 210; 100; 255
+          Enabled: true
+          Head Diameter: 0.30000001192092896
+          Head Length: 0.20000000298023224
+          Length: 0.30000001192092896
+          Line Style: Billboards
+          Line Width: 0.03999999910593033
+          Name: tb5 Global Path
+          Offset:
+            X: 0
+            Y: 0
+            Z: 0
+          Pose Color: 255; 85; 255
+          Pose Style: None
+          Radius: 0.029999999329447746
+          Shaft Diameter: 0.10000000149011612
+          Shaft Length: 0.10000000149011612
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Best Effort
+            Value: /fleet_visualization/tb5/plan
+          Value: true
+        - Alpha: 1
+          Buffer Length: 1
+          Class: rviz_default_plugins/Path
+          Color: 210; 100; 255
+          Enabled: true
+          Head Diameter: 0.30000001192092896
+          Head Length: 0.20000000298023224
+          Length: 0.30000001192092896
+          Line Style: Billboards
+          Line Width: 0.019999999552965164
+          Name: tb5 Local Path
+          Offset:
+            X: 0
+            Y: 0
+            Z: 0
+          Pose Color: 255; 85; 255
+          Pose Style: None
+          Radius: 0.029999999329447746
+          Shaft Diameter: 0.10000000149011612
+          Shaft Length: 0.10000000149011612
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Best Effort
+            Value: /fleet_visualization/tb5/local_plan
+          Value: true
+        - Alpha: 1
+          Buffer Length: 1
+          Class: rviz_default_plugins/Path
+          Color: 210; 100; 255
+          Enabled: true
+          Head Diameter: 0.30000001192092896
+          Head Length: 0.20000000298023224
+          Length: 0.30000001192092896
+          Line Style: Billboards
+          Line Width: 0.019999999552965164
+          Name: tb5 Smoothed Path
+          Offset:
+            X: 0
+            Y: 0
+            Z: 0
+          Pose Color: 255; 85; 255
+          Pose Style: None
+          Radius: 0.029999999329447746
+          Shaft Diameter: 0.10000000149011612
+          Shaft Length: 0.10000000149011612
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Best Effort
+            Value: /fleet_visualization/tb5/plan_smoothed
+          Value: true
+        - Alpha: 0.44999998807907104
+          Class: rviz_default_plugins/Map
+          Color Scheme: costmap
+          Draw Behind: false
+          Enabled: true
+          Name: tb5 Global Costmap
+          Topic:
+            Depth: 1
+            Durability Policy: Transient Local
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /fleet_visualization/tb5/global_costmap/costmap
+          Update Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /fleet_visualization/tb5/global_costmap/costmap_updates
+          Use Timestamp: false
+          Value: true
+        - Alpha: 0.44999998807907104
+          Class: rviz_default_plugins/Map
+          Color Scheme: costmap
+          Draw Behind: false
+          Enabled: true
+          Name: tb5 Local Costmap
+          Topic:
+            Depth: 1
+            Durability Policy: Transient Local
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /fleet_visualization/tb5/local_costmap/costmap
+          Update Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /fleet_visualization/tb5/local_costmap/costmap_updates
+          Use Timestamp: false
+          Value: true
+      Enabled: true
+      Name: tb5
+    - Class: rviz_default_plugins/MarkerArray
+      Enabled: true
+      Name: Mission goal, formation, names and state
+      Namespaces:
+        fleet_mission: true
       Topic:
-        Value: /fleet_visualization/tb1/scan
-        Depth: 5
-        History Policy: Keep Last
+        Depth: 10
         Durability Policy: Volatile
-        Reliability Policy: Best Effort
-      Use Fixed Frame: true
-      Use rainbow: true
-      Value: true
-    - Class: rviz_default_plugins/Path
-      Name: tb1 Global Path
-      Enabled: true
-      Value: true
-      Topic:
-        Value: /fleet_visualization/tb1/plan
-        Depth: 5
         History Policy: Keep Last
-        Durability Policy: Volatile
-        Reliability Policy: Best Effort
-      Color: 255; 80; 80
-      Alpha: 1.0
-      Buffer Length: 1
-      Line Style: Billboards
-      Line Width: 0.04
-      Pose Style: None
-    - Class: rviz_default_plugins/Path
-      Name: tb1 Local Path
-      Enabled: true
-      Value: true
-      Topic:
-        Value: /fleet_visualization/tb1/local_plan
-        Depth: 5
-        History Policy: Keep Last
-        Durability Policy: Volatile
-        Reliability Policy: Best Effort
-      Color: 255; 80; 80
-      Alpha: 1.0
-      Buffer Length: 1
-      Line Style: Billboards
-      Line Width: 0.02
-      Pose Style: None
-    - Class: rviz_default_plugins/Path
-      Name: tb1 Smoothed Path
-      Enabled: true
-      Value: true
-      Topic:
-        Value: /fleet_visualization/tb1/plan_smoothed
-        Depth: 5
-        History Policy: Keep Last
-        Durability Policy: Volatile
-        Reliability Policy: Best Effort
-      Color: 255; 80; 80
-      Alpha: 1.0
-      Buffer Length: 1
-      Line Style: Billboards
-      Line Width: 0.02
-      Pose Style: None
-    - Class: rviz_default_plugins/Map
-      Name: tb1 Global Costmap
-      Enabled: true
-      Value: true
-      Alpha: 0.45
-      Color Scheme: costmap
-      Draw Behind: false
-      Use Timestamp: false
-      Topic:
-        Value: /fleet_visualization/tb1/global_costmap/costmap
-        Depth: 1
-        History Policy: Keep Last
-        Durability Policy: Transient Local
         Reliability Policy: Reliable
-    - Class: rviz_default_plugins/Map
-      Name: tb1 Local Costmap
-      Enabled: true
+        Value: /formation/markers
       Value: true
-      Alpha: 0.45
-      Color Scheme: costmap
-      Draw Behind: false
-      Use Timestamp: false
-      Topic:
-        Value: /fleet_visualization/tb1/local_costmap/costmap
-        Depth: 1
-        History Policy: Keep Last
-        Durability Policy: Transient Local
-        Reliability Policy: Reliable
-  - Class: rviz_common/Group
-    Name: tb2
-    Enabled: true
-    Displays:
-    - Alpha: 1
-      Class: rviz_default_plugins/RobotModel
-      Collision Enabled: false
-      Description File: ''
-      Description Source: Topic
-      Description Topic:
-        Value: /tb2/robot_description
-        Depth: 5
-        History Policy: Keep Last
-        Durability Policy: Transient Local
-        Reliability Policy: Reliable
-      Enabled: true
-      Links:
-        All Links Enabled: true
-        Expand Joint Details: false
-        Expand Link Details: false
-        Expand Tree: false
-        Link Tree Style: ''
-      Name: tb2 TurtleBot
-      TF Prefix: tb2
-      Update Interval: 0
-      Value: true
-      Visual Enabled: true
-    - Alpha: 1
-      Autocompute Intensity Bounds: true
-      Autocompute Value Bounds:
-        Max Value: 10
-        Min Value: -10
-        Value: true
-      Axis: Z
-      Channel Name: intensity
-      Class: rviz_default_plugins/LaserScan
-      Color: 80; 200; 255
-      Color Transformer: FlatColor
-      Decay Time: 0
-      Enabled: true
-      Invert Rainbow: false
-      Max Color: 255; 255; 255
-      Max Intensity: 0
-      Min Color: 0; 0; 0
-      Min Intensity: 0
-      Name: tb2 Laser
-      Position Transformer: XYZ
-      Selectable: true
-      Size (Pixels): 3
-      Size (m): 0.04
-      Style: Flat Squares
-      Topic:
-        Value: /fleet_visualization/tb2/scan
-        Depth: 5
-        History Policy: Keep Last
-        Durability Policy: Volatile
-        Reliability Policy: Best Effort
-      Use Fixed Frame: true
-      Use rainbow: true
-      Value: true
-    - Class: rviz_default_plugins/Path
-      Name: tb2 Global Path
-      Enabled: true
-      Value: true
-      Topic:
-        Value: /fleet_visualization/tb2/plan
-        Depth: 5
-        History Policy: Keep Last
-        Durability Policy: Volatile
-        Reliability Policy: Best Effort
-      Color: 80; 200; 255
-      Alpha: 1.0
-      Buffer Length: 1
-      Line Style: Billboards
-      Line Width: 0.04
-      Pose Style: None
-    - Class: rviz_default_plugins/Path
-      Name: tb2 Local Path
-      Enabled: true
-      Value: true
-      Topic:
-        Value: /fleet_visualization/tb2/local_plan
-        Depth: 5
-        History Policy: Keep Last
-        Durability Policy: Volatile
-        Reliability Policy: Best Effort
-      Color: 80; 200; 255
-      Alpha: 1.0
-      Buffer Length: 1
-      Line Style: Billboards
-      Line Width: 0.02
-      Pose Style: None
-    - Class: rviz_default_plugins/Path
-      Name: tb2 Smoothed Path
-      Enabled: true
-      Value: true
-      Topic:
-        Value: /fleet_visualization/tb2/plan_smoothed
-        Depth: 5
-        History Policy: Keep Last
-        Durability Policy: Volatile
-        Reliability Policy: Best Effort
-      Color: 80; 200; 255
-      Alpha: 1.0
-      Buffer Length: 1
-      Line Style: Billboards
-      Line Width: 0.02
-      Pose Style: None
-    - Class: rviz_default_plugins/Map
-      Name: tb2 Global Costmap
-      Enabled: true
-      Value: true
-      Alpha: 0.45
-      Color Scheme: costmap
-      Draw Behind: false
-      Use Timestamp: false
-      Topic:
-        Value: /fleet_visualization/tb2/global_costmap/costmap
-        Depth: 1
-        History Policy: Keep Last
-        Durability Policy: Transient Local
-        Reliability Policy: Reliable
-    - Class: rviz_default_plugins/Map
-      Name: tb2 Local Costmap
-      Enabled: true
-      Value: true
-      Alpha: 0.45
-      Color Scheme: costmap
-      Draw Behind: false
-      Use Timestamp: false
-      Topic:
-        Value: /fleet_visualization/tb2/local_costmap/costmap
-        Depth: 1
-        History Policy: Keep Last
-        Durability Policy: Transient Local
-        Reliability Policy: Reliable
-  - Class: rviz_common/Group
-    Name: tb3
-    Enabled: true
-    Displays:
-    - Alpha: 1
-      Class: rviz_default_plugins/RobotModel
-      Collision Enabled: false
-      Description File: ''
-      Description Source: Topic
-      Description Topic:
-        Value: /tb3/robot_description
-        Depth: 5
-        History Policy: Keep Last
-        Durability Policy: Transient Local
-        Reliability Policy: Reliable
-      Enabled: true
-      Links:
-        All Links Enabled: true
-        Expand Joint Details: false
-        Expand Link Details: false
-        Expand Tree: false
-        Link Tree Style: ''
-      Name: tb3 TurtleBot
-      TF Prefix: tb3
-      Update Interval: 0
-      Value: true
-      Visual Enabled: true
-    - Alpha: 1
-      Autocompute Intensity Bounds: true
-      Autocompute Value Bounds:
-        Max Value: 10
-        Min Value: -10
-        Value: true
-      Axis: Z
-      Channel Name: intensity
-      Class: rviz_default_plugins/LaserScan
-      Color: 80; 255; 120
-      Color Transformer: FlatColor
-      Decay Time: 0
-      Enabled: true
-      Invert Rainbow: false
-      Max Color: 255; 255; 255
-      Max Intensity: 0
-      Min Color: 0; 0; 0
-      Min Intensity: 0
-      Name: tb3 Laser
-      Position Transformer: XYZ
-      Selectable: true
-      Size (Pixels): 3
-      Size (m): 0.04
-      Style: Flat Squares
-      Topic:
-        Value: /fleet_visualization/tb3/scan
-        Depth: 5
-        History Policy: Keep Last
-        Durability Policy: Volatile
-        Reliability Policy: Best Effort
-      Use Fixed Frame: true
-      Use rainbow: true
-      Value: true
-    - Class: rviz_default_plugins/Path
-      Name: tb3 Global Path
-      Enabled: true
-      Value: true
-      Topic:
-        Value: /fleet_visualization/tb3/plan
-        Depth: 5
-        History Policy: Keep Last
-        Durability Policy: Volatile
-        Reliability Policy: Best Effort
-      Color: 80; 255; 120
-      Alpha: 1.0
-      Buffer Length: 1
-      Line Style: Billboards
-      Line Width: 0.04
-      Pose Style: None
-    - Class: rviz_default_plugins/Path
-      Name: tb3 Local Path
-      Enabled: true
-      Value: true
-      Topic:
-        Value: /fleet_visualization/tb3/local_plan
-        Depth: 5
-        History Policy: Keep Last
-        Durability Policy: Volatile
-        Reliability Policy: Best Effort
-      Color: 80; 255; 120
-      Alpha: 1.0
-      Buffer Length: 1
-      Line Style: Billboards
-      Line Width: 0.02
-      Pose Style: None
-    - Class: rviz_default_plugins/Path
-      Name: tb3 Smoothed Path
-      Enabled: true
-      Value: true
-      Topic:
-        Value: /fleet_visualization/tb3/plan_smoothed
-        Depth: 5
-        History Policy: Keep Last
-        Durability Policy: Volatile
-        Reliability Policy: Best Effort
-      Color: 80; 255; 120
-      Alpha: 1.0
-      Buffer Length: 1
-      Line Style: Billboards
-      Line Width: 0.02
-      Pose Style: None
-    - Class: rviz_default_plugins/Map
-      Name: tb3 Global Costmap
-      Enabled: true
-      Value: true
-      Alpha: 0.45
-      Color Scheme: costmap
-      Draw Behind: false
-      Use Timestamp: false
-      Topic:
-        Value: /fleet_visualization/tb3/global_costmap/costmap
-        Depth: 1
-        History Policy: Keep Last
-        Durability Policy: Transient Local
-        Reliability Policy: Reliable
-    - Class: rviz_default_plugins/Map
-      Name: tb3 Local Costmap
-      Enabled: true
-      Value: true
-      Alpha: 0.45
-      Color Scheme: costmap
-      Draw Behind: false
-      Use Timestamp: false
-      Topic:
-        Value: /fleet_visualization/tb3/local_costmap/costmap
-        Depth: 1
-        History Policy: Keep Last
-        Durability Policy: Transient Local
-        Reliability Policy: Reliable
-  - Class: rviz_common/Group
-    Name: tb4
-    Enabled: true
-    Displays:
-    - Alpha: 1
-      Class: rviz_default_plugins/RobotModel
-      Collision Enabled: false
-      Description File: ''
-      Description Source: Topic
-      Description Topic:
-        Value: /tb4/robot_description
-        Depth: 5
-        History Policy: Keep Last
-        Durability Policy: Transient Local
-        Reliability Policy: Reliable
-      Enabled: true
-      Links:
-        All Links Enabled: true
-        Expand Joint Details: false
-        Expand Link Details: false
-        Expand Tree: false
-        Link Tree Style: ''
-      Name: tb4 TurtleBot
-      TF Prefix: tb4
-      Update Interval: 0
-      Value: true
-      Visual Enabled: true
-    - Alpha: 1
-      Autocompute Intensity Bounds: true
-      Autocompute Value Bounds:
-        Max Value: 10
-        Min Value: -10
-        Value: true
-      Axis: Z
-      Channel Name: intensity
-      Class: rviz_default_plugins/LaserScan
-      Color: 255; 200; 60
-      Color Transformer: FlatColor
-      Decay Time: 0
-      Enabled: true
-      Invert Rainbow: false
-      Max Color: 255; 255; 255
-      Max Intensity: 0
-      Min Color: 0; 0; 0
-      Min Intensity: 0
-      Name: tb4 Laser
-      Position Transformer: XYZ
-      Selectable: true
-      Size (Pixels): 3
-      Size (m): 0.04
-      Style: Flat Squares
-      Topic:
-        Value: /fleet_visualization/tb4/scan
-        Depth: 5
-        History Policy: Keep Last
-        Durability Policy: Volatile
-        Reliability Policy: Best Effort
-      Use Fixed Frame: true
-      Use rainbow: true
-      Value: true
-    - Class: rviz_default_plugins/Path
-      Name: tb4 Global Path
-      Enabled: true
-      Value: true
-      Topic:
-        Value: /fleet_visualization/tb4/plan
-        Depth: 5
-        History Policy: Keep Last
-        Durability Policy: Volatile
-        Reliability Policy: Best Effort
-      Color: 255; 200; 60
-      Alpha: 1.0
-      Buffer Length: 1
-      Line Style: Billboards
-      Line Width: 0.04
-      Pose Style: None
-    - Class: rviz_default_plugins/Path
-      Name: tb4 Local Path
-      Enabled: true
-      Value: true
-      Topic:
-        Value: /fleet_visualization/tb4/local_plan
-        Depth: 5
-        History Policy: Keep Last
-        Durability Policy: Volatile
-        Reliability Policy: Best Effort
-      Color: 255; 200; 60
-      Alpha: 1.0
-      Buffer Length: 1
-      Line Style: Billboards
-      Line Width: 0.02
-      Pose Style: None
-    - Class: rviz_default_plugins/Path
-      Name: tb4 Smoothed Path
-      Enabled: true
-      Value: true
-      Topic:
-        Value: /fleet_visualization/tb4/plan_smoothed
-        Depth: 5
-        History Policy: Keep Last
-        Durability Policy: Volatile
-        Reliability Policy: Best Effort
-      Color: 255; 200; 60
-      Alpha: 1.0
-      Buffer Length: 1
-      Line Style: Billboards
-      Line Width: 0.02
-      Pose Style: None
-    - Class: rviz_default_plugins/Map
-      Name: tb4 Global Costmap
-      Enabled: true
-      Value: true
-      Alpha: 0.45
-      Color Scheme: costmap
-      Draw Behind: false
-      Use Timestamp: false
-      Topic:
-        Value: /fleet_visualization/tb4/global_costmap/costmap
-        Depth: 1
-        History Policy: Keep Last
-        Durability Policy: Transient Local
-        Reliability Policy: Reliable
-    - Class: rviz_default_plugins/Map
-      Name: tb4 Local Costmap
-      Enabled: true
-      Value: true
-      Alpha: 0.45
-      Color Scheme: costmap
-      Draw Behind: false
-      Use Timestamp: false
-      Topic:
-        Value: /fleet_visualization/tb4/local_costmap/costmap
-        Depth: 1
-        History Policy: Keep Last
-        Durability Policy: Transient Local
-        Reliability Policy: Reliable
-  - Class: rviz_common/Group
-    Name: tb5
-    Enabled: true
-    Displays:
-    - Alpha: 1
-      Class: rviz_default_plugins/RobotModel
-      Collision Enabled: false
-      Description File: ''
-      Description Source: Topic
-      Description Topic:
-        Value: /tb5/robot_description
-        Depth: 5
-        History Policy: Keep Last
-        Durability Policy: Transient Local
-        Reliability Policy: Reliable
-      Enabled: true
-      Links:
-        All Links Enabled: true
-        Expand Joint Details: false
-        Expand Link Details: false
-        Expand Tree: false
-        Link Tree Style: ''
-      Name: tb5 TurtleBot
-      TF Prefix: tb5
-      Update Interval: 0
-      Value: true
-      Visual Enabled: true
-    - Alpha: 1
-      Autocompute Intensity Bounds: true
-      Autocompute Value Bounds:
-        Max Value: 10
-        Min Value: -10
-        Value: true
-      Axis: Z
-      Channel Name: intensity
-      Class: rviz_default_plugins/LaserScan
-      Color: 210; 100; 255
-      Color Transformer: FlatColor
-      Decay Time: 0
-      Enabled: true
-      Invert Rainbow: false
-      Max Color: 255; 255; 255
-      Max Intensity: 0
-      Min Color: 0; 0; 0
-      Min Intensity: 0
-      Name: tb5 Laser
-      Position Transformer: XYZ
-      Selectable: true
-      Size (Pixels): 3
-      Size (m): 0.04
-      Style: Flat Squares
-      Topic:
-        Value: /fleet_visualization/tb5/scan
-        Depth: 5
-        History Policy: Keep Last
-        Durability Policy: Volatile
-        Reliability Policy: Best Effort
-      Use Fixed Frame: true
-      Use rainbow: true
-      Value: true
-    - Class: rviz_default_plugins/Path
-      Name: tb5 Global Path
-      Enabled: true
-      Value: true
-      Topic:
-        Value: /fleet_visualization/tb5/plan
-        Depth: 5
-        History Policy: Keep Last
-        Durability Policy: Volatile
-        Reliability Policy: Best Effort
-      Color: 210; 100; 255
-      Alpha: 1.0
-      Buffer Length: 1
-      Line Style: Billboards
-      Line Width: 0.04
-      Pose Style: None
-    - Class: rviz_default_plugins/Path
-      Name: tb5 Local Path
-      Enabled: true
-      Value: true
-      Topic:
-        Value: /fleet_visualization/tb5/local_plan
-        Depth: 5
-        History Policy: Keep Last
-        Durability Policy: Volatile
-        Reliability Policy: Best Effort
-      Color: 210; 100; 255
-      Alpha: 1.0
-      Buffer Length: 1
-      Line Style: Billboards
-      Line Width: 0.02
-      Pose Style: None
-    - Class: rviz_default_plugins/Path
-      Name: tb5 Smoothed Path
-      Enabled: true
-      Value: true
-      Topic:
-        Value: /fleet_visualization/tb5/plan_smoothed
-        Depth: 5
-        History Policy: Keep Last
-        Durability Policy: Volatile
-        Reliability Policy: Best Effort
-      Color: 210; 100; 255
-      Alpha: 1.0
-      Buffer Length: 1
-      Line Style: Billboards
-      Line Width: 0.02
-      Pose Style: None
-    - Class: rviz_default_plugins/Map
-      Name: tb5 Global Costmap
-      Enabled: true
-      Value: true
-      Alpha: 0.45
-      Color Scheme: costmap
-      Draw Behind: false
-      Use Timestamp: false
-      Topic:
-        Value: /fleet_visualization/tb5/global_costmap/costmap
-        Depth: 1
-        History Policy: Keep Last
-        Durability Policy: Transient Local
-        Reliability Policy: Reliable
-    - Class: rviz_default_plugins/Map
-      Name: tb5 Local Costmap
-      Enabled: true
-      Value: true
-      Alpha: 0.45
-      Color Scheme: costmap
-      Draw Behind: false
-      Use Timestamp: false
-      Topic:
-        Value: /fleet_visualization/tb5/local_costmap/costmap
-        Depth: 1
-        History Policy: Keep Last
-        Durability Policy: Transient Local
-        Reliability Policy: Reliable
-  - Class: rviz_default_plugins/MarkerArray
-    Name: Mission goal, formation, names and state
-    Enabled: true
-    Value: true
-    Topic:
-      Value: /formation/markers
-      Depth: 10
-      History Policy: Keep Last
-      Reliability Policy: Reliable
-      Durability Policy: Volatile
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -766,37 +1438,48 @@ Visualization Manager:
     Frame Rate: 30
   Name: root
   Tools:
-  - Class: rviz_default_plugins/Interact
-  - Class: rviz_default_plugins/MoveCamera
-  - Class: rviz_default_plugins/Select
-  - Class: rviz_default_plugins/SetGoal
-    Topic: /formation/primary_goal
-  - Class: rviz_default_plugins/Measure
+    - Class: rviz_default_plugins/Interact
+      Hide Inactive Objects: true
+    - Class: rviz_default_plugins/MoveCamera
+    - Class: rviz_default_plugins/Select
+    - Class: rviz_default_plugins/SetGoal
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /formation/primary_goal
+    - Class: rviz_default_plugins/Measure
+      Line color: 128; 128; 0
   Transformation:
     Current:
       Class: rviz_default_plugins/TF
   Value: true
   Views:
     Current:
+      Angle: -2.514570951461792e-07
       Class: rviz_default_plugins/TopDownOrtho
-      Name: Fleet Overview
+      Enable Stereo Rendering:
+        Stereo Eye Separation: 0.05999999865889549
+        Stereo Focal Distance: 1
+        Swap Stereo Eyes: false
+        Value: false
+      Invert Z Axis: false
+      Name: Current View
+      Near Clip Distance: 0.009999999776482582
+      Scale: 56.274925231933594
       Target Frame: map
-      Scale: 18.0
-      Angle: 0.0
-      X: 0.0
-      Y: 0.0
-    Saved: []
+      Value: TopDownOrtho (rviz_default_plugins)
+      X: 42.33058547973633
+      Y: -18.00707244873047
+    Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
   Height: 932
   Hide Left Dock: false
   Hide Right Dock: true
-  Navigation 2:
-    collapsed: false
-  QMainWindow State: 000000ff00000000fd00000004000000000000016a0000034afc020000000afb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003d0000029b000000c900fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb00000018004e0061007600690067006100740069006f006e0020003201000002de000000a90000008100fffffffb0000001e005200650061006c00730065006e0073006500430061006d00650072006100000002c6000000c10000002800ffffff000000010000010f0000034afc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003d0000034a000000a400fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004420000003efc0100000002fb0000000800540069006d00650100000000000004420000000000000000fb0000000800540069006d00650100000000000004500000000000000000000004990000034a00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
-  RealsenseCamera:
-    collapsed: false
+  QMainWindow State: 000000ff00000000fd00000004000000000000016a0000034efc020000000afb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003b0000034e000000c700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb00000018004e0061007600690067006100740069006f006e0020003201000002de000000a90000000000000000fb0000001e005200650061006c00730065006e0073006500430061006d00650072006100000002c6000000c10000000000000000000000010000010f0000034afc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003d0000034a000000a000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004420000003efc0100000002fb0000000800540069006d00650100000000000004420000000000000000fb0000000800540069006d00650100000000000004500000000000000000000004990000034e00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Tool Properties:
@@ -804,5 +1487,5 @@ Window Geometry:
   Views:
     collapsed: true
   Width: 1545
-  X: 696
-  Y: 229
+  X: 332
+  Y: 37
