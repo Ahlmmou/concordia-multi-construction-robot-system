@@ -5,9 +5,10 @@
 clearance_margin: 0.30
 departure_distance: 0.30
 footprint_padding: 0.05
+# Spawn above wheel contact height to avoid an initial ground penetration impulse.
 robots:
-  - {name: tb1, x_pose: 0.5, y_pose: 1.6, z_pose: 0.01, yaw: 0.0}
-  - {name: tb2, x_pose: 4.7, y_pose: 5.0, z_pose: 0.01, yaw: 0.0}
-  - {name: tb3, x_pose: -3.7, y_pose: -1.8, z_pose: 0.01, yaw: 0.0}
-  - {name: tb4, x_pose: 4.7, y_pose: -1.8, z_pose: 0.01, yaw: 0.0}
-  - {name: tb5, x_pose: -3.7, y_pose: 5.0, z_pose: 0.01, yaw: 0.0}
+  - {name: tb1, x_pose: 0.5, y_pose: 1.6, z_pose: 0.04, yaw: 0.0}
+  - {name: tb2, x_pose: 4.7, y_pose: 5.0, z_pose: 0.03, yaw: 0.0}
+  - {name: tb3, x_pose: -3.7, y_pose: -1.8, z_pose: 0.03, yaw: 0.0}
+  - {name: tb4, x_pose: 4.7, y_pose: -1.8, z_pose: 0.03, yaw: 0.0}
+  - {name: tb5, x_pose: -3.7, y_pose: 5.0, z_pose: 0.03, yaw: 0.0}
