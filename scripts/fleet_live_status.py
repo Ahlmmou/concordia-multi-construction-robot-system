@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Read-only live fleet updates alongside RViz."""
+"""Live fleet updates and one-click mission stop alongside RViz."""
 import time
 import json
 from collections import deque
@@ -11,6 +11,7 @@ from geometry_msgs.msg import PoseStamped
 from nav_msgs.msg import Odometry
 from rosgraph_msgs.msg import Clock
 from std_msgs.msg import String
+from std_srvs.srv import Trigger
 from rcl_interfaces.msg import Log
 from visualization_msgs.msg import MarkerArray
 from fleet_status_text import describe,ROBOTS
@@ -21,6 +22,8 @@ class FleetStatus(Node):
         super().__init__('fleet_live_status')
         self.state={};self.received=0.;self.motion={};self.goal=None;self.clocks=deque(maxlen=2000);self.notice=None
         self.requested_goal=None;self.request_number=0;self.request_mission=0;self.goal_confirmed=False;self.goal_rejected=None
+        self.stop_client=self.create_client(Trigger,'/formation/stop')
+        self.stop_future=None;self.stop_started=0.;self.stop_message=''
         self.subs=[self.create_subscription(String,'/formation/state',self.status,10),
                    self.create_subscription(PoseStamped,'/formation/primary_goal',self.goal_requested,10),
                    self.create_subscription(MarkerArray,'/formation/markers',self.markers,10),
@@ -38,6 +41,29 @@ class FleetStatus(Node):
         self.requested_goal=(msg.pose.position.x,msg.pose.position.y)
         self.request_mission=self.state.get('mission',0);self.request_number+=1
         self.goal_confirmed=False;self.goal_rejected=None;self.notice=None
+        self.stop_message=''
+
+    def request_stop(self):
+        if self.stop_future is not None:return
+        if not self.stop_client.service_is_ready():
+            self.stop_message='Stop unavailable: waiting for the fleet controller.';return
+        try:
+            self.stop_future=self.stop_client.call_async(Trigger.Request())
+            self.stop_started=time.monotonic();self.stop_message='Stopping the current goal…'
+        except Exception as exc:self.stop_message='Stop request failed: '+str(exc)
+
+    def poll_stop(self):
+        if self.stop_future is None:return
+        if self.stop_future.done():
+            try:
+                result=self.stop_future.result()
+                self.stop_message=('Goal stopped. Send a new goal in RViz when ready.'
+                    if result.success else 'Stop rejected: '+result.message)
+            except Exception as exc:self.stop_message='Stop request failed: '+str(exc)
+            self.stop_future=None
+        elif time.monotonic()-self.stop_started>8.:
+            self.stop_future.cancel();self.stop_future=None
+            self.stop_message='Stop not confirmed. Check fleet status and click again to retry.'
 
     def markers(self,msg):
         for marker in msg.markers:
@@ -55,7 +81,7 @@ class FleetStatus(Node):
 
 
 def main():
-    rclpy.init();node=FleetStatus();root=tk.Tk();root.title('Fleet — live updates');root.geometry(f'520x650+{max(0,root.winfo_screenwidth()-540)}+70');root.attributes('-topmost',True);root.configure(bg='#16202a');root.minsize(480,560)
+    rclpy.init();node=FleetStatus();root=tk.Tk();root.title('Fleet — live updates');root.geometry(f'520x740+{max(0,root.winfo_screenwidth()-540)}+70');root.attributes('-topmost',True);root.configure(bg='#16202a');root.minsize(480,650)
     def label(text='',size=12,color='#d9e4ed',**kwargs):
         return tk.Label(root,text=text,font=('DejaVu Sans',size),bg='#16202a',fg=color,anchor='w',justify='left',**kwargs)
     label('FLEET LIVE UPDATES',11,'#91a9bc').pack(fill='x',padx=20,pady=(18,8))
@@ -63,6 +89,12 @@ def main():
     detail=label(size=12,wraplength=475);detail.pack(fill='x',padx=20,pady=(8,10))
     goal_label=label(size=11,color='#7ed9ec',wraplength=475);goal_label.pack(fill='x',padx=20,pady=(0,8))
     progress=label(size=15,color='#7ed9ec');progress.pack(fill='x',padx=20,pady=(0,10))
+    stop_button=tk.Button(root,text='Stop goal',command=node.request_stop,
+        font=('DejaVu Sans',14,'bold'),bg='#b52e3d',fg='white',activebackground='#d33b4d',
+        activeforeground='white',relief='flat',cursor='hand2',pady=10)
+    stop_button.pack(fill='x',padx=20,pady=(0,5))
+    stop_feedback=label(size=10,color='#f0c777',wraplength=475)
+    stop_feedback.pack(fill='x',padx=20,pady=(0,8))
     rows={}
     for robot in ROBOTS:
         rows[robot]=label(size=12);rows[robot].pack(fill='x',padx=20,pady=5)
@@ -77,6 +109,12 @@ def main():
         for _ in range(30):
             if not rclpy.ok():close();return
             rclpy.spin_once(node,timeout_sec=0.)
+        node.poll_stop()
+        stopping=node.stop_future is not None
+        stopped=node.state.get('state')=='STOPPED'
+        stop_button.config(text='Stopping…' if stopping else ('Goal stopped' if stopped else 'Stop goal'),
+            state='disabled' if stopping or stopped else 'normal')
+        stop_feedback.config(text=node.stop_message)
         now=time.monotonic();motion={r:(v,w) for r,(stamp,v,w) in node.motion.items() if now-stamp<3.}
         view=describe(node.state,motion,node.goal)
         stale=bool(node.received) and now-node.received>3.

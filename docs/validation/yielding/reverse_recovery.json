@@ -1,0 +1,539 @@
+{
+  "goal": [
+    31.325109481811523,
+    -6.217083930969238,
+    2.573962858178192
+  ],
+  "events": [
+    {
+      "elapsed": 0.0,
+      "state": "READY",
+      "reason": "Live data and Nav2 verified",
+      "yielding": {},
+      "maneuver": null,
+      "recoveries": {},
+      "motors": {
+        "tb1": [
+          0.0,
+          0.0
+        ],
+        "tb2": [
+          0.0,
+          0.0
+        ],
+        "tb3": [
+          0.0,
+          0.0
+        ],
+        "tb4": [
+          0.0,
+          0.0
+        ],
+        "tb5": [
+          0.0,
+          0.0
+        ]
+      },
+      "movement": {
+        "tb1": 2.834495242484755e-06,
+        "tb2": 8.42841594016621e-06,
+        "tb3": 6.872092049283931e-06,
+        "tb4": 8.742205414618678e-06,
+        "tb5": 6.55481930652542e-06
+      },
+      "minimum_clearance": 2.4250030260310282
+    },
+    {
+      "elapsed": 0.5,
+      "state": "BOUNDARY_TRAVELLING",
+      "reason": "Flexible followers adjusting around tb1; blue line is visual only",
+      "yielding": {},
+      "maneuver": null,
+      "recoveries": {},
+      "motors": {
+        "tb1": [
+          0.0,
+          0.0
+        ],
+        "tb2": [
+          0.0,
+          0.0
+        ],
+        "tb3": [
+          0.0,
+          0.0
+        ],
+        "tb4": [
+          0.0,
+          0.0
+        ],
+        "tb5": [
+          0.0,
+          0.0
+        ]
+      },
+      "movement": {
+        "tb1": 3.126740994251952e-05,
+        "tb2": 9.024355153434858e-05,
+        "tb3": 9.755862923614437e-05,
+        "tb4": 9.839646881264089e-05,
+        "tb5": 8.834130448336644e-05
+      },
+      "minimum_clearance": 2.4250006558380264
+    },
+    {
+      "elapsed": 11.4,
+      "state": "BOUNDARY_TRAVELLING",
+      "reason": "Flexible followers adjusting around tb1; blue line is visual only",
+      "yielding": {},
+      "maneuver": null,
+      "recoveries": {
+        "tb5": {
+          "target": null,
+          "started": 9426.8,
+          "start_pose": [
+            44.05419816339659,
+            -4.473009679167653,
+            -2.313188183496087
+          ],
+          "mode": "escape",
+          "state": "Checking escape route"
+        }
+      },
+      "motors": {
+        "tb1": [
+          0.0,
+          0.0
+        ],
+        "tb2": [
+          0.0,
+          0.0
+        ],
+        "tb3": [
+          0.0,
+          0.0
+        ],
+        "tb4": [
+          0.0863157894736842,
+          -0.5
+        ],
+        "tb5": [
+          0.0,
+          0.0
+        ]
+      },
+      "movement": {
+        "tb1": 0.0005991387731550938,
+        "tb2": 0.48293337431393435,
+        "tb3": 0.0023564923718191904,
+        "tb4": 0.14265866145071518,
+        "tb5": 0.0023832677995957083
+      },
+      "minimum_clearance": 2.3045215213327097
+    },
+    {
+      "elapsed": 12.7,
+      "state": "BOUNDARY_TRAVELLING",
+      "reason": "Flexible followers adjusting around tb1; blue line is visual only",
+      "yielding": {},
+      "maneuver": null,
+      "recoveries": {
+        "tb5": {
+          "target": null,
+          "started": 9426.8,
+          "start_pose": [
+            44.05419816339659,
+            -4.473009679167653,
+            -2.313188183496087
+          ],
+          "mode": "escape",
+          "state": "Escaping obstacle buffer",
+          "command": [
+            -0.12,
+            0.0
+          ]
+        }
+      },
+      "motors": {
+        "tb1": [
+          0.0,
+          0.0
+        ],
+        "tb2": [
+          0.0,
+          0.0
+        ],
+        "tb3": [
+          0.0,
+          0.0
+        ],
+        "tb4": [
+          0.19999999999999998,
+          -0.5
+        ],
+        "tb5": [
+          -0.12,
+          0.0
+        ]
+      },
+      "movement": {
+        "tb1": 0.0011155938904799452,
+        "tb2": 0.48312914370062227,
+        "tb3": 0.002550057852169184,
+        "tb4": 0.1681551155165032,
+        "tb5": 0.03243872856901286
+      },
+      "minimum_clearance": 2.3045215213327097
+    },
+    {
+      "elapsed": 30.0,
+      "state": "BOUNDARY_TRAVELLING",
+      "reason": "Flexible followers adjusting around tb1; blue line is visual only",
+      "yielding": {},
+      "maneuver": null,
+      "recoveries": {},
+      "motors": {
+        "tb1": [
+          0.0,
+          0.0
+        ],
+        "tb2": [
+          0.0,
+          0.0
+        ],
+        "tb3": [
+          0.0,
+          0.0
+        ],
+        "tb4": [
+          0.1921052631578947,
+          -0.5
+        ],
+        "tb5": [
+          -0.12,
+          0.0
+        ]
+      },
+      "movement": {
+        "tb1": 0.0031994503215961832,
+        "tb2": 0.48663191112827237,
+        "tb3": 0.006112586700312349,
+        "tb4": 0.7757573197744843,
+        "tb5": 1.0391776301826803
+      },
+      "minimum_clearance": 2.3045215213327097
+    },
+    {
+      "elapsed": 40.4,
+      "state": "BOUNDARY_TRAVELLING",
+      "reason": "Flexible followers adjusting around tb1; blue line is visual only",
+      "yielding": {},
+      "maneuver": null,
+      "recoveries": {
+        "tb5": {
+          "target": null,
+          "started": 9441.0,
+          "start_pose": [
+            44.51783235020272,
+            -3.9680592232458367,
+            -2.2959605181697222
+          ],
+          "mode": "escape",
+          "state": "Checking escape route"
+        }
+      },
+      "motors": {
+        "tb1": [
+          0.0,
+          0.0
+        ],
+        "tb2": [
+          0.0,
+          0.0
+        ],
+        "tb3": [
+          0.0,
+          0.0
+        ],
+        "tb4": [
+          0.0,
+          0.0
+        ],
+        "tb5": [
+          0.0,
+          0.0
+        ]
+      },
+      "movement": {
+        "tb1": 0.004241766367635628,
+        "tb2": 0.4887639300907313,
+        "tb3": 0.008319186738446428,
+        "tb4": 0.8348552647238986,
+        "tb5": 1.0970571001958267
+      },
+      "minimum_clearance": 2.3045215213327097
+    },
+    {
+      "elapsed": 41.0,
+      "state": "BOUNDARY_TRAVELLING",
+      "reason": "Flexible followers adjusting around tb1; blue line is visual only",
+      "yielding": {},
+      "maneuver": null,
+      "recoveries": {
+        "tb5": {
+          "target": null,
+          "started": 9441.0,
+          "start_pose": [
+            44.51783235020272,
+            -3.9680592232458367,
+            -2.2959605181697222
+          ],
+          "mode": "escape",
+          "state": "Escaping obstacle buffer",
+          "command": [
+            -0.12,
+            0.0
+          ]
+        }
+      },
+      "motors": {
+        "tb1": [
+          0.0,
+          0.0
+        ],
+        "tb2": [
+          0.0,
+          0.0
+        ],
+        "tb3": [
+          0.0,
+          0.0
+        ],
+        "tb4": [
+          0.0,
+          0.0
+        ],
+        "tb5": [
+          -0.12,
+          0.0
+        ]
+      },
+      "movement": {
+        "tb1": 0.004241766367635628,
+        "tb2": 0.4889271204859274,
+        "tb3": 0.008463559827927358,
+        "tb4": 0.8348787526820013,
+        "tb5": 1.0970571001958267
+      },
+      "minimum_clearance": 2.3045215213327097
+    },
+    {
+      "elapsed": 46.5,
+      "state": "BOUNDARY_TRAVELLING",
+      "reason": "Flexible followers adjusting around tb1; blue line is visual only",
+      "yielding": {},
+      "maneuver": null,
+      "recoveries": {},
+      "motors": {
+        "tb1": [
+          0.0,
+          0.0
+        ],
+        "tb2": [
+          0.0,
+          0.0
+        ],
+        "tb3": [
+          0.0,
+          0.0
+        ],
+        "tb4": [
+          0.0,
+          0.0
+        ],
+        "tb5": [
+          -0.12,
+          0.0
+        ]
+      },
+      "movement": {
+        "tb1": 0.004672887359846492,
+        "tb2": 0.4899661998395594,
+        "tb3": 0.009536213712592216,
+        "tb4": 0.8350405454237649,
+        "tb5": 1.0970571001958267
+      },
+      "minimum_clearance": 2.3045215213327097
+    },
+    {
+      "elapsed": 66.5,
+      "state": "BOUNDARY_TRAVELLING",
+      "reason": "Flexible followers adjusting around tb1; blue line is visual only",
+      "yielding": {},
+      "maneuver": null,
+      "recoveries": {},
+      "motors": {
+        "tb1": [
+          0.0,
+          0.0
+        ],
+        "tb2": [
+          0.0,
+          0.0
+        ],
+        "tb3": [
+          0.0,
+          0.0
+        ],
+        "tb4": [
+          0.0,
+          0.0
+        ],
+        "tb5": [
+          0.0,
+          0.5
+        ]
+      },
+      "movement": {
+        "tb1": 0.006972892713007135,
+        "tb2": 0.49391946412800714,
+        "tb3": 0.013499998262732226,
+        "tb4": 0.8356456190684814,
+        "tb5": 2.1790936361536755
+      },
+      "minimum_clearance": 2.3045215213327097
+    },
+    {
+      "elapsed": 86.5,
+      "state": "BOUNDARY_TRAVELLING",
+      "reason": "Flexible followers adjusting around tb1; blue line is visual only",
+      "yielding": {},
+      "maneuver": null,
+      "recoveries": {},
+      "motors": {
+        "tb1": [
+          0.0,
+          0.0
+        ],
+        "tb2": [
+          0.0,
+          0.0
+        ],
+        "tb3": [
+          0.0,
+          0.0
+        ],
+        "tb4": [
+          0.0,
+          0.0
+        ],
+        "tb5": [
+          0.22499999999999998,
+          -0.36
+        ]
+      },
+      "movement": {
+        "tb1": 0.01053033897529066,
+        "tb2": 0.49794299060240593,
+        "tb3": 0.017585663588554932,
+        "tb4": 0.8362782703142315,
+        "tb5": 3.8454193592492736
+      },
+      "minimum_clearance": 2.3045215213327097
+    }
+  ],
+  "state": {
+    "state": "BOUNDARY_TRAVELLING",
+    "reason": "Flexible followers adjusting around tb1; blue line is visual only",
+    "phase": "BOUNDARY_TRAVELLING",
+    "manual_navigation": false,
+    "mission": 1,
+    "poses": {
+      "tb1": [
+        33.52901514315992,
+        -8.42208306776915,
+        -1.8093511322077527
+      ],
+      "tb3": [
+        31.01484627780925,
+        -2.9687359698597247,
+        1.4424990645083429
+      ],
+      "tb2": [
+        36.04267653902949,
+        -13.146323265764037,
+        -2.024182017227901
+      ],
+      "tb4": [
+        29.095901419584074,
+        -12.003498839971448,
+        2.1068910164919683
+      ],
+      "tb5": [
+        37.79735624979814,
+        -6.016997510647508,
+        2.3983196226288803
+      ]
+    },
+    "targets": {
+      "tb1": [
+        31.325109481811523,
+        -6.217083930969238,
+        2.573962858178192
+      ],
+      "tb2": [
+        35.860415407347176,
+        -13.29697514946158,
+        -2.024182017227901
+      ],
+      "tb3": [
+        31.197614878972654,
+        -3.5471909860767177,
+        -1.2647624719392205
+      ],
+      "tb4": [
+        29.246412257992887,
+        -11.717430170573197,
+        2.1068910164919683
+      ],
+      "tb5": [
+        37.81161802832695,
+        -5.126735964965102,
+        1.5547779344781134
+      ]
+    },
+    "blocked": [],
+    "yielding_to": {},
+    "clearance_maneuver": null,
+    "rolling_turn_active": false,
+    "obstacle_recoveries": {},
+    "waiting_for_followers": [],
+    "formation_heading": -1.8052236657731173,
+    "flexible_boundary": true,
+    "follower_slots": {
+      "tb2": 0,
+      "tb3": 1,
+      "tb4": 2,
+      "tb5": 3
+    },
+    "actions": {
+      "tb1": "idle",
+      "tb2": "succeeded",
+      "tb3": "idle",
+      "tb4": "cancelled",
+      "tb5": "active"
+    }
+  },
+  "movement": {
+    "tb1": 0.012787064795277326,
+    "tb2": 0.5007797987137272,
+    "tb3": 0.02056324430957346,
+    "tb4": 0.8367492670134049,
+    "tb5": 6.641593595314528
+  },
+  "minimum_footprint_clearance": 2.3045215213327097,
+  "yield_observed": false,
+  "leader_resumed": false,
+  "duration_seconds": 100,
+  "validation_note": "Reverse-until-clear live replay: tb5 executed -0.12 m/s reverse commands, cleared the buffer twice, then resumed Nav2 and advanced more than 6 m toward its formation position. Peer gaps stayed above 2.30 m in this run. This run validates obstacle recovery, not completion of the entire fleet destination."
+}

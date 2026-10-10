@@ -10,5 +10,7 @@ if [[ -f "$fleet_workspace_setup" ]]; then
 fi
 python3 "$fleet_project_dir/scripts/fleet_rviz_relay.py" --ros-args -p use_sim_time:=true &
 fleet_relay_pid=$!
-trap 'kill "$fleet_relay_pid" 2>/dev/null || true' EXIT INT TERM
+python3 "$fleet_project_dir/scripts/fleet_live_status.py" &
+fleet_status_pid=$!
+trap 'kill "$fleet_relay_pid" "$fleet_status_pid" 2>/dev/null || true' EXIT INT TERM
 rviz2 -d "$fleet_project_dir/rviz/fleet_simulation.rviz" --ros-args -p use_sim_time:=true -r /tf:=/fleet_visualization/tf -r /tf_static:=/fleet_visualization/tf_static

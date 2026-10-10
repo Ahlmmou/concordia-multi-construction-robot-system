@@ -41,6 +41,17 @@ def describe(state, motion, goal=None):
     if holding and phase=='BOUNDARY_TRAVELLING':detail='tb1 is waiting for '+', '.join(holding)+' to catch up; it can still turn in place.'
     blocked=state.get('blocked',[])
     if blocked and phase not in ('WAITING','STOPPED','PREFLIGHT'):detail='Clearance check is holding '+', '.join(blocked)+'.'
+    yielding=state.get('yielding_to',{})
+    maneuver=state.get('clearance_maneuver')
+    if yielding and phase not in ('WAITING','STOPPED','PREFLIGHT'):
+        detail='; '.join(f'{r} is yielding to {peer}' for r,peer in sorted(yielding.items()))+'. Movement resumes automatically when clear.'
+        if maneuver:detail=f"{maneuver['peer']} holds while {maneuver['robot']} moves to clear the route. The formation resumes automatically."
+    if state.get('rolling_turn_active') and phase=='BOUNDARY_TRAVELLING' and not yielding and not blocked:
+        direction='backward' if motion.get('tb1',(0.,0.))[0]<0. else 'forward'
+        detail=f'tb1 is taking a gentle {direction} arc to turn toward the route.'
+    recoveries=state.get('obstacle_recoveries',{})
+    if recoveries and phase not in ('WAITING','STOPPED','PREFLIGHT'):
+        detail='; '.join(r+': '+recovery.get('state','Checking escape route').lower() for r,recovery in sorted(recoveries.items()))+'. Formation targets resume after clearance.'
     remaining=None
     if goal is not None and 'tb1' in poses and phase not in ('STOPPED','READY','CONNECTING'):
         remaining=math.dist(poses['tb1'][:2],goal[:2])
@@ -49,8 +60,13 @@ def describe(state, motion, goal=None):
         speed,turn=motion.get(r,(None,None));target=targets.get(r);pose=poses.get(r)
         distance=math.dist(pose[:2],target[:2]) if pose is not None and target is not None else None
         if phase in ('WAITING','STOPPED','PREFLIGHT'):label='On hold'
+        elif r in yielding:label='Yielding to '+yielding[r]
+        elif r in recoveries:label=recoveries[r].get('state','Recovering from obstacle')
+        elif maneuver and r==maneuver['robot']:label='Clearing the route'
         elif speed is None:label='Waiting for data'
-        elif abs(speed)>.02:label='Moving'
+        elif r=='tb1' and state.get('rolling_turn_active') and abs(speed)>.02:label='Reversing turn' if speed<0. else 'Rolling turn'
+        elif speed<-.02:label='Reversing'
+        elif speed>.02:label='Moving'
         elif abs(turn or 0.)>.04:label='Turning'
         elif pose is not None and target is not None and arrived(pose,target):label='At its target'
         elif state.get('actions',{}).get(r) in ('active','sending'):label='Starting / paused'

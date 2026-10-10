@@ -1,0 +1,99 @@
+{
+  "goal": [
+    29.098636627197266,
+    -8.865243911743164,
+    -1.5707963267948963
+  ],
+  "movement": {
+    "tb1": 7.216406402725517,
+    "tb2": 5.1218589793164435,
+    "tb3": 2.2469203952977517,
+    "tb4": 7.810833605355185,
+    "tb5": 2.39046759110313
+  },
+  "minimum_footprint_clearance": 0.45771272425802323,
+  "yield_observed": true,
+  "leader_resumed": true,
+  "state": {
+    "state": "BOUNDARY_TRAVELLING",
+    "reason": "Flexible followers adjusting around tb1; blue line is visual only",
+    "phase": "BOUNDARY_TRAVELLING",
+    "manual_navigation": false,
+    "mission": 1,
+    "poses": {
+      "tb1": [
+        26.392872636935458,
+        -1.744287571887765,
+        -1.0404043378283108
+      ],
+      "tb2": [
+        28.57341007838176,
+        2.68563809906596,
+        -0.47415946360616024
+      ],
+      "tb3": [
+        18.119474256106805,
+        -0.5389733978053006,
+        -0.2978273737268591
+      ],
+      "tb4": [
+        28.031143722298197,
+        -4.248902747981742,
+        -0.5898586917497495
+      ],
+      "tb5": [
+        17.913485648803665,
+        6.190521528265236,
+        0.22430075629004523
+      ]
+    },
+    "targets": {
+      "tb1": [
+        29.098636627197266,
+        -8.865243911743164,
+        -1.5707963267948963
+      ],
+      "tb2": [
+        31.30955082205989,
+        0.4976481149510703,
+        -0.674535302173667
+      ],
+      "tb3": [
+        21.476194451811025,
+        -3.9862232587266004,
+        -0.7987027962442153
+      ],
+      "tb4": [
+        29.60941669795168,
+        -6.086388941448506,
+        -0.8611404282020945
+      ],
+      "tb5": [
+        23.176328575919236,
+        2.5978137976729765,
+        -0.5989901456173542
+      ]
+    },
+    "blocked": [],
+    "yielding_to": {},
+    "clearance_maneuver": null,
+    "waiting_for_followers": [],
+    "formation_heading": -0.2527006261931996,
+    "flexible_boundary": true,
+    "follower_slots": {
+      "tb2": 0,
+      "tb3": 1,
+      "tb4": 2,
+      "tb5": 3
+    },
+    "actions": {
+      "tb1": "active",
+      "tb2": "active",
+      "tb3": "active",
+      "tb4": "active",
+      "tb5": "active"
+    }
+  },
+  "duration_seconds": 150,
+  "note": "Live stalled-goal replay validated yielding and automatic release. Translational-stall detection during in-place turning was added afterward and requires controller restart."
+}

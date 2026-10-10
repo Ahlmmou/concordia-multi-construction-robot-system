@@ -1,0 +1,99 @@
+{
+  "goal": [
+    29.098636627197266,
+    -8.865243911743164,
+    -1.5707963267948963
+  ],
+  "movement": {
+    "tb1": 5.897030756830522,
+    "tb2": 4.223018585159542,
+    "tb3": 3.564748882853866,
+    "tb4": 6.240283143967063,
+    "tb5": 4.281256159623592
+  },
+  "minimum_footprint_clearance": 0.8338586838253939,
+  "yield_observed": false,
+  "leader_resumed": false,
+  "state": {
+    "state": "BOUNDARY_TRAVELLING",
+    "reason": "Flexible followers adjusting around tb1; blue line is visual only",
+    "phase": "BOUNDARY_TRAVELLING",
+    "manual_navigation": false,
+    "mission": 1,
+    "poses": {
+      "tb1": [
+        29.085968506580546,
+        -8.659021544056237,
+        -1.2855847763696466
+      ],
+      "tb2": [
+        30.411901031178807,
+        -3.0211368570018826,
+        -1.3338420167147886
+      ],
+      "tb3": [
+        27.234352127393358,
+        -13.573069162453502,
+        -0.39177710076896916
+      ],
+      "tb4": [
+        33.5604645313296,
+        -10.002859958539078,
+        -1.3500782634198192
+      ],
+      "tb5": [
+        23.901151394845563,
+        -5.922139378190379,
+        -0.18869845416386566
+      ]
+    },
+    "targets": {
+      "tb1": [
+        29.098636627197266,
+        -8.865243911743164,
+        -1.5707963267948963
+      ],
+      "tb2": [
+        30.51977732201092,
+        -3.3111319482171337,
+        -1.4174011434012388
+      ],
+      "tb3": [
+        27.524988959767892,
+        -13.695314278346633,
+        -0.594132510841091
+      ],
+      "tb4": [
+        33.7888888618836,
+        -11.048890650830655,
+        -1.234944867451634
+      ],
+      "tb5": [
+        24.255877419895214,
+        -5.957555575733112,
+        -0.9743902498107772
+      ]
+    },
+    "blocked": [],
+    "yielding_to": {},
+    "clearance_maneuver": null,
+    "waiting_for_followers": [],
+    "formation_heading": -1.171055141409055,
+    "flexible_boundary": true,
+    "follower_slots": {
+      "tb2": 3,
+      "tb3": 2,
+      "tb4": 0,
+      "tb5": 1
+    },
+    "actions": {
+      "tb1": "cancelled",
+      "tb2": "cancelled",
+      "tb3": "cancelled",
+      "tb4": "active",
+      "tb5": "active"
+    }
+  },
+  "duration_seconds": 75,
+  "note": "Final controller loaded. Continued same destination; leader reached positional/yaw arrival tolerance and followers continued assembling. Temporary localization checks paused motion and recovered automatically. No further yielding encounter occurred in this continuation."
+}

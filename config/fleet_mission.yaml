@@ -9,12 +9,18 @@ fleet_mission_controller:
     boundary_tolerance: 0.8
     transit_spacing: 3.0
     minimum_separation: 0.4
+    # Body-to-body buffer for any auxiliary passing tb1, including in front.
+    primary_minimum_separation: 0.6
     footprint_padding: 0.12
     hilti_footprint: "[[-1.20,-0.85],[-1.20,0.85],[1.40,0.85],[1.40,-0.85]]"
     auxiliary_footprint: "[[-0.30,-0.30],[-0.30,0.30],[0.475,0.30],[0.475,-0.30]]"
     leader_speed: 0.60
     auxiliary_speed: 0.80
     angular_speed: 0.50
+    # Gentle moving turns reduce the leader's struggle with in-place rotation.
+    leader_rolling_turn: true
+    rolling_turn_speed: 0.22
+    rolling_turn_rate: 0.15
     update_distance: 0.8
     update_angle: 0.5
     minimum_goal_interval: 4.0
@@ -25,6 +31,12 @@ fleet_mission_controller:
     maximum_target_cost: 70
     maximum_follower_lag: 5.0
     collision_horizon: 2.0
+    yield_recovery_delay: 3.0
+    yield_clearance_distance: 1.5
+    obstacle_recovery_delay: 3.0
+    obstacle_escape_speed: 0.12
+    # Gain steering room before requesting a fresh formation path.
+    obstacle_release_padding: 0.20
     verify_gazebo_localization: true
     maximum_localization_error: 0.35
     action_response_timeout: 30.0

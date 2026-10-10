@@ -45,3 +45,32 @@ def test_live_progress_explains_turn_in_place():
     view=describe({'state':'BOUNDARY_TRAVELLING'},{'tb1':(0.,-.3)})
     assert 'turning to face' in view['detail']
     assert view['rows'][0]['label']=='Turning'
+
+
+def test_yielding_explains_automatic_resume_and_identifies_both_robots():
+    view=describe({'state':'BOUNDARY_TRAVELLING','blocked':['tb1'],'yielding_to':{'tb1':'tb4'}},{'tb4':(.3,0.)})
+    assert 'tb1 is yielding to tb4' in view['detail']
+    assert 'automatically' in view['detail']
+    assert view['rows'][0]['label']=='Yielding to tb4'
+    assert view['rows'][3]['label']=='Moving'
+
+
+def test_clearance_maneuver_has_distinct_live_status():
+    view=describe({'state':'BOUNDARY_TRAVELLING','yielding_to':{'tb3':'tb2'},'clearance_maneuver':{'robot':'tb2','peer':'tb3','target':(1,2,0)}},{})
+    assert 'tb3 holds while tb2 moves' in view['detail']
+    assert view['rows'][1]['label']=='Clearing the route'
+
+
+def test_backward_motion_is_identified_as_reversing():
+    view=describe({'state':'BOUNDARY_TRAVELLING'},{'tb1':(-.2,.1),'tb4':(-.3,0.)})
+    assert view['rows'][0]['label']=='Reversing'
+    assert view['rows'][3]['label']=='Reversing'
+    assert view['rows'][0]['speed']==.2
+
+
+def test_rolling_turn_is_visible_in_live_progress():
+    state={'state':'BOUNDARY_TRAVELLING','rolling_turn_active':True}
+    view=describe(state,{'tb1':(.18,.2)})
+    assert 'gentle forward arc' in view['detail'] and view['rows'][0]['label']=='Rolling turn'
+    view=describe(state,{'tb1':(-.18,.2)})
+    assert 'backward arc' in view['detail'] and view['rows'][0]['label']=='Reversing turn'
