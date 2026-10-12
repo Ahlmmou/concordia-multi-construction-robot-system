@@ -322,3 +322,20 @@ def test_detour_completion_returns_robot_to_its_trail_slot():
     assert FleetMissionController.trail_navigation_targets(node,(0.,0.,0.),{'tb2':normal})['tb2']==normal
     assert cancelled==['tb2']
     assert not node.trail_recovering and not node.trail_detours
+
+
+def test_short_backtracking_noise_does_not_create_a_false_turn_waypoint():
+    from formation_geometry import trail_waypoint
+    trail=[(-5.,0.,0.),(0.,0.,0.),(-.12,.05,3.),(.1,0.,0.),(10.,0.,0.)]
+    point,_=trail_waypoint(trail,(-.1,.02,0.),3.,2.5,4.95)
+    assert point[0]>1.
+    assert abs(point[2])<.2
+
+
+def test_single_file_lag_holds_translation_but_allows_collision_checked_turning():
+    from formation_geometry import follower_lag_gate
+    poses={r:(10.*i,0.,0.) for i,r in enumerate(ROBOTS)}
+    commands={r:(.6,.3) for r in ROBOTS}
+    assert follower_lag_gate(poses,commands,5.,allow_turning=True)['tb1']==(0.,.3)
+    assert follower_lag_gate(poses,commands,5.)['tb1']==(0.,0.)
+    assert follower_lag_gate(poses,commands,5.,recovering={'tb2'},allow_turning=True)['tb1']==(.6,.3)

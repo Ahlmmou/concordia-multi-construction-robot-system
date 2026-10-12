@@ -9,7 +9,6 @@ import json
 import math
 import signal
 import time
-import textwrap
 from pathlib import Path
 from collections import deque
 from functools import partial
@@ -39,7 +38,7 @@ from formation_geometry import (ROBOTS, Grid, yaw, wrap, distance, rectangle,
                                 candidates, trail_target, rotate, boundary_followers_holding,
                                 flexible_assignment, boundary_order, yielding_gate,
                                 footprint_clearance, advance, pair_separation,
-                                rolling_turn_candidates, motion_conflict, inflation_escape, local_obstacle_command, MODES, formation_slots, layout_clearance, trail_waypoint, horizontal_first_routes, stationary_route_clear, assembly_reroute_candidates)
+                                rolling_turn_candidates, motion_conflict, inflation_escape, local_obstacle_command, MODES, formation_slots, layout_clearance, trail_waypoint, horizontal_first_routes, stationary_route_clear, assembly_reroute_candidates, follower_lag_gate)
 
 
 class FleetMissionController(Node):
@@ -828,10 +827,9 @@ class FleetMissionController(Node):
                     if self.transition_state!='ASSEMBLING' or r not in (set(self.assembly_routes) if self.requested_mode=='SINGLE_FILE' else {self.transition_robot}):commands[r]=(0.,0.)
             if self.state=='FORMING_BOUNDARY' and not self.p['flexible_boundary']:commands['tb1']=(0.,0.)
             if self.state=='TRAVELLING':
-                for i,r in enumerate(ROBOTS[:-1]):
-                    follower=ROBOTS[i+1]
-                    recovering=self.requested_mode=='SINGLE_FILE' and (follower in self.trail_recovering or follower in self.trail_blocked_since)
-                    if not recovering and distance(self.poses[r],self.poses[follower])>self.p['maximum_follower_lag']:commands[r]=(0.,0.)
+                single=self.requested_mode=='SINGLE_FILE'
+                recovering=set(self.trail_recovering)|set(self.trail_blocked_since) if single else set()
+                commands=follower_lag_gate(self.poses,commands,self.p['maximum_follower_lag'],recovering,allow_turning=single)
             maneuver=self.clearance_maneuver
             if maneuver:commands[maneuver['peer']]=(0.,0.)
             # In verified simulation localization, Gazebo world and map share
@@ -1170,10 +1168,10 @@ class FleetMissionController(Node):
             return m
         if self.primary:array.markers.append(marker(1,'Primary goal',self.primary,(1.,.3,.1),Marker.SPHERE))
         for i,r in enumerate(ROBOTS):
-            if r in self.poses:array.markers.append(marker(10+i,r,(self.poses[r][0],self.poses[r][1]-.5,self.poses[r][2]),(.1,.1,.1),Marker.TEXT_VIEW_FACING))
+            if r in self.poses:array.markers.append(marker(10+i,r+(' (primary)' if r=='tb1' else ''),(self.poses[r][0],self.poses[r][1]-.5,self.poses[r][2]),(.1,.35,.75),Marker.TEXT_VIEW_FACING))
             if r in desired:
                 array.markers.append(marker(20+i,r+' target',desired[r],(.1,1.,.2),Marker.ARROW))
-                array.markers.append(marker(30+i,r+' desired',(desired[r][0],desired[r][1]+.5,desired[r][2]),(.05,.5,.1),Marker.TEXT_VIEW_FACING))
+                array.markers.append(marker(30+i,r+' slot',(desired[r][0],desired[r][1]+.5,desired[r][2]),(.05,.5,.1),Marker.TEXT_VIEW_FACING))
                 outline=marker(100+i,'',desired[r],(.1,1.,.2),Marker.LINE_STRIP)
                 outline.scale.x=.04;outline.pose.position.z=.08
                 for x,y in self.polygons[r]+[self.polygons[r][0]]:
@@ -1193,7 +1191,6 @@ class FleetMissionController(Node):
             for d,side in ((0,1),(-depth,1),(-depth,-1),(0,-1),(0,1)):
                 point=Point();point.x=leader[0]+d*nx+side*width*tx;point.y=leader[1]+d*ny+side*width*ty;work.points.append(point)
             array.markers.append(work)
-        center=self.poses.get('tb1',(0.,0.,0.));state=marker(50,f'{self.requested_mode} / active: {self.active_mode or "unverified"}\n{self.transition_state}: {self.state}\n{textwrap.fill(self.reason,64)}',(center[0],center[1]+5.7,0.),(.2,.2,.1),Marker.TEXT_VIEW_FACING);state.pose.position.z=2.;array.markers.append(state)
         self.markers.publish(array)
         msg=String();msg.data=json.dumps({'simulation_time':self.clock_value,'requested_mode':self.requested_mode,'active_mode':self.active_mode,'assembly_stage':self.assembly_stage,'assembly_robot':self.transition_robot,'assembly_route':self.assembly_route,'assembly_routes':self.assembly_routes,'transition_state':self.transition_state,'transition_seconds':(time.monotonic()-self.transition_started if self.transition_started and self.transition_state in ('CANCELLING','ASSEMBLING') else self.transition_duration),'transition_progress':sum(self.arrived(r,t) for r,t in desired.items())/max(1,len(desired)),'formation_error':{r:distance(self.poses[r],t) for r,t in desired.items() if r in self.poses},'position_source':'map TF; simulation ground truth verified separately','recovering_robots':self.trail_recovering,'recovery_waypoints':self.trail_detours,'ground_truth_poses':self.physical_poses,'localization_error':{r:distance(p,self.physical_poses[r]) for r,p in self.poses.items() if r in self.physical_poses},'minimum_footprint_clearance':min((footprint_clearance(self.physical_poses[a],self.polygons[a],self.physical_poses[b],self.polygons[b]) for i,a in enumerate(ROBOTS) for b in ROBOTS[i+1:] if a in self.physical_poses and b in self.physical_poses),default=None),'state':self.state,'reason':self.reason,'phase':self.phase,'manual_navigation':self.manual,'mission':self.mission_number,'poses':self.poses,'desired_slots':desired,'targets':self.targets,'unresolved_pairs':list(self.unresolved_pairs),'blocked':sorted(self.blocked),'yielding_to':self.yielding,'clearance_maneuver':self.clearance_maneuver,'rolling_turn_active':getattr(self,'rolling_turn_active',False),'obstacle_recoveries':self.obstacle_recoveries,'waiting_for_followers':sorted(self.boundary_holds),'formation_heading':self.boundary_heading,'flexible_boundary':self.p['flexible_boundary'],'follower_slots':getattr(self,'flexible_slots',{}),'actions':{r:s['status'] for r,s in self.slots.items()}});self.status_pub.publish(msg)
 

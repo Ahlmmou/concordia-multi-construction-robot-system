@@ -1,6 +1,6 @@
 # Formation validation record
 
-Unit suite: 122 passed (`PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python3 -m pytest tests -q`, ROS Humble sourced).
+Unit suite: 124 passed (`PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python3 -m pytest tests -q`, ROS Humble sourced).
 
 Startup preserves the original LEGACY controller, flexible boundary and configured dimensions. Optional modes require an explicit request. Legacy runtime readiness and idle actions are recorded in `legacy_default_runtime.json`. This is a readiness observation, not a completed legacy navigation test.
 
@@ -45,3 +45,24 @@ coverage. That latest recovery revision has not yet been loaded into the moving
 supervisor or live fault-tested. The running trip uses the preceding tested
 concurrent-assembly/trail-retry revision. Load the latest controller only while
 stationary. Further speed tuning and live recovery validation remain open.
+
+## Operator handoff: original flexible formation restored
+
+Corridor experiments were stopped at the operator's request. The original EV9
+world/map and configured `fleet_spawn.yaml` positions were restored, with
+`LEGACY` active, `flexible_boundary: true`, and no mission queued.
+`flexible_restored_spawn.json` passed: READY, all five zero motor commands,
+spawn position errors below 0.025 metres, and no overhead status marker.
+The real RViz screenshot is `flexible_restored_rviz.png`. Gazebo server and
+RViz are running; no Gazebo GUI is running. Goal testing is handed back to the
+operator using RViz's 2D Goal Pose publishing `/formation/primary_goal`.
+
+The overhead black status block is removed; blue robot names, assigned green
+slots during movement, navigation paths, primary goal and follower polygon
+remain. Detailed status stays in Fleet Live Updates.
+
+The earlier `corridor_top_from_inside.json` failed with a follower motion stall.
+`corridor_top_turn_fix.json` was interrupted for this operator handoff and does
+not validate corridor arrival. The latest turn/recovery fixes have unit
+coverage (124 passing tests); successful live traversal of the bend remains
+unvalidated. No further corridor goals are running.

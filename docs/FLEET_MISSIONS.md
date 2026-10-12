@@ -486,3 +486,8 @@ The intermediate entry and elbow goals prevent Nav2 choosing a shorter route
 around the outside of the test walls. Use the matching ROS environment described
 above. These commands record observed passes or failures, and stop safely after
 each leg.
+
+For flexible-formation testing, RViz shows blue robot labels (`tb1` marked
+primary), green assigned slots, the primary goal, navigation paths, and the
+follower polygon. The large floating status block is removed; use Fleet Live
+Updates for goal progress, current actions, and blocked reasons.

@@ -368,15 +368,22 @@ def trail_waypoint(trail, pose, behind, lookahead=0.8, cursor=0.):
         arc+=length
     if best is None:return trail_target(trail,behind),cursor
     cursor=max(cursor,best[1]);vertex=total
-    base=math.atan2(trail[best[2]+1][1]-trail[best[2]][1],trail[best[2]+1][0]-trail[best[2]][0])
+    def at(arc):return trail_target(trail,max(0.,total-min(total,max(0.,arc))))
+    origin=at(max(0.,cursor-.5));ahead=at(cursor)
+    if distance(origin,ahead)<.1:origin=at(cursor);ahead=at(min(limit,cursor+.5))
+    base=math.atan2(ahead[1]-origin[1],ahead[0]-origin[0])
     arc=sum(lengths[:best[2]+1])
     for i in range(best[2]+1,len(lengths)):
-        if lengths[i]>1e-6:
-            heading=math.atan2(trail[i+1][1]-trail[i][1],trail[i+1][0]-trail[i][0])
-            if abs(wrap(heading-base))>.35:vertex=arc;break
+        if arc>cursor+1e-6 and arc<limit:
+            before=at(max(cursor,arc-.25));after=at(min(limit,arc+.25))
+            if distance(before,after)>.2:
+                heading=math.atan2(after[1]-before[1],after[0]-before[0])
+                if abs(wrap(heading-base))>.35:vertex=arc;break
         arc+=lengths[i]
     carrot=min(limit,cursor+lookahead,vertex)
-    return trail_target(trail,max(0.,total-carrot)),cursor
+    point=at(carrot);before=at(max(0.,carrot-.5))
+    heading=math.atan2(point[1]-before[1],point[0]-before[0]) if distance(point,before)>.1 else point[2]
+    return (point[0],point[1],heading),cursor
 
 
 def horizontal_first_routes(start, target, axis_yaw=0., clearance_step=1.):
@@ -447,3 +454,12 @@ def stationary_route_clear(start, route, robot, poses, polygons, gap, primary_ga
         if not rotation((target[0],target[1],heading),target[2]):return False
         previous=target
     return True
+
+
+def follower_lag_gate(poses,commands,maximum_lag,recovering=(),allow_turning=False):
+    """Coordinate healthy followers; independent recovery retains collision gates."""
+    result=dict(commands)
+    for robot,follower in zip(ROBOTS,ROBOTS[1:]):
+        if follower not in recovering and distance(poses[robot],poses[follower])>maximum_lag:
+            result[robot]=(0.,result[robot][1] if allow_turning else 0.)
+    return result
