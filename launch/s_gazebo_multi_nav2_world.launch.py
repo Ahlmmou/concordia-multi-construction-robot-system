@@ -88,7 +88,7 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(
             os.path.join(get_package_share_directory('gazebo_ros'), 'launch', 'gzserver.launch.py')
         ),
-        launch_arguments={'world': world}.items(),
+        launch_arguments={'world': LaunchConfiguration('world')}.items(),
     )
 
     gzclient_cmd = IncludeLaunchDescription(
@@ -100,7 +100,9 @@ def generate_launch_description():
     
      
     ld.add_action(DeclareLaunchArgument('simulation_localization', default_value='false'))
-    ld.add_action(DeclareLaunchArgument('gazebo_gui', default_value='true'))
+    ld.add_action(DeclareLaunchArgument('gazebo_gui', default_value='false'))
+    ld.add_action(DeclareLaunchArgument('world', default_value=world))
+    ld.add_action(DeclareLaunchArgument('map_yaml', default_value=os.path.join(s_turtlebot3_multi_robot,'config','EVfloor9_outer_only.yaml')))
     ld.add_action(DeclareLaunchArgument('enable_legacy_formation', default_value='false'))
     ld.add_action(DeclareLaunchArgument('velocity_output_topic', default_value='cmd_vel'))
     ld.add_action(DeclareLaunchArgument('auxiliary_navigation', default_value='true'))
@@ -141,7 +143,7 @@ def generate_launch_description():
             executable='map_server',
             name='map_server',
             output='screen',
-            parameters=[{'use_sim_time': use_sim_time, 'yaml_filename': os.path.join(s_turtlebot3_multi_robot, 'config', 'EVfloor9_outer_only.yaml')}],
+            parameters=[{'use_sim_time': use_sim_time, 'yaml_filename': LaunchConfiguration('map_yaml')}],
             remappings=remappings
     )
         #map_file = os.path.join(get_package_share_directory('nav2_project'), 'config', 'turtlebot3_house.yaml')

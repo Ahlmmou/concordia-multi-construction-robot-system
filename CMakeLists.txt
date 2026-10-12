@@ -37,6 +37,8 @@ install(PROGRAMS
   scripts/formation_geometry.py
   scripts/audit_fleet.py
   scripts/validate_fleet_navigation.py
+  scripts/validate_formation_modes.py
+  scripts/generate_formation_scenario.py
   scripts/validate_fleet_mission.py
   scripts/fleet_rviz_relay.py
   scripts/fleet_live_status.py

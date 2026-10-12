@@ -1,0 +1,130 @@
+{
+  "passed": false,
+  "error": "Single-file auxiliary approach repeatedly held by primary clearance gate; stopped to implement checked clearance recovery. Recorder SIGINT cleanup failed before saving metrics.",
+  "metrics_complete": false,
+  "observed_snapshot": {
+    "simulation_time": 121.2,
+    "requested_mode": "SINGLE_FILE",
+    "active_mode": "OPEN_RECTANGLE",
+    "transition_state": "ASSEMBLING",
+    "transition_seconds": 129.55853712199996,
+    "transition_progress": 0.0,
+    "formation_error": {
+      "tb2": 5.201403211659402,
+      "tb3": 3.8735319756043736,
+      "tb4": 13.685390286460892,
+      "tb5": 8.56024098995331
+    },
+    "position_source": "map TF; simulation ground truth verified separately",
+    "ground_truth_poses": {
+      "tb1": [
+        0.466374977405133,
+        1.5711970494693548,
+        -0.013376833726822846
+      ],
+      "tb2": [
+        2.1157702891692596,
+        3.9867026013369045,
+        1.2997188369611385
+      ],
+      "tb3": [
+        -3.648853125067474,
+        -1.799751510964249,
+        -0.0033391427556983106
+      ],
+      "tb4": [
+        4.750845729338173,
+        -1.7997444069980106,
+        -0.0034097503712589385
+      ],
+      "tb5": [
+        -3.6496685914813076,
+        5.0002431552317175,
+        -0.00326872911247218
+      ]
+    },
+    "localization_error": {
+      "tb1": 2.5849607547167156e-05,
+      "tb2": 7.670338706744788e-06,
+      "tb3": 1.6143364567510167e-05,
+      "tb4": 1.6412374719323463e-05,
+      "tb5": 3.400326043545315e-05
+    },
+    "minimum_footprint_clearance": 1.2902238333514666,
+    "state": "MODE_TRANSITION",
+    "reason": "Targets verified; assembling auxiliaries sequentially while tb1 holds",
+    "phase": "MODE_TRANSITION",
+    "manual_navigation": false,
+    "mission": 2,
+    "poses": {
+      "tb1": [
+        0.4663611394799255,
+        1.5711752156873577,
+        -0.013359095195711202
+      ],
+      "tb2": [
+        2.1157679740736595,
+        3.986695288715744,
+        1.2997189576550627
+      ],
+      "tb3": [
+        -3.648869199761127,
+        -1.7997529983927414,
+        -0.003332320579160357
+      ],
+      "tb4": [
+        4.7508293763519704,
+        -1.7997458019482564,
+        -0.0034035511231531525
+      ],
+      "tb5": [
+        -3.649702593631534,
+        5.00024343000474,
+        -0.0032611992695808687
+      ]
+    },
+    "targets": {
+      "tb2": [
+        -2.505598429784097,
+        1.5997374064824672,
+        -1.3311748189550732e-05
+      ],
+      "tb3": [
+        -5.505598429518293,
+        1.5997773417270347,
+        -1.3311748189550732e-05
+      ],
+      "tb4": [
+        -8.505598429252489,
+        1.5998172769716021,
+        -1.3311748189550732e-05
+      ],
+      "tb5": [
+        -11.505598428986684,
+        1.5998572122161696,
+        -1.3311748189550732e-05
+      ]
+    },
+    "blocked": [
+      "tb2"
+    ],
+    "yielding_to": {
+      "tb1": "tb2"
+    },
+    "clearance_maneuver": null,
+    "rolling_turn_active": false,
+    "obstacle_recoveries": {},
+    "waiting_for_followers": [],
+    "formation_heading": null,
+    "flexible_boundary": false,
+    "follower_slots": {},
+    "actions": {
+      "tb1": "idle",
+      "tb2": "active",
+      "tb3": "idle",
+      "tb4": "idle",
+      "tb5": "idle"
+    }
+  },
+  "explicit_stop_service_acknowledged": true
+}

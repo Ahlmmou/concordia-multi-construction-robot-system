@@ -1,0 +1,174 @@
+{
+  "passed": true,
+  "request": "OPEN_RECTANGLE",
+  "events": [
+    {
+      "elapsed": 0.0025482839996584516,
+      "state": "READY",
+      "transition": "IDLE",
+      "reason": "Live data and Nav2 verified"
+    },
+    {
+      "elapsed": 0.3024089829996228,
+      "state": "READY",
+      "transition": "COMPLETE",
+      "reason": "Formation verified from all actual poses and action results"
+    }
+  ],
+  "samples": [],
+  "start_simulation_time": 38.0,
+  "elapsed_wall": 0.3024681819997568,
+  "minimum_footprint_clearance": 2.5080395472299895,
+  "last_status": {
+    "simulation_time": 38.3,
+    "requested_mode": "OPEN_RECTANGLE",
+    "active_mode": "OPEN_RECTANGLE",
+    "transition_state": "COMPLETE",
+    "transition_seconds": 0.2624250359999678,
+    "transition_progress": 1.0,
+    "formation_error": {
+      "tb2": 0.01655907572543015,
+      "tb3": 0.016620072239998136,
+      "tb4": 0.01623783248912886,
+      "tb5": 0.015372603869736186
+    },
+    "position_source": "map TF; simulation ground truth verified separately",
+    "ground_truth_poses": {
+      "tb1": [
+        0.4994391493665517,
+        1.5996783644858996,
+        -6.87860492086469e-05
+      ],
+      "tb2": [
+        4.716238053364784,
+        5.000108013796412,
+        -0.0011591414560364847
+      ],
+      "tb3": [
+        -3.6841475181049335,
+        -1.7998967688329637,
+        -0.001113874244790242
+      ],
+      "tb4": [
+        4.715451427881809,
+        -1.7998975362519805,
+        -0.0010945025875402326
+      ],
+      "tb5": [
+        -3.684910868100561,
+        5.0001004363747175,
+        -0.0010747741081146764
+      ]
+    },
+    "localization_error": {
+      "tb1": 1.7260668896265839e-06,
+      "tb2": 1.995814878409006e-05,
+      "tb3": 2.5826658546301217e-05,
+      "tb4": 2.21116676751604e-05,
+      "tb5": 4.24744897745857e-05
+    },
+    "minimum_footprint_clearance": 2.5080395472299895,
+    "state": "READY",
+    "reason": "Formation verified from all actual poses and action results",
+    "phase": "IDLE",
+    "manual_navigation": false,
+    "mission": 1,
+    "poses": {
+      "tb1": [
+        0.4994408751495844,
+        1.59967839578816,
+        -6.874876743176304e-05
+      ],
+      "tb2": [
+        4.716218173925539,
+        5.000106243034375,
+        -0.0011552426187631873
+      ],
+      "tb3": [
+        -3.6841733436720174,
+        -1.7998970062702366,
+        -0.0011131109784855145
+      ],
+      "tb4": [
+        4.715429360463639,
+        -1.7998989344303244,
+        -0.0010898685776516155
+      ],
+      "tb5": [
+        -3.6849533375951764,
+        5.00009978498487,
+        -0.0010710992368581486
+      ]
+    },
+    "targets": {
+      "tb2": [
+        4.699674611033243,
+        4.999389642930305,
+        -6.874876743176304e-05
+      ],
+      "tb3": [
+        -3.7007928607340737,
+        -1.8000328513539858,
+        -6.874876743176304e-05
+      ],
+      "tb4": [
+        4.6992071194150755,
+        -1.8006103409999574,
+        -6.874876743176304e-05
+      ],
+      "tb5": [
+        -3.7003253691159066,
+        4.999967132576277,
+        -6.874876743176304e-05
+      ]
+    },
+    "blocked": [],
+    "yielding_to": {},
+    "clearance_maneuver": null,
+    "rolling_turn_active": false,
+    "obstacle_recoveries": {},
+    "waiting_for_followers": [],
+    "formation_heading": null,
+    "flexible_boundary": false,
+    "follower_slots": {},
+    "actions": {
+      "tb1": "idle",
+      "tb2": "idle",
+      "tb3": "idle",
+      "tb4": "idle",
+      "tb5": "idle"
+    }
+  },
+  "elapsed_simulation": 0.29999999999999716,
+  "physical_displacements": {
+    "tb1": 1.5674541872347624e-05,
+    "tb2": 9.719585028826938e-05,
+    "tb3": 9.349569531291385e-05,
+    "tb4": 9.739363364732441e-05,
+    "tb5": 9.935843936611025e-05
+  },
+  "stop_acknowledged": true,
+  "final_motor_commands": {
+    "tb1": [
+      0.0,
+      0.0
+    ],
+    "tb2": [
+      0.0,
+      0.0
+    ],
+    "tb3": [
+      0.0,
+      0.0
+    ],
+    "tb4": [
+      0.0,
+      0.0
+    ],
+    "tb5": [
+      0.0,
+      0.0
+    ]
+  },
+  "safe_stop_observed": true
+}

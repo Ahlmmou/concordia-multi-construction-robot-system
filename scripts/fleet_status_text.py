@@ -2,7 +2,7 @@
 import math
 
 ROBOTS = ('tb1', 'tb2', 'tb3', 'tb4', 'tb5')
-TITLES = {'READY':'Ready for a goal','PREFLIGHT':'Checking robot readiness',
+TITLES = {'MODE_TRANSITION':'Changing formation','READY':'Ready for a goal','PREFLIGHT':'Checking robot readiness',
           'FORMING_BOUNDARY':'Building the boundary','BOUNDARY_TRAVELLING':'Moving with the boundary',
           'FORMING_LINE':'Preparing the followers','TRAVELLING':'Following tb1',
           'FORMING_RECTANGLE':'Arranging the boundary','WAITING':'Fleet paused','STOPPED':'Goal stopped'}
@@ -72,4 +72,7 @@ def describe(state, motion, goal=None):
         elif state.get('actions',{}).get(r) in ('active','sending'):label='Starting / paused'
         else:label='Holding position'
         rows.append({'robot':r,'label':label,'speed':abs(speed) if speed is not None else None,'remaining':distance})
+    if state.get('requested_mode'):
+        title += ' · '+state['requested_mode']
+        detail += ' Active: '+str(state.get('active_mode') or 'unverified')+'. Transition: '+state.get('transition_state','IDLE')+'.'
     return {'title':title,'detail':detail,'remaining':remaining,'rows':rows,'phase':phase}

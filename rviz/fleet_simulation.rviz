@@ -1435,7 +1435,7 @@ Visualization Manager:
   Global Options:
     Background Color: 48; 48; 48
     Fixed Frame: map
-    Frame Rate: 30
+    Frame Rate: 10
   Name: root
   Tools:
     - Class: rviz_default_plugins/Interact
@@ -1467,11 +1467,11 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 56.274925231933594
-      Target Frame: map
+      Scale: 35.0
+      Target Frame: tb1/base_footprint
       Value: TopDownOrtho (rviz_default_plugins)
-      X: 42.33058547973633
-      Y: -18.00707244873047
+      X: 0.0
+      Y: 0.0
     Saved: ~
 Window Geometry:
   Displays:

@@ -1,12 +1,30 @@
 fleet_mission_controller:
   ros__parameters:
+    # Original flexible formation remains the startup behavior (LEGACY).
+    # Additional modes are opt-in via /formation/mode_request.
     use_sim_time: true
     rectangle_half_length: 4.2
     rectangle_half_width: 3.4
+    compact_half_length: 2.8
+    compact_half_width: 2.2
+    transition_timeout: 600.0
+    trail_lookahead: 2.5
+    # Wall point must lie on an occupied map cell; normal points into free space.
+    wall_x: 0.0
+    wall_y: 0.0
+    wall_normal_yaw: 0.0
+    wall_probe_distance: 1.0
+    maximum_wall_distance: 6.0
+    wall_workspace_depth: 3.0
+    wall_row_spacing: 1.8
+    wall_half_width: 2.2
     maintain_boundary: true
     flexible_boundary: true
     boundary_step: 1.0
     boundary_tolerance: 0.8
+    # Map X first, then turn toward the verified line slot.
+    single_file_assembly_axis_yaw: 0.0
+    single_file_clearance_step: 1.0
     transit_spacing: 3.0
     minimum_separation: 0.4
     # Body-to-body buffer for any auxiliary passing tb1, including in front.

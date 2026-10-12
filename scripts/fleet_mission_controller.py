@@ -9,6 +9,8 @@ import json
 import math
 import signal
 import time
+import textwrap
+from pathlib import Path
 from collections import deque
 from functools import partial
 
@@ -37,13 +39,18 @@ from formation_geometry import (ROBOTS, Grid, yaw, wrap, distance, rectangle,
                                 candidates, trail_target, rotate, boundary_followers_holding,
                                 flexible_assignment, boundary_order, yielding_gate,
                                 footprint_clearance, advance, pair_separation,
-                                rolling_turn_candidates, motion_conflict, inflation_escape, local_obstacle_command)
+                                rolling_turn_candidates, motion_conflict, inflation_escape, local_obstacle_command, MODES, formation_slots, layout_clearance, trail_waypoint, horizontal_first_routes, stationary_route_clear, assembly_reroute_candidates)
 
 
 class FleetMissionController(Node):
     def __init__(self):
         super().__init__('fleet_mission_controller')
         defaults = dict(rectangle_half_length=4.2, rectangle_half_width=3.4,
+            compact_half_length=2.8, compact_half_width=2.2,
+            wall_x=0.0, wall_y=0.0, wall_normal_yaw=0.0, wall_probe_distance=1.0, maximum_wall_distance=6.0,
+            wall_workspace_depth=3.0, wall_row_spacing=1.8, wall_half_width=2.2,
+            transition_timeout=600.0, trail_lookahead=2.5,
+            single_file_assembly_axis_yaw=0.0, single_file_clearance_step=1.0,
             transit_spacing=3.0, minimum_separation=0.4, primary_minimum_separation=0.6, footprint_padding=0.12,
             leader_speed=0.60, auxiliary_speed=0.80, angular_speed=0.50,
             leader_rolling_turn=True, rolling_turn_speed=0.22, rolling_turn_rate=0.15,
@@ -64,7 +71,11 @@ class FleetMissionController(Node):
         for name,value in defaults.items():self.declare_parameter(name,value)
         self.p={name:self.get_parameter(name).value for name in defaults}
         self.polygons={r:ast.literal_eval(self.p['hilti_footprint'] if r=='tb1' else self.p['auxiliary_footprint']) for r in ROBOTS}
+        for name in ('rectangle_half_length','rectangle_half_width','compact_half_length','compact_half_width','wall_workspace_depth','wall_row_spacing','wall_half_width','single_file_clearance_step','wall_probe_distance','maximum_wall_distance','transition_timeout','trail_lookahead'):
+            if not math.isfinite(self.p[name]) or self.p[name]<=0.:raise ValueError(name+' must be finite and positive')
+        if not all(math.isfinite(self.p[k]) for k in ('wall_x','wall_y','wall_normal_yaw')):raise ValueError('Wall coordinates must be finite')
         self.radii={r:max(math.hypot(x,y) for x,y in poly) for r,poly in self.polygons.items()}
+        if self.p['trail_lookahead']<=self.p['arrival_tolerance']:raise ValueError('trail_lookahead must exceed arrival_tolerance')
         if self.p['primary_minimum_separation']<self.p['minimum_separation']:raise ValueError('Primary clearance must be at least minimum_separation')
         if not (0.<self.p['rolling_turn_speed']<=self.p['leader_speed'] and
                 0.<self.p['rolling_turn_rate']<=self.p['angular_speed']):raise ValueError('Rolling turn speeds must be positive and within motor limits')
@@ -72,6 +83,12 @@ class FleetMissionController(Node):
         if self.p['transit_spacing']<self.radii['tb1']+self.radii['tb2']+self.p['primary_minimum_separation']:
             raise ValueError('transit_spacing is too small for the Hilti and auxiliary footprints')
         if min(self.p['boundary_step'],self.p['boundary_tolerance'],self.p['candidate_step'],self.p['minimum_goal_interval'],self.p['data_timeout'],self.p['yield_recovery_delay'],self.p['yield_clearance_distance'])<=0:raise ValueError('Intervals and candidate step must be positive')
+        self.requested_mode='LEGACY';self.active_mode='LEGACY'
+        self.legacy_parameters={k:self.p[k] for k in ('rectangle_half_length','rectangle_half_width','flexible_boundary','maintain_boundary')}
+        self.transition_state='IDLE';self.transition_started=None;self.transition_duration=None
+        self.mode_targets=None;self.mode_anchor=None;self.transition_robot=None;self.assembly_route=None;self.assembly_stage=None;self.assembly_routes={};self.assembly_blocked_since={}
+        self.trail_cursors={r:0. for r in ROBOTS[1:]};self.follower_waypoints={};self.trail_blocked_since={};self.trail_recovering={};self.trail_detours={}
+        self.open_dimensions=(self.p['rectangle_half_length'],self.p['rectangle_half_width'])
         self.state='PREFLIGHT';self.reason='Waiting for verified live data';self.phase='IDLE'
         self.static_transforms={r:{} for r in ROBOTS}
         self.poses={};self.pose_stamp={};self.odom_frames={};self.buffers={r:Buffer(cache_time=Duration(seconds=30.0),node=self) for r in ROBOTS}
@@ -98,6 +115,7 @@ class FleetMissionController(Node):
         if self.p['verify_gazebo_localization']:
             self.subscriptions_kept.append(self.create_subscription(ModelStates,'/gazebo/model_states',self.model_states,10))
         self.subscriptions_kept.append(self.create_subscription(PoseStamped,'/formation/primary_goal',self.primary_goal,10))
+        self.subscriptions_kept.append(self.create_subscription(String,'/formation/mode_request',self.mode_request,10))
         for r in ROBOTS:
             for suffix,static,qos in [('tf',False,qos_profile_sensor_data),('tf_static',True,static_qos)]:
                 self.subscriptions_kept.append(self.create_subscription(TFMessage,f'/{r}/{suffix}',partial(self.tf,robot=r,static=static),qos))
@@ -235,16 +253,22 @@ class FleetMissionController(Node):
         q=msg.pose.orientation
         if not all(math.isfinite(v) for v in [msg.pose.position.x,msg.pose.position.y,q.x,q.y,q.z,q.w]) or abs(q.x*q.x+q.y*q.y+q.z*q.z+q.w*q.w-1)>0.01:
             self.get_logger().error('Primary goal has invalid coordinates/quaternion');return
+        if self.transition_state in ('CANCELLING','ASSEMBLING'):
+            self.get_logger().warning('Complete or stop the formation transition before requesting travel');return
+        if self.requested_mode=='WALL_WORKSPACE':
+            self.get_logger().warning('WALL_WORKSPACE is stationary; request a transit formation before travel');return
         target=(msg.pose.position.x,msg.pose.position.y,yaw(q))
         if not self.feasible('tb1',target,peers=False):self.get_logger().error('Primary goal is unknown, occupied, out of bounds, or too tight for Hilti footprint');return
-        self.manual=False;self.pending_primary=target;self.rectangle_targets=None;self.targets={};self.trail.clear();self.trail_seeded=False
+        self.transition_state='IDLE';self.transition_robot=None
+        self.manual=False;self.pending_primary=target;self.rectangle_targets=None;self.targets={}
+        if self.requested_mode!='SINGLE_FILE':self.trail.clear();self.trail_seeded=False
         self.mission_number+=1;self.cancel_all()
         for slot in self.slots.values():slot['retries']=0;slot['cooldown']=0.;slot['target']=None
         self.boundary_waypoint=None;self.boundary_heading=None
         self.flexible_slots={};self.flexible_final_targets=None
         self.yielding={};self.unresolved_pairs=set();self.conflict_since={};self.clearance_maneuver=None
         self.obstacle_recoveries={};self.obstacle_since={}
-        self.phase='FORMING_BOUNDARY' if self.p['maintain_boundary'] else 'FORMING_LINE'
+        self.phase=('TRAVELLING' if self.active_mode=='SINGLE_FILE' and self.trail_seeded else 'FORMING_LINE') if self.requested_mode=='SINGLE_FILE' else ('FORMING_BOUNDARY' if self.p['maintain_boundary'] else 'FORMING_LINE')
         self.set_state(self.phase,'New primary goal queued; waiting for previous actions to stop')
 
     def set_state(self,state,reason):
@@ -275,6 +299,8 @@ class FleetMissionController(Node):
             self.get_logger().info(f'{robot}: navigation paused for clearance recovery; retry automatically when clear')
             return
         self.get_logger().warning(f'{robot}: {reason}; retry {slot["retries"]}/{self.p["maximum_retries"]}')
+        if slot['retries']>=self.p['maximum_retries'] and self.requested_mode=='SINGLE_FILE' and self.state=='TRAVELLING' and robot!='tb1':
+            self.recover_auxiliary(robot,reason);slot['retries']=0;return
         if slot['retries']>=self.p['maximum_retries']:
             self.cancel_all()
             self.set_state('WAITING',f'{robot}: retry limit reached; use /formation/resume or a new primary goal')
@@ -294,7 +320,8 @@ class FleetMissionController(Node):
             if slot['status']=='succeeded' and not changed:
                 # A Nav2 result alone is insufficient: actual pose must meet tolerance.
                 self.failure(robot,'Nav2 succeeded but actual pose is outside formation tolerance');return
-        if now-slot['last_send']<self.p['minimum_goal_interval']:return
+        interval=0. if self.requested_mode=='SINGLE_FILE' and self.state=='TRAVELLING' and robot!='tb1' else self.p['minimum_goal_interval']
+        if now-slot['last_send']<interval:return
         if not self.feasible(robot,target,self.targets):return
         slot['pending']=True;slot['pending_since']=time.monotonic();slot['plan_token']+=1;token=slot['plan_token'];slot['cancel_when_accepted']=False
         request=ComputePathToPose.Goal();request.goal=self.pose_message(target);request.use_start=False
@@ -317,6 +344,9 @@ class FleetMissionController(Node):
             if result.status!=GoalStatus.STATUS_SUCCEEDED or not result.result.path.poses:self.failure(robot,'No feasible Nav2 path');return
             if not self.feasible(robot,target,self.targets):slot['pending']=False;return
             goal=NavigateToPose.Goal();goal.pose=self.pose_message(target)
+            if self.requested_mode=='SINGLE_FILE':
+                from ament_index_python.packages import get_package_share_directory
+                goal.behavior_tree=str(Path(get_package_share_directory('crs_multibot'))/'config/single_file_navigation.xml')
             slot['pending_since']=time.monotonic();slot['target']=target;slot['last_send']=self.get_clock().now().nanoseconds*1e-9;slot['status']='sending'
             future=self.nav[robot].send_goal_async(goal)
             future.add_done_callback(partial(self.nav_accepted,robot=robot))
@@ -360,16 +390,24 @@ class FleetMissionController(Node):
         if self.state=='PREFLIGHT':
             self.set_state(self.phase if self.phase!='IDLE' else 'READY','Live data and Nav2 verified')
             if self.p['auto_form_rectangle'] and self.phase=='IDLE':self.phase='FORMING_RECTANGLE';self.set_state(self.phase,'Initial work formation')
-        if self.state in ('STOPPED','WAITING'):self.publish_markers();return
+        if self.state in ('STOPPED','WAITING'):
+            if self.transition_state in ('CANCELLING','ASSEMBLING'):self.transition_state='BLOCKED'
+            self.publish_markers();return
         if self.p['flexible_boundary'] and self.state in ('FORMING_BOUNDARY','BOUNDARY_TRAVELLING'):self.obstacle_tick()
         for robot,slot in self.slots.items():
             if slot['pending'] and time.monotonic()-slot.get('pending_since',time.monotonic())>self.p['action_response_timeout']:
                 # A timed-out send may still be accepted remotely. Keep ownership,
                 # stop all motor commands, and cancel if its late response arrives.
                 slot['cancel_when_accepted']=True
+                if self.requested_mode=='SINGLE_FILE' and self.state=='TRAVELLING' and robot!='tb1':
+                    self.recover_auxiliary(robot,'action response timeout');continue
                 self.set_state('WAITING',f'{robot}: action response timeout; awaiting cancellation/result')
                 self.publish_markers();return
             if slot['handle'] is not None and not slot['cancelling']:
+                if self.requested_mode=='SINGLE_FILE' and self.state=='TRAVELLING' and robot!='tb1' and (robot in self.yielding or robot in self.blocked):
+                    since=self.trail_blocked_since.setdefault(robot,self.clock_value)
+                    if self.clock_value-since>=self.p['yield_recovery_delay']:self.recover_auxiliary(robot,'route conflict')
+                    continue
                 if robot in self.yielding or robot in self.obstacle_recoveries:
                     # Intentional right-of-way waits are not navigation stalls.
                     slot['progress_sim']=self.clock_value
@@ -378,8 +416,12 @@ class FleetMissionController(Node):
                 if previous is None or distance(previous,self.poses[robot])>.1:
                     slot['progress_pose']=self.poses[robot];slot['progress_sim']=self.clock_value
                 elif self.clock_value-slot.get('progress_sim',self.clock_value)>self.p['progress_timeout']:
+                    if self.requested_mode=='SINGLE_FILE' and self.state=='TRAVELLING' and robot!='tb1':
+                        self.recover_auxiliary(robot,'actual motion stalled');continue
                     self.cancel_all();self.set_state('WAITING',f'{robot}: actual motion stalled; resume after resolving obstruction')
                     self.publish_markers();return
+        if self.state=='MODE_TRANSITION':
+            self.mode_tick();self.publish_markers();return
         if self.pending_primary is not None:
             if not self.idle_actions():self.publish_markers();return
             self.primary=self.pending_primary;self.pending_primary=None
@@ -406,21 +448,41 @@ class FleetMissionController(Node):
                 else:self.send(r,target);break
             else:
                 if not self.idle_actions():self.cancel_all();return
+                if self.requested_mode=='SINGLE_FILE':self.active_mode='SINGLE_FILE'
                 self.trail=deque([(leader[0]-i*self.p['transit_spacing']*math.cos(heading),leader[1]-i*self.p['transit_spacing']*math.sin(heading),heading) for i in range(4,-1,-1)],maxlen=5000)
                 self.trail_seeded=True;self.phase='TRAVELLING';self.set_state('TRAVELLING','Transit assembly verified from actual poses')
         elif self.state=='TRAVELLING' and self.primary:
             leader=self.poses['tb1']
             if not self.trail or distance(self.trail[-1],leader)>.1:self.trail.append(leader)
-            if self.arrived('tb1',self.primary):
-                self.cancel_all();self.phase='FORMING_RECTANGLE';self.rectangle_targets=None;self.set_state(self.phase,'Leader arrival verified; assembling work rectangle')
-            else:
-                desired={r:trail_target(list(self.trail),i*self.p['transit_spacing']) for i,r in enumerate(ROBOTS[1:],1)}
-                reserved={'tb1':self.primary};targets={'tb1':self.primary}
-                for r,preferred in desired.items():
-                    target=preferred if self.feasible(r,preferred,reserved) else self.choose(r,preferred,reserved)
-                    if target is not None:targets[r]=target;reserved[r]=target
-                self.targets=targets
-                for r,target in targets.items():self.send(r,target)
+            if self.requested_mode=='LEGACY':
+                self.legacy_transit_tick(leader);self.publish_markers();return
+            finished=self.arrived('tb1',self.primary)
+            desired={}
+            for i,r in enumerate(ROBOTS[1:],1):
+                waypoint,cursor=trail_waypoint(list(self.trail),self.poses[r],i*self.p['transit_spacing'],self.p['trail_lookahead'],self.trail_cursors[r])
+                previous=self.follower_waypoints.get(r)
+                if previous is not None and not self.arrived(r,previous):
+                    desired[r]=previous
+                elif self.slots[r]['pending'] or self.slots[r]['handle'] is not None:
+                    self.cancel(r);desired[r]=previous or waypoint
+                else:
+                    if previous is not None:
+                        _,completed=trail_waypoint(list(self.trail),previous,0.,0.,self.trail_cursors[r])
+                        waypoint,cursor=trail_waypoint(list(self.trail),self.poses[r],i*self.p['transit_spacing'],self.p['trail_lookahead'],completed)
+                    self.trail_cursors[r]=cursor;self.follower_waypoints[r]=waypoint
+                    self.slots[r]['target']=None;self.slots[r]['status']='idle';desired[r]=waypoint
+            targets=self.trail_navigation_targets(leader,desired)
+            if targets is None:return
+            self.targets=targets
+            for r,target in targets.items():self.send(r,target)
+            final={r:trail_target(list(self.trail),i*self.p['transit_spacing']) for i,r in enumerate(ROBOTS[1:],1)}
+            if finished and all(self.arrived(r,t) for r,t in final.items()):
+                self.cancel_all()
+                if not self.idle_actions():self.publish_markers();return
+                if self.requested_mode=='SINGLE_FILE':
+                    self.active_mode='SINGLE_FILE';self.phase='IDLE';self.set_state('READY','Primary arrival and all travelled-trail follower slots verified')
+                else:
+                    self.phase='FORMING_RECTANGLE';self.rectangle_targets=None;self.set_state(self.phase,'Leader arrival verified; assembling work rectangle')
         elif self.state=='FORMING_RECTANGLE':
             if any(s['cancelling'] or s['pending'] for s in self.slots.values()):self.publish_markers();return
             leader=self.poses['tb1']
@@ -451,6 +513,54 @@ class FleetMissionController(Node):
                     layout='Feasible alternative work positions' if relaxed else 'Destination rectangle'
                     self.set_state('READY',layout+' verified from all actual robot poses; ready for next goal')
         self.publish_markers()
+
+    def recover_auxiliary(self,robot,reason):
+        self.cancel(robot)
+        self.trail_recovering[robot]=reason
+
+    def trail_navigation_targets(self,leader,desired):
+        reserved={'tb1':leader};targets={'tb1':self.primary};waiting=[]
+        for robot,target in desired.items():
+            if robot in self.trail_recovering:
+                slot=self.slots[robot];detour=self.trail_detours.get(robot)
+                if detour is not None and self.arrived(robot,detour):
+                    self.cancel(robot)
+                    if slot['pending'] or slot['handle'] is not None:
+                        reserved[robot]=self.poses[robot];continue
+                    self.trail_detours.pop(robot,None);self.trail_recovering.pop(robot,None)
+                    slot['target']=None;slot['status']='idle';slot['retries']=0
+                elif detour is not None:
+                    targets[robot]=detour;reserved[robot]=detour;waiting.append(robot);continue
+                else:
+                    if not slot['pending'] and slot['handle'] is None:
+                        peer=min((r for r in ROBOTS if r!=robot),key=lambda r:distance(self.poses[robot],self.poses[r]))
+                        detour=self.clearance_target(robot,peer)
+                        if detour is not None:
+                            self.trail_detours[robot]=detour;targets[robot]=detour;reserved[robot]=detour
+                            slot['target']=None;slot['status']='idle';slot['retries']=0
+                    reserved.setdefault(robot,self.poses[robot]);waiting.append(robot);continue
+            if not self.feasible(robot,target,reserved,peers=False):
+                self.cancel(robot)
+                since=self.trail_blocked_since.setdefault(robot,self.clock_value)
+                if self.clock_value-since>=self.p['yield_recovery_delay']:
+                    self.recover_auxiliary(robot,'trail waypoint obstructed')
+                waiting.append(robot);reserved[robot]=self.poses[robot];continue
+            self.trail_blocked_since.pop(robot,None)
+            targets[robot]=target;reserved[robot]=target
+        self.set_state('TRAVELLING',('Independent recovery / trail retry: '+', '.join(waiting)) if waiting else 'Following the verified travelled trail')
+        return targets
+
+    def legacy_transit_tick(self,leader):
+        if self.arrived('tb1',self.primary):
+            self.cancel_all();self.phase='FORMING_RECTANGLE';self.rectangle_targets=None;self.set_state(self.phase,'Leader arrival verified; assembling work rectangle')
+        else:
+            desired={r:trail_target(list(self.trail),i*self.p['transit_spacing']) for i,r in enumerate(ROBOTS[1:],1)}
+            reserved={'tb1':self.primary};targets={'tb1':self.primary}
+            for r,preferred in desired.items():
+                target=preferred if self.feasible(r,preferred,reserved) else self.choose(r,preferred,reserved)
+                if target is not None:targets[r]=target;reserved[r]=target
+            self.targets=targets
+            for r,target in targets.items():self.send(r,target)
 
     def work_positions(self,leader):
         desired=rectangle(leader,self.p['rectangle_half_length'],self.p['rectangle_half_width'])
@@ -694,7 +804,7 @@ class FleetMissionController(Node):
 
     def gate(self):
         now=time.monotonic();ok,_=self.ready()
-        permitted=ok and (self.state in ('FORMING_LINE','TRAVELLING','FORMING_RECTANGLE','FORMING_BOUNDARY','BOUNDARY_TRAVELLING') or (self.manual and self.state=='READY'))
+        permitted=ok and (self.state in ('MODE_TRANSITION','FORMING_LINE','TRAVELLING','FORMING_RECTANGLE','FORMING_BOUNDARY','BOUNDARY_TRAVELLING') or (self.manual and self.state=='READY'))
         commands={r:(0.,0.) for r in ROBOTS}
         self.boundary_holds=set()
         if permitted:
@@ -702,7 +812,7 @@ class FleetMissionController(Node):
                 msg,stamp=self.commands.get(r,(Twist(),0.))
                 if now-stamp>self.p['command_timeout']:continue
                 # Only owned action goals may move in mission mode.
-                if not self.manual and self.slots[r]['handle'] is None:continue
+                if not self.manual and (self.slots[r]['handle'] is None or self.slots[r].get('cancelling',False) or self.slots[r].get('cancel_when_accepted')):continue
                 speed=self.p['leader_speed'] if r=='tb1' else self.p['auxiliary_speed']
                 # Preserve signed Nav2 velocity: reversing is a valid formation
                 # maneuver and passes the same obstacle/yield checks as forward motion.
@@ -713,10 +823,15 @@ class FleetMissionController(Node):
                     self.p['rectangle_half_length'],self.p['rectangle_half_width'],
                     self.p['boundary_tolerance'],commands['tb1'][0])
                 if self.boundary_holds:commands['tb1']=(0.,commands['tb1'][1])
+            if self.state=='MODE_TRANSITION':
+                for r in ROBOTS:
+                    if self.transition_state!='ASSEMBLING' or r not in (set(self.assembly_routes) if self.requested_mode=='SINGLE_FILE' else {self.transition_robot}):commands[r]=(0.,0.)
             if self.state=='FORMING_BOUNDARY' and not self.p['flexible_boundary']:commands['tb1']=(0.,0.)
             if self.state=='TRAVELLING':
                 for i,r in enumerate(ROBOTS[:-1]):
-                    if distance(self.poses[r],self.poses[ROBOTS[i+1]])>self.p['maximum_follower_lag']:commands[r]=(0.,0.)
+                    follower=ROBOTS[i+1]
+                    recovering=self.requested_mode=='SINGLE_FILE' and (follower in self.trail_recovering or follower in self.trail_blocked_since)
+                    if not recovering and distance(self.poses[r],self.poses[follower])>self.p['maximum_follower_lag']:commands[r]=(0.,0.)
             maneuver=self.clearance_maneuver
             if maneuver:commands[maneuver['peer']]=(0.,0.)
             # In verified simulation localization, Gazebo world and map share
@@ -812,42 +927,275 @@ class FleetMissionController(Node):
     def stop_service(self,req,res):
         self.obstacle_recoveries={};self.obstacle_since={}
         self.clearance_maneuver=None;self.conflict_since.clear();self.yielding={}
+        self.transition_state='STOPPED';self.transition_robot=None
         self.manual=False;self.pending_primary=None;self.cancel_all();self.set_state('STOPPED','Operator stop; zero motor commands');res.success=True;res.message=self.reason;return res
     def resume_service(self,req,res):
+        if self.phase=='IDLE':self.transition_state='COMPLETE' if self.active_mode else 'IDLE'
         self.manual=self.p['manual_navigation'] and self.phase=='IDLE'
         for slot in self.slots.values():slot['retries']=0;slot['cooldown']=0.;slot['status']='idle'
         self.set_state('PREFLIGHT','Rechecking readiness before resuming');res.success=True;res.message=self.reason;return res
     def rectangle_service(self,req,res):
+        self.p.update(self.legacy_parameters);self.requested_mode='LEGACY';self.active_mode='LEGACY'
+        self.transition_state='IDLE';self.transition_robot=None
         self.obstacle_recoveries={};self.obstacle_since={}
         self.clearance_maneuver=None;self.conflict_since.clear();self.yielding={}
         self.manual=False;self.primary=None;self.pending_primary=None;self.mission_number+=1;self.cancel_all();self.rectangle_targets=None;self.phase='FORMING_RECTANGLE';self.set_state('FORMING_RECTANGLE','Operator requested work rectangle');res.success=True;res.message=self.reason;return res
 
+    def mode_request(self,msg):
+        mode=msg.data.strip().upper()
+        if mode not in (*MODES,'LEGACY'):
+            self.get_logger().error('Unknown formation mode: '+mode);return
+        self.follower_waypoints={};self.trail_cursors={r:0. for r in ROBOTS[1:]};self.trail_blocked_since={};self.trail_recovering={};self.trail_detours={}
+        self.requested_mode=mode;self.manual=False;self.primary=None;self.pending_primary=None
+        self.mission_number+=1;self.cancel_all()
+        self.mode_targets=None;self.mode_anchor=None;self.transition_robot=None;self.assembly_route=None;self.assembly_stage=None;self.assembly_routes={};self.assembly_blocked_since={}
+        self.transition_started=time.monotonic();self.transition_duration=None
+        self.transition_state='CANCELLING';self.phase='MODE_TRANSITION'
+        self.clearance_maneuver=None;self.obstacle_recoveries={};self.obstacle_since={}
+        self.conflict_since.clear();self.yielding={};self.boundary_waypoint=None;self.boundary_heading=None
+        for slot in self.slots.values():
+            slot['retries']=0;slot['cooldown']=0.;slot['target']=None
+        self.set_state('MODE_TRANSITION','Waiting for all owned actions to finish cancellation')
+
+    def mode_blocked(self,reason):
+        self.cancel_all();self.transition_robot=None;self.transition_state='BLOCKED'
+        self.set_state('WAITING',self.requested_mode+': '+reason)
+
+    def wall_verified(self):
+        grid=self.grids.get('/map')
+        if grid is None:return False
+        x,y,angle=self.p['wall_x'],self.p['wall_y'],self.p['wall_normal_yaw']
+        # A configured wall point must touch an occupied map cell. Probe just
+        # into the accessible side with the auxiliary footprint, rejecting unknown.
+        dx,dy=rotate(x-grid.origin[0],y-grid.origin[1],-grid.angle)
+        ix,iy=int(math.floor(dx/grid.resolution)),int(math.floor(dy/grid.resolution))
+        h,w=grid.cells.shape
+        if not (0<=ix<w and 0<=iy<h and grid.cells[iy,ix]>=99):return False
+        nx,ny=rotate(self.p['wall_probe_distance'],0.,angle)
+        return grid.footprint_free((x+nx,y+ny,angle),self.polygons['tb2'],self.p['footprint_padding'],self.p['maximum_target_cost'])
+
+    def mode_tick(self):
+        if self.requested_mode=='LEGACY':
+            if not self.idle_actions():return
+            self.p.update(self.legacy_parameters)
+            self.active_mode='LEGACY';self.transition_state='COMPLETE'
+            self.transition_duration=time.monotonic()-self.transition_started
+            self.phase='IDLE';self.set_state('READY','Original formation behavior restored; ready for a primary goal')
+            return
+        if time.monotonic()-self.transition_started>self.p['transition_timeout']:
+            self.mode_blocked('transition timed out before actual pose verification');return
+        if self.transition_state=='CANCELLING':
+            if not self.idle_actions():return
+            self.mode_anchor=self.poses['tb1']
+            if self.mode_targets is None:
+                if self.requested_mode=='WALL_WORKSPACE':
+                    nx,ny=rotate(1.,0.,self.p['wall_normal_yaw'])
+                    wall_distance=(self.mode_anchor[0]-self.p['wall_x'])*nx+(self.mode_anchor[1]-self.p['wall_y'])*ny
+                    if not 0.<wall_distance<=self.p['maximum_wall_distance']:
+                        self.mode_blocked('tb1 is not within the configured nearby-wall distance on its accessible side');return
+                if self.requested_mode=='WALL_WORKSPACE' and not self.wall_verified():
+                    self.mode_blocked('configured wall point / accessible normal is not verified on the map');return
+                try:
+                    self.mode_targets=formation_slots(self.requested_mode,self.mode_anchor,{**self.p,'rectangle_half_length':self.open_dimensions[0],'rectangle_half_width':self.open_dimensions[1]},
+                        (self.p['wall_x'],self.p['wall_y'],self.p['wall_normal_yaw']))
+                except ValueError as exc:self.mode_blocked(str(exc));return
+            reserved={'tb1':self.mode_anchor,**self.mode_targets}
+            reason=layout_clearance(reserved,self.polygons,self.p['minimum_separation'],self.p['primary_minimum_separation'])
+            if reason:self.mode_blocked(reason);return
+            for r,t in self.mode_targets.items():
+                if not self.feasible(r,t,reserved,peers=False):
+                    self.mode_blocked(r+': exact target footprint cannot fit on map/costmap');return
+            self.targets=dict(self.mode_targets);self.transition_state='ASSEMBLING'
+            self.set_state('MODE_TRANSITION','Targets verified; assembling auxiliaries while tb1 holds')
+        if self.transition_state!='ASSEMBLING':return
+        if distance(self.poses['tb1'],self.mode_anchor)>self.p['arrival_tolerance']:
+            self.mode_blocked('tb1 moved away from the verified transition anchor');return
+        if self.requested_mode=='SINGLE_FILE':
+            self.concurrent_line_assembly_tick();return
+        # Reuse the supervisor's checked clearance waypoint search, but move
+        # only the auxiliary that owns this sequential assembly step.
+        maneuver=self.clearance_maneuver
+        if maneuver:
+            robot=maneuver['robot']
+            if self.arrived(robot,maneuver['target']):
+                self.cancel(robot)
+                if self.idle_actions():self.clearance_maneuver=None;self.conflict_since.clear()
+            else:
+                self.targets={**self.mode_targets,robot:maneuver['target']}
+                self.send(robot,maneuver['target'])
+            return
+        if self.transition_robot is not None:
+            robot=self.transition_robot
+            pairs=set(self.unresolved_pairs)
+            if robot in self.blocked:
+                pairs.update((winner,loser) for loser,winner in self.yielding.items() if robot in (winner,loser))
+            for pair in sorted(pairs):
+                if robot not in pair:continue
+                since=self.conflict_since.setdefault(pair,self.clock_value)
+                if self.clock_value-since<self.p['yield_recovery_delay']:continue
+                peer=next(r for r in pair if r!=robot)
+                target=self.clearance_target(robot,peer)
+                if target is not None:
+                    self.clearance_maneuver={'robot':robot,'peer':peer,'target':target}
+                    self.cancel(robot)
+                    self.set_state('MODE_TRANSITION',robot+': taking verified clearance waypoint around '+peer)
+                    return
+        self.targets=dict(self.mode_targets)
+        remaining=[r for r,t in self.mode_targets.items() if not self.arrived(r,t)]
+        if not remaining:
+            self.complete_mode();return
+        if self.transition_robot is not None:
+            r=self.transition_robot
+            if self.arrived(r,self.mode_targets[r]):
+                self.cancel(r)
+                if self.idle_actions():self.transition_robot=None
+                return
+        if self.transition_robot is None:
+            # Prefer a currently reachable free target; current peers remain fixed.
+            self.transition_robot=next((r for r in remaining if self.feasible(r,self.mode_targets[r],self.mode_targets)),None)
+            if self.transition_robot is None:
+                self.mode_blocked('all remaining slots obstructed by stationary peers');return
+        if not self.feasible(self.transition_robot,self.mode_targets[self.transition_robot],self.mode_targets):
+            self.mode_blocked(self.transition_robot+': target or approach obstructed by current peers/map');return
+        self.send(self.transition_robot,self.mode_targets[self.transition_robot])
+
+    def complete_mode(self):
+        if not self.idle_actions():self.cancel_all();return
+        self.active_mode=self.requested_mode;self.transition_state='COMPLETE';self.transition_robot=None
+        self.transition_duration=time.monotonic()-self.transition_started
+        if self.active_mode=='SINGLE_FILE' and not self.trail_seeded:
+            self.trail=deque([self.mode_targets[r] for r in reversed(ROBOTS[1:])]+[self.mode_anchor],maxlen=5000)
+            self.trail_seeded=True
+        if self.active_mode=='COMPACT_RECTANGLE':
+            self.p['rectangle_half_length']=self.p['compact_half_length'];self.p['rectangle_half_width']=self.p['compact_half_width']
+        elif self.active_mode=='OPEN_RECTANGLE':
+            self.p['rectangle_half_length'],self.p['rectangle_half_width']=self.open_dimensions
+        if self.active_mode in ('OPEN_RECTANGLE','COMPACT_RECTANGLE'):self.p['flexible_boundary']=False
+        self.phase='IDLE';self.set_state('READY','Formation verified from all actual poses and action results');return
+
+    def concurrent_line_assembly_tick(self):
+        self.targets=dict(self.mode_targets)
+        waiting=[]
+        for robot in ROBOTS[1:]:
+            slot=self.slots[robot]
+            if self.arrived(robot,self.mode_targets[robot]):
+                self.cancel(robot)
+                if not slot['pending'] and slot['handle'] is None:
+                    self.assembly_routes.pop(robot,None)
+                continue
+            route=self.assembly_routes.get(robot)
+            stalled=(robot in self.blocked or robot in self.yielding or
+                     (slot['handle'] is not None and self.clock_value-slot.get('progress_sim',self.clock_value)>self.p['yield_recovery_delay']))
+            if stalled:
+                since=self.assembly_blocked_since.setdefault(robot,self.clock_value)
+                if self.clock_value-since>=self.p['yield_recovery_delay']:
+                    self.cancel(robot)
+                    if slot['pending'] or slot['handle'] is not None:continue
+                    self.assembly_routes.pop(robot,None);route=None
+                    slot['target']=None;slot['status']='idle'
+                    self.assembly_blocked_since.pop(robot,None)
+            else:self.assembly_blocked_since.pop(robot,None)
+            if route is None:
+                for candidate in assembly_reroute_candidates(self.poses[robot],self.mode_targets[robot],
+                        self.p['single_file_assembly_axis_yaw'],self.p['single_file_clearance_step']):
+                    if stationary_route_clear(self.poses[robot],candidate,robot,self.poses,self.polygons,
+                            self.p['minimum_separation'],self.p['primary_minimum_separation'],
+                            free=lambda pose,r=robot:self.feasible(r,pose,peers=False)):
+                        route=list(candidate);self.assembly_routes[robot]=route;break
+                if route is None:waiting.append(robot);continue
+            target=route[0]
+            reached=(distance(self.poses[robot],target)<=self.p['arrival_tolerance'] if len(route)>1 else self.arrived(robot,target))
+            if reached:
+                self.cancel(robot)
+                # Wait only for this robot's result, never for another robot.
+                if slot['pending'] or slot['handle'] is not None:continue
+                route.pop(0);slot['target']=None;slot['status']='idle'
+                if not route:self.assembly_routes.pop(robot,None);continue
+                target=route[0]
+            self.targets[robot]=target
+        for robot in list(self.assembly_routes):
+            self.send(robot,self.targets[robot])
+        self.assembly_stage='CONCURRENT_HORIZONTAL_ASSEMBLY'
+        self.set_state('MODE_TRANSITION','Concurrent auxiliary assembly'+('; waiting for clearance: '+', '.join(waiting) if waiting else ''))
+        if all(self.arrived(r,t) for r,t in self.mode_targets.items()):self.complete_mode()
+
+    def horizontal_assembly_tick(self):
+        remaining=[r for r in ROBOTS[1:] if not self.arrived(r,self.mode_targets[r])]
+        if not remaining:
+            self.complete_mode();return
+        if self.transition_robot is None:
+            # Clear the rear robots first. Only pick a robot whose entire simple
+            # horizontal-first route is verified around currently stationary peers.
+            for robot in reversed(remaining):
+                for route in horizontal_first_routes(self.poses[robot],self.mode_targets[robot],
+                        self.p['single_file_assembly_axis_yaw'],self.p['single_file_clearance_step']):
+                    if stationary_route_clear(self.poses[robot],route,robot,self.poses,self.polygons,
+                            self.p['minimum_separation'],self.p['primary_minimum_separation'],
+                            free=lambda pose,r=robot:self.feasible(r,pose,peers=False)):
+                        self.transition_robot=robot;self.assembly_route=list(route)
+                        break
+                if self.transition_robot is not None:break
+            if self.transition_robot is None:
+                self.mode_blocked('no safe horizontal-first approach; current peers or map obstruct both simple routes');return
+        robot=self.transition_robot
+        if self.arrived(robot,self.mode_targets[robot]):
+            self.cancel(robot)
+            if self.idle_actions():self.transition_robot=None;self.assembly_route=None
+            return
+        target=self.assembly_route[0]
+        reached=(distance(self.poses[robot],target)<=self.p['arrival_tolerance'] if len(self.assembly_route)>1 else self.arrived(robot,target))
+        if reached:
+            self.cancel(robot)
+            if not self.idle_actions():return
+            self.assembly_route.pop(0)
+            self.slots[robot]['target']=None;self.slots[robot]['status']='idle'
+            if not self.assembly_route:self.transition_robot=None;return
+            target=self.assembly_route[0]
+        self.assembly_stage='HORIZONTAL_CLEARANCE' if len(self.assembly_route)>1 else 'APPROACH_SLOT'
+        self.targets={**self.mode_targets,robot:target}
+        self.set_state('MODE_TRANSITION',robot+': '+('moving horizontally clear of stationary robots' if self.assembly_stage=='HORIZONTAL_CLEARANCE' else 'horizontal clearance verified; turning toward line slot'))
+        self.send(robot,target)
+
+    def formation_targets(self):
+        if self.state=='TRAVELLING' and self.requested_mode=='SINGLE_FILE' and self.trail:
+            return {r:trail_target(list(self.trail),i*self.p['transit_spacing']) for i,r in enumerate(ROBOTS[1:],1)}
+        return self.mode_targets if self.state=='MODE_TRANSITION' and self.mode_targets is not None else self.targets
+
     def publish_markers(self):
+        desired=self.formation_targets()
         array=MarkerArray();clear=Marker();clear.action=Marker.DELETEALL;array.markers.append(clear)
         def marker(mid,label,pose,color,kind):
             m=Marker();m.header.frame_id='map';m.header.stamp=self.get_clock().now().to_msg();m.ns='fleet_mission';m.id=mid;m.type=kind;m.action=Marker.ADD;m.pose=self.pose_message(pose).pose;m.pose.position.z=.3;m.scale.x=.3;m.scale.y=.3;m.scale.z=.3;m.color.r,m.color.g,m.color.b=color;m.color.a=1.;m.text=label
-            if kind==Marker.TEXT_VIEW_FACING:m.scale.z=.7
+            if kind==Marker.TEXT_VIEW_FACING:m.scale.z=.35
             return m
         if self.primary:array.markers.append(marker(1,'Primary goal',self.primary,(1.,.3,.1),Marker.SPHERE))
         for i,r in enumerate(ROBOTS):
-            if r in self.poses:array.markers.append(marker(10+i,r,self.poses[r],(1.,1.,1.),Marker.TEXT_VIEW_FACING))
-            if r in self.targets:
-                array.markers.append(marker(20+i,r+' target',self.targets[r],(.1,1.,.2),Marker.ARROW))
-                array.markers.append(marker(30+i,r+' desired',self.targets[r],(.1,1.,.2),Marker.TEXT_VIEW_FACING))
-                outline=marker(100+i,'',self.targets[r],(.1,1.,.2),Marker.LINE_STRIP)
+            if r in self.poses:array.markers.append(marker(10+i,r,(self.poses[r][0],self.poses[r][1]-.5,self.poses[r][2]),(.1,.1,.1),Marker.TEXT_VIEW_FACING))
+            if r in desired:
+                array.markers.append(marker(20+i,r+' target',desired[r],(.1,1.,.2),Marker.ARROW))
+                array.markers.append(marker(30+i,r+' desired',(desired[r][0],desired[r][1]+.5,desired[r][2]),(.05,.5,.1),Marker.TEXT_VIEW_FACING))
+                outline=marker(100+i,'',desired[r],(.1,1.,.2),Marker.LINE_STRIP)
                 outline.scale.x=.04;outline.pose.position.z=.08
                 for x,y in self.polygons[r]+[self.polygons[r][0]]:
                     point=Point();point.x=float(x);point.y=float(y);outline.points.append(point)
                 array.markers.append(outline)
-        if all(r in self.poses for r in ROBOTS):
+        if self.requested_mode in ('LEGACY','OPEN_RECTANGLE','COMPACT_RECTANGLE') and all(r in self.poses for r in ROBOTS):
             boundary=marker(200,'',(0.,0.,0.),(.2,.8,1.),Marker.LINE_STRIP);boundary.scale.x=.08
             order=boundary_order(self.poses)
             for r in order+[order[0]]:
                 point=Point();point.x=float(self.poses[r][0]);point.y=float(self.poses[r][1]);boundary.points.append(point)
             array.markers.append(boundary)
-        center=self.poses.get('tb1',(0.,0.,0.));state=marker(50,self.state,center,(1.,1.,.2),Marker.TEXT_VIEW_FACING);state.pose.position.z=2.;array.markers.append(state)
+        if self.requested_mode=='WALL_WORKSPACE' and self.mode_anchor and self.wall_verified():
+            work=marker(210,'Intended wall workspace',(0.,0.,0.),(1.,.5,.1),Marker.LINE_STRIP);work.scale.x=.08
+            nx,ny=rotate(1.,0.,self.p['wall_normal_yaw']);tx,ty=-ny,nx
+            leader=self.mode_anchor;depth=(leader[0]-self.p['wall_x'])*nx+(leader[1]-self.p['wall_y'])*ny
+            width=self.p['wall_half_width']
+            for d,side in ((0,1),(-depth,1),(-depth,-1),(0,-1),(0,1)):
+                point=Point();point.x=leader[0]+d*nx+side*width*tx;point.y=leader[1]+d*ny+side*width*ty;work.points.append(point)
+            array.markers.append(work)
+        center=self.poses.get('tb1',(0.,0.,0.));state=marker(50,f'{self.requested_mode} / active: {self.active_mode or "unverified"}\n{self.transition_state}: {self.state}\n{textwrap.fill(self.reason,64)}',(center[0],center[1]+5.7,0.),(.2,.2,.1),Marker.TEXT_VIEW_FACING);state.pose.position.z=2.;array.markers.append(state)
         self.markers.publish(array)
-        msg=String();msg.data=json.dumps({'state':self.state,'reason':self.reason,'phase':self.phase,'manual_navigation':self.manual,'mission':self.mission_number,'poses':self.poses,'targets':self.targets,'blocked':sorted(self.blocked),'yielding_to':self.yielding,'clearance_maneuver':self.clearance_maneuver,'rolling_turn_active':getattr(self,'rolling_turn_active',False),'obstacle_recoveries':self.obstacle_recoveries,'waiting_for_followers':sorted(self.boundary_holds),'formation_heading':self.boundary_heading,'flexible_boundary':self.p['flexible_boundary'],'follower_slots':getattr(self,'flexible_slots',{}),'actions':{r:s['status'] for r,s in self.slots.items()}});self.status_pub.publish(msg)
+        msg=String();msg.data=json.dumps({'simulation_time':self.clock_value,'requested_mode':self.requested_mode,'active_mode':self.active_mode,'assembly_stage':self.assembly_stage,'assembly_robot':self.transition_robot,'assembly_route':self.assembly_route,'assembly_routes':self.assembly_routes,'transition_state':self.transition_state,'transition_seconds':(time.monotonic()-self.transition_started if self.transition_started and self.transition_state in ('CANCELLING','ASSEMBLING') else self.transition_duration),'transition_progress':sum(self.arrived(r,t) for r,t in desired.items())/max(1,len(desired)),'formation_error':{r:distance(self.poses[r],t) for r,t in desired.items() if r in self.poses},'position_source':'map TF; simulation ground truth verified separately','recovering_robots':self.trail_recovering,'recovery_waypoints':self.trail_detours,'ground_truth_poses':self.physical_poses,'localization_error':{r:distance(p,self.physical_poses[r]) for r,p in self.poses.items() if r in self.physical_poses},'minimum_footprint_clearance':min((footprint_clearance(self.physical_poses[a],self.polygons[a],self.physical_poses[b],self.polygons[b]) for i,a in enumerate(ROBOTS) for b in ROBOTS[i+1:] if a in self.physical_poses and b in self.physical_poses),default=None),'state':self.state,'reason':self.reason,'phase':self.phase,'manual_navigation':self.manual,'mission':self.mission_number,'poses':self.poses,'desired_slots':desired,'targets':self.targets,'unresolved_pairs':list(self.unresolved_pairs),'blocked':sorted(self.blocked),'yielding_to':self.yielding,'clearance_maneuver':self.clearance_maneuver,'rolling_turn_active':getattr(self,'rolling_turn_active',False),'obstacle_recoveries':self.obstacle_recoveries,'waiting_for_followers':sorted(self.boundary_holds),'formation_heading':self.boundary_heading,'flexible_boundary':self.p['flexible_boundary'],'follower_slots':getattr(self,'flexible_slots',{}),'actions':{r:s['status'] for r,s in self.slots.items()}});self.status_pub.publish(msg)
 
     def shutdown(self):
         self.cancel_all()

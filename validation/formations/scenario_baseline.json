@@ -1,0 +1,2300 @@
+{
+  "robots": {
+    "tb1": {
+      "tf_edges": [
+        [
+          "base_link",
+          "left_wheel_link_1"
+        ],
+        [
+          "base_link",
+          "left_wheel_link_2"
+        ],
+        [
+          "base_link",
+          "right_wheel_link_1"
+        ],
+        [
+          "base_link",
+          "right_wheel_Link_2"
+        ],
+        [
+          "odom",
+          "base_footprint"
+        ],
+        [
+          "base_link",
+          "Front_sensor_link"
+        ],
+        [
+          "base_footprint",
+          "base_link"
+        ],
+        [
+          "base_link",
+          "imu_link"
+        ],
+        [
+          "map",
+          "odom"
+        ]
+      ],
+      "scan": {
+        "frame": "Front_sensor_link",
+        "rays": 360,
+        "finite_returns": 283,
+        "stamp": 19.808
+      },
+      "odom": {
+        "frame": "odom",
+        "child": "base_footprint",
+        "x": 0.49992835672821617,
+        "y": 1.5998268519754022
+      },
+      "map_pose": {
+        "x": 0.49992835672821617,
+        "y": 1.5998268519754022,
+        "yaw": -2.140267820816072e-05,
+        "base_frame": "base_footprint"
+      }
+    },
+    "tb2": {
+      "tf_edges": [
+        [
+          "odom",
+          "base_footprint"
+        ],
+        [
+          "map",
+          "odom"
+        ],
+        [
+          "base_footprint",
+          "base_link"
+        ],
+        [
+          "base_link",
+          "caster_back_link"
+        ],
+        [
+          "base_link",
+          "imu_link"
+        ],
+        [
+          "base_link",
+          "base_scan"
+        ],
+        [
+          "base_link",
+          "wheel_left_link_1"
+        ],
+        [
+          "base_link",
+          "wheel_left_link_2"
+        ],
+        [
+          "base_link",
+          "wheel_right_link_1"
+        ],
+        [
+          "base_link",
+          "wheel_right_link_2"
+        ]
+      ],
+      "scan": {
+        "frame": "base_scan",
+        "rays": 360,
+        "finite_returns": 0,
+        "stamp": 19.412
+      },
+      "odom": {
+        "frame": "odom",
+        "child": "base_footprint",
+        "x": 4.708320237227244,
+        "y": 5.000050859095775
+      },
+      "map_pose": {
+        "x": 4.708362718332386,
+        "y": 5.000051394301629,
+        "yaw": -0.0005366106625775866,
+        "base_frame": "base_footprint"
+      }
+    },
+    "tb3": {
+      "tf_edges": [
+        [
+          "base_link",
+          "wheel_left_link_1"
+        ],
+        [
+          "base_link",
+          "wheel_left_link_2"
+        ],
+        [
+          "base_link",
+          "wheel_right_link_1"
+        ],
+        [
+          "base_link",
+          "wheel_right_link_2"
+        ],
+        [
+          "map",
+          "odom"
+        ],
+        [
+          "odom",
+          "base_footprint"
+        ],
+        [
+          "base_footprint",
+          "base_link"
+        ],
+        [
+          "base_link",
+          "caster_back_link"
+        ],
+        [
+          "base_link",
+          "imu_link"
+        ],
+        [
+          "base_link",
+          "base_scan"
+        ]
+      ],
+      "scan": {
+        "frame": "base_scan",
+        "rays": 360,
+        "finite_returns": 100,
+        "stamp": 19.456
+      },
+      "odom": {
+        "frame": "odom",
+        "child": "base_footprint",
+        "x": -3.6920342328154026,
+        "y": -1.7999522781840172
+      },
+      "map_pose": {
+        "x": -3.6919965003153417,
+        "y": -1.7999520074607818,
+        "yaw": -0.000502366782183105,
+        "base_frame": "base_footprint"
+      }
+    },
+    "tb4": {
+      "tf_edges": [
+        [
+          "base_link",
+          "wheel_left_link_1"
+        ],
+        [
+          "base_link",
+          "wheel_left_link_2"
+        ],
+        [
+          "base_link",
+          "wheel_right_link_1"
+        ],
+        [
+          "base_link",
+          "wheel_right_link_2"
+        ],
+        [
+          "odom",
+          "base_footprint"
+        ],
+        [
+          "map",
+          "odom"
+        ],
+        [
+          "base_footprint",
+          "base_link"
+        ],
+        [
+          "base_link",
+          "caster_back_link"
+        ],
+        [
+          "base_link",
+          "imu_link"
+        ],
+        [
+          "base_link",
+          "base_scan"
+        ]
+      ],
+      "scan": {
+        "frame": "base_scan",
+        "rays": 360,
+        "finite_returns": 114,
+        "stamp": 19.264
+      },
+      "odom": {
+        "frame": "odom",
+        "child": "base_footprint",
+        "x": 4.707311149578352,
+        "y": -1.799959036065369
+      },
+      "map_pose": {
+        "x": 4.707354378949541,
+        "y": -1.799958143123026,
+        "yaw": -0.00042514645048284645,
+        "base_frame": "base_footprint"
+      }
+    },
+    "tb5": {
+      "tf_edges": [
+        [
+          "base_link",
+          "wheel_left_link_1"
+        ],
+        [
+          "base_link",
+          "wheel_left_link_2"
+        ],
+        [
+          "base_link",
+          "wheel_right_link_1"
+        ],
+        [
+          "base_link",
+          "wheel_right_link_2"
+        ],
+        [
+          "base_footprint",
+          "base_link"
+        ],
+        [
+          "base_link",
+          "caster_back_link"
+        ],
+        [
+          "base_link",
+          "imu_link"
+        ],
+        [
+          "base_link",
+          "base_scan"
+        ],
+        [
+          "odom",
+          "base_footprint"
+        ],
+        [
+          "map",
+          "odom"
+        ]
+      ],
+      "odom": {
+        "frame": "odom",
+        "child": "base_footprint",
+        "x": -3.693058199215899,
+        "y": 5.000040659514431
+      },
+      "scan": {
+        "frame": "base_scan",
+        "rays": 360,
+        "finite_returns": 0,
+        "stamp": 19.356
+      },
+      "map_pose": {
+        "x": -3.6929742837667328,
+        "y": 5.00004123910985,
+        "yaw": -0.0004180088483593838,
+        "base_frame": "base_footprint"
+      }
+    }
+  },
+  "maps": {
+    "/tb1/local_costmap/costmap": {
+      "frame": "odom",
+      "width": 160,
+      "height": 160,
+      "resolution": 0.05000000074505806,
+      "origin": [
+        -3.4500000003725293,
+        -2.350000000372529
+      ],
+      "occupied_cells": 0,
+      "inflated_cells": 0,
+      "unknown_cells": 0,
+      "sha256": "c65206769723a13afe80c0d925531639ceef9c2eb97eee3b1b542739ec40597f"
+    },
+    "/tb2/local_costmap/costmap": {
+      "frame": "odom",
+      "width": 80,
+      "height": 80,
+      "resolution": 0.05000000074505806,
+      "origin": [
+        2.699999999627471,
+        2.999999999627471
+      ],
+      "occupied_cells": 0,
+      "inflated_cells": 0,
+      "unknown_cells": 0,
+      "sha256": "56a43ef88ddfcd0f56f7dd973312c0e73d62f59655c01d7b4e59aaa3be8b3fb6"
+    },
+    "/tb3/local_costmap/costmap": {
+      "frame": "odom",
+      "width": 80,
+      "height": 80,
+      "resolution": 0.05000000074505806,
+      "origin": [
+        -5.650000000372529,
+        -3.750000000372529
+      ],
+      "occupied_cells": 0,
+      "inflated_cells": 0,
+      "unknown_cells": 0,
+      "sha256": "56a43ef88ddfcd0f56f7dd973312c0e73d62f59655c01d7b4e59aaa3be8b3fb6"
+    },
+    "/tb4/local_costmap/costmap": {
+      "frame": "odom",
+      "width": 80,
+      "height": 80,
+      "resolution": 0.05000000074505806,
+      "origin": [
+        2.699999999627471,
+        -3.750000000372529
+      ],
+      "occupied_cells": 409,
+      "inflated_cells": 129,
+      "unknown_cells": 0,
+      "sha256": "7deaf67fe15b805a233026c42e6396202f99138fb9667dc259c8aa17208b72bd"
+    },
+    "/tb5/local_costmap/costmap": {
+      "frame": "odom",
+      "width": 80,
+      "height": 80,
+      "resolution": 0.05000000074505806,
+      "origin": [
+        -5.650000000372529,
+        2.999999999627471
+      ],
+      "occupied_cells": 0,
+      "inflated_cells": 0,
+      "unknown_cells": 0,
+      "sha256": "56a43ef88ddfcd0f56f7dd973312c0e73d62f59655c01d7b4e59aaa3be8b3fb6"
+    },
+    "/map": {
+      "frame": "map",
+      "width": 4215,
+      "height": 2980,
+      "resolution": 0.025512002408504486,
+      "origin": [
+        -36.748513534724125,
+        -33.690327890042596
+      ],
+      "occupied_cells": 111318,
+      "inflated_cells": 0,
+      "unknown_cells": 0,
+      "sha256": "eee37d484eb76b4038bc07236026c6d62da22ef6a5f16ebfa85c3e14991b2715"
+    },
+    "/tb1/global_costmap/costmap": {
+      "frame": "map",
+      "width": 4215,
+      "height": 2980,
+      "resolution": 0.025512002408504486,
+      "origin": [
+        -36.748513534724125,
+        -33.690327890042596
+      ],
+      "occupied_cells": 1356020,
+      "inflated_cells": 1133708,
+      "unknown_cells": 0,
+      "sha256": "585087d3099de5dc6af99b8e2d7f8a3362e2a97bb30cdb850e34d694ea1fdb37",
+      "map_wall_cells_present": 111318,
+      "map_wall_cells_total": 111318
+    },
+    "/tb2/global_costmap/costmap": {
+      "frame": "map",
+      "width": 4215,
+      "height": 2980,
+      "resolution": 0.025512002408504486,
+      "origin": [
+        -36.748513534724125,
+        -33.690327890042596
+      ],
+      "occupied_cells": 624698,
+      "inflated_cells": 631026,
+      "unknown_cells": 0,
+      "sha256": "055616757676a962ff727d6bcc0e9c9ec6f65982c94220ac4bcfa2807aa7b7d7",
+      "map_wall_cells_present": 111318,
+      "map_wall_cells_total": 111318
+    },
+    "/tb3/global_costmap/costmap": {
+      "frame": "map",
+      "width": 4215,
+      "height": 2980,
+      "resolution": 0.025512002408504486,
+      "origin": [
+        -36.748513534724125,
+        -33.690327890042596
+      ],
+      "occupied_cells": 624698,
+      "inflated_cells": 631026,
+      "unknown_cells": 0,
+      "sha256": "8f2cdf0525ca3bfdcfb32f1ce8e05bcd26b41367e9d0968593010a2693687693",
+      "map_wall_cells_present": 111318,
+      "map_wall_cells_total": 111318
+    },
+    "/tb4/global_costmap/costmap": {
+      "frame": "map",
+      "width": 4215,
+      "height": 2980,
+      "resolution": 0.025512002408504486,
+      "origin": [
+        -36.748513534724125,
+        -33.690327890042596
+      ],
+      "occupied_cells": 624698,
+      "inflated_cells": 631026,
+      "unknown_cells": 0,
+      "sha256": "29e58ef46e6500f2d558ea54e5aee18605569931dd004b6b3fc54d0ba6616089",
+      "map_wall_cells_present": 111318,
+      "map_wall_cells_total": 111318
+    },
+    "/tb5/global_costmap/costmap": {
+      "frame": "map",
+      "width": 4215,
+      "height": 2980,
+      "resolution": 0.025512002408504486,
+      "origin": [
+        -36.748513534724125,
+        -33.690327890042596
+      ],
+      "occupied_cells": 624698,
+      "inflated_cells": 631026,
+      "unknown_cells": 0,
+      "sha256": "055616757676a962ff727d6bcc0e9c9ec6f65982c94220ac4bcfa2807aa7b7d7",
+      "map_wall_cells_present": 111318,
+      "map_wall_cells_total": 111318
+    }
+  },
+  "services": {
+    "/map_server/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/map_server/get_parameters": {
+      "use_sim_time": true,
+      "yaml_filename": "/home/umroot/crs_ws/src/concordia-multi-construction-robot-system/config/ev9_formation_test.yaml",
+      "frame_id": "map"
+    },
+    "/tb1/amcl/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb1/amcl/get_parameters": {
+      "use_sim_time": true,
+      "global_frame_id": "map",
+      "odom_frame_id": "odom",
+      "base_frame_id": "base_footprint",
+      "scan_topic": "scan",
+      "map_topic": "/map",
+      "set_initial_pose": true
+    },
+    "/tb1/controller_server/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb1/controller_server/get_parameters": {
+      "use_sim_time": true,
+      "FollowPath.max_vel_x": 0.6,
+      "FollowPath.max_speed_xy": 0.6,
+      "goal_checker_plugins": [
+        "goal_checker"
+      ],
+      "goal_checker.xy_goal_tolerance": 0.25,
+      "FollowPath.xy_goal_tolerance": 0.25
+    },
+    "/tb1/planner_server/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb1/bt_navigator/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb1/bt_navigator/get_parameters": {
+      "use_sim_time": true,
+      "global_frame": "map",
+      "robot_base_frame": "base_footprint",
+      "odom_topic": "odom"
+    },
+    "/tb1/velocity_smoother/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb1/velocity_smoother/get_parameters": {
+      "use_sim_time": true,
+      "max_velocity": [
+        0.6,
+        0.0,
+        0.5
+      ],
+      "odom_topic": "odom"
+    },
+    "/tb1/global_costmap/global_costmap/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb1/local_costmap/local_costmap/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb1/local_costmap/local_costmap/get_parameters": {
+      "use_sim_time": true,
+      "global_frame": "odom",
+      "robot_base_frame": "base_footprint",
+      "footprint": "[[-1.20,-0.85],[-1.20,0.85],[1.40,0.85],[1.40,-0.85]]",
+      "plugins": [
+        "voxel_layer",
+        "inflation_layer"
+      ],
+      "voxel_layer.scan.topic": "/scan"
+    },
+    "/tb2/amcl/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb2/amcl/get_parameters": {
+      "use_sim_time": true,
+      "global_frame_id": "map",
+      "odom_frame_id": "odom",
+      "base_frame_id": "base_footprint",
+      "scan_topic": "scan",
+      "map_topic": "/map",
+      "set_initial_pose": true
+    },
+    "/tb2/controller_server/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb2/controller_server/get_parameters": {
+      "use_sim_time": true,
+      "FollowPath.max_vel_x": 0.8,
+      "FollowPath.max_speed_xy": 0.8,
+      "goal_checker_plugins": [
+        "goal_checker"
+      ],
+      "goal_checker.xy_goal_tolerance": 0.3,
+      "FollowPath.xy_goal_tolerance": 0.3
+    },
+    "/tb2/planner_server/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb2/planner_server/get_parameters": {
+      "use_sim_time": true
+    },
+    "/tb2/bt_navigator/get_state": {
+      "error": "no response within audit window"
+    },
+    "/tb2/velocity_smoother/get_state": {
+      "error": "no response within audit window"
+    },
+    "/tb2/global_costmap/global_costmap/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb2/global_costmap/global_costmap/get_parameters": {
+      "use_sim_time": true,
+      "global_frame": "map",
+      "robot_base_frame": "base_footprint",
+      "footprint": "[[-0.30,-0.30],[-0.30,0.30],[0.475,0.30],[0.475,-0.30]]",
+      "plugins": [
+        "static_layer",
+        "obstacle_layer",
+        "inflation_layer"
+      ],
+      "static_layer.map_topic": "",
+      "obstacle_layer.scan.topic": "/scan"
+    },
+    "/tb2/local_costmap/local_costmap/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb2/local_costmap/local_costmap/get_parameters": {
+      "use_sim_time": true,
+      "global_frame": "odom",
+      "robot_base_frame": "base_footprint",
+      "footprint": "[[-0.30,-0.30],[-0.30,0.30],[0.475,0.30],[0.475,-0.30]]",
+      "plugins": [
+        "voxel_layer",
+        "inflation_layer"
+      ],
+      "voxel_layer.scan.topic": "/scan"
+    },
+    "/tb3/amcl/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb3/amcl/get_parameters": {
+      "use_sim_time": true,
+      "global_frame_id": "map",
+      "odom_frame_id": "odom",
+      "base_frame_id": "base_footprint",
+      "scan_topic": "scan",
+      "map_topic": "/map",
+      "set_initial_pose": true
+    },
+    "/tb3/controller_server/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb3/controller_server/get_parameters": {
+      "use_sim_time": true,
+      "FollowPath.max_vel_x": 0.8,
+      "FollowPath.max_speed_xy": 0.8,
+      "goal_checker_plugins": [
+        "goal_checker"
+      ],
+      "goal_checker.xy_goal_tolerance": 0.3,
+      "FollowPath.xy_goal_tolerance": 0.3
+    },
+    "/tb3/planner_server/get_state": {
+      "error": "no response within audit window"
+    },
+    "/tb3/bt_navigator/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb3/bt_navigator/get_parameters": {
+      "use_sim_time": true,
+      "global_frame": "map",
+      "robot_base_frame": "base_footprint",
+      "odom_topic": "odom"
+    },
+    "/tb3/velocity_smoother/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb3/velocity_smoother/get_parameters": {
+      "use_sim_time": true,
+      "max_velocity": [
+        0.8,
+        0.0,
+        0.5
+      ],
+      "odom_topic": "odom"
+    },
+    "/tb3/global_costmap/global_costmap/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb3/local_costmap/local_costmap/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb3/local_costmap/local_costmap/get_parameters": {
+      "use_sim_time": true,
+      "global_frame": "odom",
+      "robot_base_frame": "base_footprint",
+      "footprint": "[[-0.30,-0.30],[-0.30,0.30],[0.475,0.30],[0.475,-0.30]]",
+      "plugins": [
+        "voxel_layer",
+        "inflation_layer"
+      ],
+      "voxel_layer.scan.topic": "/scan"
+    },
+    "/tb4/amcl/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb4/amcl/get_parameters": {
+      "use_sim_time": true,
+      "global_frame_id": "map",
+      "odom_frame_id": "odom",
+      "base_frame_id": "base_footprint",
+      "scan_topic": "scan",
+      "map_topic": "/map",
+      "set_initial_pose": true
+    },
+    "/tb4/controller_server/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb4/controller_server/get_parameters": {
+      "use_sim_time": true,
+      "FollowPath.max_vel_x": 0.8,
+      "FollowPath.max_speed_xy": 0.8,
+      "goal_checker_plugins": [
+        "goal_checker"
+      ],
+      "goal_checker.xy_goal_tolerance": 0.3,
+      "FollowPath.xy_goal_tolerance": 0.3
+    },
+    "/tb4/planner_server/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb4/planner_server/get_parameters": {
+      "use_sim_time": true
+    },
+    "/tb4/bt_navigator/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb4/bt_navigator/get_parameters": {
+      "use_sim_time": true,
+      "global_frame": "map",
+      "robot_base_frame": "base_footprint",
+      "odom_topic": "odom"
+    },
+    "/tb4/velocity_smoother/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb4/velocity_smoother/get_parameters": {
+      "use_sim_time": true,
+      "max_velocity": [
+        0.8,
+        0.0,
+        0.5
+      ],
+      "odom_topic": "odom"
+    },
+    "/tb4/global_costmap/global_costmap/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb4/global_costmap/global_costmap/get_parameters": {
+      "use_sim_time": true,
+      "global_frame": "map",
+      "robot_base_frame": "base_footprint",
+      "footprint": "[[-0.30,-0.30],[-0.30,0.30],[0.475,0.30],[0.475,-0.30]]",
+      "plugins": [
+        "static_layer",
+        "obstacle_layer",
+        "inflation_layer"
+      ],
+      "static_layer.map_topic": "",
+      "obstacle_layer.scan.topic": "/scan"
+    },
+    "/tb4/local_costmap/local_costmap/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb4/local_costmap/local_costmap/get_parameters": {
+      "use_sim_time": true,
+      "global_frame": "odom",
+      "robot_base_frame": "base_footprint",
+      "footprint": "[[-0.30,-0.30],[-0.30,0.30],[0.475,0.30],[0.475,-0.30]]",
+      "plugins": [
+        "voxel_layer",
+        "inflation_layer"
+      ],
+      "voxel_layer.scan.topic": "/scan"
+    },
+    "/tb5/amcl/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb5/amcl/get_parameters": {
+      "use_sim_time": true,
+      "global_frame_id": "map",
+      "odom_frame_id": "odom",
+      "base_frame_id": "base_footprint",
+      "scan_topic": "scan",
+      "map_topic": "/map",
+      "set_initial_pose": true
+    },
+    "/tb5/controller_server/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb5/controller_server/get_parameters": {
+      "use_sim_time": true,
+      "FollowPath.max_vel_x": 0.8,
+      "FollowPath.max_speed_xy": 0.8,
+      "goal_checker_plugins": [
+        "goal_checker"
+      ],
+      "goal_checker.xy_goal_tolerance": 0.3,
+      "FollowPath.xy_goal_tolerance": 0.3
+    },
+    "/tb5/planner_server/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb5/planner_server/get_parameters": {
+      "use_sim_time": true
+    },
+    "/tb5/bt_navigator/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb5/velocity_smoother/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb5/global_costmap/global_costmap/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb5/global_costmap/global_costmap/get_parameters": {
+      "use_sim_time": true,
+      "global_frame": "map",
+      "robot_base_frame": "base_footprint",
+      "footprint": "[[-0.30,-0.30],[-0.30,0.30],[0.475,0.30],[0.475,-0.30]]",
+      "plugins": [
+        "static_layer",
+        "obstacle_layer",
+        "inflation_layer"
+      ],
+      "static_layer.map_topic": "",
+      "obstacle_layer.scan.topic": "/scan"
+    },
+    "/tb5/local_costmap/local_costmap/get_state": {
+      "id": 3,
+      "label": "active"
+    },
+    "/tb5/local_costmap/local_costmap/get_parameters": {
+      "use_sim_time": true,
+      "global_frame": "odom",
+      "robot_base_frame": "base_footprint",
+      "footprint": "[[-0.30,-0.30],[-0.30,0.30],[0.475,0.30],[0.475,-0.30]]",
+      "plugins": [
+        "voxel_layer",
+        "inflation_layer"
+      ],
+      "voxel_layer.scan.topic": "/scan"
+    },
+    "/tb1/planner_server/get_parameters": {
+      "use_sim_time": true
+    },
+    "/tb1/global_costmap/global_costmap/get_parameters": {
+      "use_sim_time": true,
+      "global_frame": "map",
+      "robot_base_frame": "base_footprint",
+      "footprint": "[[-1.20,-0.85],[-1.20,0.85],[1.40,0.85],[1.40,-0.85]]",
+      "plugins": [
+        "static_layer",
+        "obstacle_layer",
+        "inflation_layer"
+      ],
+      "static_layer.map_topic": "",
+      "obstacle_layer.scan.topic": "/scan"
+    },
+    "/tb2/bt_navigator/get_parameters": {
+      "use_sim_time": true,
+      "global_frame": "map",
+      "robot_base_frame": "base_footprint",
+      "odom_topic": "odom"
+    },
+    "/tb2/velocity_smoother/get_parameters": {
+      "use_sim_time": true,
+      "max_velocity": [
+        0.8,
+        0.0,
+        0.5
+      ],
+      "odom_topic": "odom"
+    },
+    "/tb3/planner_server/get_parameters": {
+      "use_sim_time": true
+    },
+    "/tb3/global_costmap/global_costmap/get_parameters": {
+      "use_sim_time": true,
+      "global_frame": "map",
+      "robot_base_frame": "base_footprint",
+      "footprint": "[[-0.30,-0.30],[-0.30,0.30],[0.475,0.30],[0.475,-0.30]]",
+      "plugins": [
+        "static_layer",
+        "obstacle_layer",
+        "inflation_layer"
+      ],
+      "static_layer.map_topic": "",
+      "obstacle_layer.scan.topic": "/scan"
+    },
+    "/tb5/bt_navigator/get_parameters": {
+      "use_sim_time": true,
+      "global_frame": "map",
+      "robot_base_frame": "base_footprint",
+      "odom_topic": "odom"
+    },
+    "/tb5/velocity_smoother/get_parameters": {
+      "use_sim_time": true,
+      "max_velocity": [
+        0.8,
+        0.0,
+        0.5
+      ],
+      "odom_topic": "odom"
+    }
+  },
+  "clock": [
+    12.8,
+    19.8
+  ],
+  "nodes": [
+    "/tb2/amcl",
+    "/tb2/transform_listener_impl_72e670034980",
+    "/tb3/velocity_smoother",
+    "/tb2/planner_server",
+    "/tb2/global_costmap/global_costmap",
+    "/tb2/transform_listener_impl_7ef66c0057d0",
+    "/tb4/velocity_smoother",
+    "/tb2/lifecycle_manager_navigation",
+    "/tb4/waypoint_follower",
+    "/tb1/planner_server",
+    "/tb1/global_costmap/global_costmap",
+    "/tb1/transform_listener_impl_784cb0002810",
+    "/tb5/behavior_server",
+    "/tb5/transform_listener_impl_74191c00a7b0",
+    "/tb5/lifecycle_manager_localization",
+    "/tb3/planner_server",
+    "/tb3/global_costmap/global_costmap",
+    "/tb3/transform_listener_impl_7783cc00d9b0",
+    "/tb4/smoother_server",
+    "/tb4/transform_listener_impl_7df09000b660",
+    "/tb1/robot_state_publisher",
+    "/tb3/simulation_map_to_odom",
+    "/tb1/bt_navigator",
+    "/tb1/bt_navigator_navigate_to_pose_rclcpp_node",
+    "/tb1/bt_navigator_navigate_through_poses_rclcpp_node",
+    "/tb1/simulation_map_to_odom",
+    "/tb5/robot_state_publisher",
+    "/tb3/behavior_server",
+    "/tb3/transform_listener_impl_705728005f50",
+    "/tb4/simulation_map_to_odom",
+    "/tb3/lifecycle_manager_localization",
+    "/tb2/smoother_server",
+    "/tb2/transform_listener_impl_742fac003f50",
+    "/tb5/simulation_map_to_odom",
+    "/tb1/controller_server",
+    "/tb1/local_costmap/local_costmap",
+    "/tb1/transform_listener_impl_7de3e00030e0",
+    "/map_server",
+    "/rviz",
+    "/transform_listener_impl_5d409614fc70",
+    "/tb2/robot_state_publisher",
+    "/tb3/amcl",
+    "/tb3/transform_listener_impl_5eb56f6b1a40",
+    "/tb4/amcl",
+    "/tb4/transform_listener_impl_5c52affb1030",
+    "/fleet_live_status",
+    "/tb5/waypoint_follower",
+    "/tb3/lifecycle_manager_navigation",
+    "/tb1/behavior_server",
+    "/tb1/transform_listener_impl_7aee6001f1c0",
+    "/tb1/waypoint_follower",
+    "/tb2/behavior_server",
+    "/tb2/transform_listener_impl_770224008f00",
+    "/tb5/bt_navigator",
+    "/tb5/bt_navigator_navigate_to_pose_rclcpp_node",
+    "/tb5/bt_navigator_navigate_through_poses_rclcpp_node",
+    "/tb5/controller_server",
+    "/tb5/local_costmap/local_costmap",
+    "/tb5/transform_listener_impl_70109000feb0",
+    "/tb4/planner_server",
+    "/tb4/global_costmap/global_costmap",
+    "/tb4/transform_listener_impl_572033124540",
+    "/tb2/velocity_smoother",
+    "/tb5/lifecycle_manager_navigation",
+    "/tb4/bt_navigator",
+    "/tb4/bt_navigator_navigate_to_pose_rclcpp_node",
+    "/tb4/bt_navigator_navigate_through_poses_rclcpp_node",
+    "/tb3/smoother_server",
+    "/tb3/transform_listener_impl_72b6c0007370",
+    "/lifecycle_manager_map_server",
+    "/tb2/simulation_map_to_odom",
+    "/tb2/lifecycle_manager_localization",
+    "/tb3/controller_server",
+    "/tb3/local_costmap/local_costmap",
+    "/tb3/transform_listener_impl_7706c400a6f0",
+    "/tb2/waypoint_follower",
+    "/tb1/smoother_server",
+    "/tb1/transform_listener_impl_782dd0020b20",
+    "/tb5/planner_server",
+    "/tb5/global_costmap/global_costmap",
+    "/tb5/transform_listener_impl_55b185494af0",
+    "/tb1/lifecycle_manager_localization",
+    "/tb3/bt_navigator",
+    "/tb3/bt_navigator_navigate_to_pose_rclcpp_node",
+    "/tb3/bt_navigator_navigate_through_poses_rclcpp_node",
+    "/tb3/robot_state_publisher",
+    "/tb4/lifecycle_manager_navigation",
+    "/tb2/controller_server",
+    "/tb2/local_costmap/local_costmap",
+    "/tb2/transform_listener_impl_59f1c6047d50",
+    "/tb4/lifecycle_manager_localization",
+    "/tb1/lifecycle_manager_navigation",
+    "/fleet_rviz_relay",
+    "/tb4/robot_state_publisher",
+    "/tb5/smoother_server",
+    "/tb5/transform_listener_impl_7d9b3c00a1d0",
+    "/tb1/amcl",
+    "/tb1/transform_listener_impl_77a5b4008290",
+    "/tb5/velocity_smoother",
+    "/fleet_read_only_audit",
+    "/tb1/velocity_smoother",
+    "/tb5/amcl",
+    "/tb5/transform_listener_impl_79f464005740",
+    "/tb4/controller_server",
+    "/tb4/local_costmap/local_costmap",
+    "/tb4/transform_listener_impl_5d003752f7f0",
+    "/tb4/behavior_server",
+    "/tb4/transform_listener_impl_763fe0009a10",
+    "/tb3/waypoint_follower",
+    "/fleet_mission_controller",
+    "/tb2/bt_navigator",
+    "/tb2/bt_navigator_navigate_to_pose_rclcpp_node",
+    "/tb2/bt_navigator_navigate_through_poses_rclcpp_node",
+    "/gazebo",
+    "/gazebo/gazebo_ros_state",
+    "/tb1/turtlebot3_imu",
+    "/tb1/front_laserscan",
+    "/tb1/turtlebot3_diff_drive",
+    "/tb1/turtlebot3_joint_state",
+    "/tb2/turtlebot3_imu",
+    "/tb2/turtlebot3_laserscan",
+    "/tb2/turtlebot3_diff_drive",
+    "/tb2/turtlebot3_joint_state",
+    "/tb3/turtlebot3_imu",
+    "/tb3/turtlebot3_laserscan",
+    "/tb3/turtlebot3_diff_drive",
+    "/tb3/turtlebot3_joint_state",
+    "/tb4/turtlebot3_imu",
+    "/tb4/turtlebot3_laserscan",
+    "/tb4/turtlebot3_diff_drive",
+    "/tb4/turtlebot3_joint_state",
+    "/tb5/turtlebot3_imu",
+    "/tb5/turtlebot3_laserscan",
+    "/tb5/turtlebot3_diff_drive",
+    "/tb5/turtlebot3_joint_state"
+  ],
+  "endpoints": {
+    "/map": {
+      "publishers": [
+        {
+          "node": "/map_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb2/amcl",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        },
+        {
+          "node": "/tb2/global_costmap/global_costmap",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        },
+        {
+          "node": "/tb1/global_costmap/global_costmap",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        },
+        {
+          "node": "/tb3/global_costmap/global_costmap",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        },
+        {
+          "node": "/rviz",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        },
+        {
+          "node": "/tb3/amcl",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        },
+        {
+          "node": "/tb4/amcl",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        },
+        {
+          "node": "/tb4/global_costmap/global_costmap",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        },
+        {
+          "node": "/tb5/global_costmap/global_costmap",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        },
+        {
+          "node": "/tb1/amcl",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        },
+        {
+          "node": "/fleet_read_only_audit",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        },
+        {
+          "node": "/tb5/amcl",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        },
+        {
+          "node": "/fleet_mission_controller",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        }
+      ]
+    },
+    "/clock": {
+      "publishers": [
+        {
+          "node": "/gazebo",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb2/amcl",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/velocity_smoother",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/planner_server",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/global_costmap/global_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/velocity_smoother",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/lifecycle_manager_navigation",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/planner_server",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/global_costmap/global_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/lifecycle_manager_localization",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/planner_server",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/global_costmap/global_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/robot_state_publisher",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/simulation_map_to_odom",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/bt_navigator",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/simulation_map_to_odom",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/robot_state_publisher",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/simulation_map_to_odom",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/lifecycle_manager_localization",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/simulation_map_to_odom",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/controller_server",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/local_costmap/local_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/map_server",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/rviz",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/transform_listener_impl_5d409614fc70",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/robot_state_publisher",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/amcl",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/amcl",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/fleet_live_status",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/lifecycle_manager_navigation",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/bt_navigator",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/controller_server",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/local_costmap/local_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/planner_server",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/global_costmap/global_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/velocity_smoother",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/lifecycle_manager_navigation",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/bt_navigator",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/lifecycle_manager_map_server",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/simulation_map_to_odom",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/lifecycle_manager_localization",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/controller_server",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/local_costmap/local_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/planner_server",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/global_costmap/global_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/lifecycle_manager_localization",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/bt_navigator",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/robot_state_publisher",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/lifecycle_manager_navigation",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/controller_server",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/local_costmap/local_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/lifecycle_manager_localization",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/lifecycle_manager_navigation",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/fleet_rviz_relay",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/robot_state_publisher",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/amcl",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/velocity_smoother",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/fleet_read_only_audit",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/fleet_read_only_audit",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/velocity_smoother",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/amcl",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/controller_server",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/local_costmap/local_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/fleet_mission_controller",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/fleet_mission_controller",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/bt_navigator",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/gazebo",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/gazebo/gazebo_ros_state",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/turtlebot3_imu",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/front_laserscan",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/turtlebot3_diff_drive",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/turtlebot3_joint_state",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/turtlebot3_imu",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/turtlebot3_laserscan",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/turtlebot3_diff_drive",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/turtlebot3_joint_state",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/turtlebot3_imu",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/turtlebot3_laserscan",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/turtlebot3_diff_drive",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/turtlebot3_joint_state",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/turtlebot3_imu",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/turtlebot3_laserscan",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/turtlebot3_diff_drive",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/turtlebot3_joint_state",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/turtlebot3_imu",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/turtlebot3_laserscan",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/turtlebot3_diff_drive",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/turtlebot3_joint_state",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/scan": {
+      "publishers": [],
+      "subscribers": []
+    },
+    "/tb1/cmd_vel": {
+      "publishers": [
+        {
+          "node": "/fleet_mission_controller",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb1/turtlebot3_diff_drive",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb1/cmd_vel_nav": {
+      "publishers": [
+        {
+          "node": "/tb1/controller_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb1/velocity_smoother",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb1/cmd_vel_uncoordinated": {
+      "publishers": [
+        {
+          "node": "/tb1/velocity_smoother",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/fleet_mission_controller",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb1/goal_pose": {
+      "publishers": [],
+      "subscribers": [
+        {
+          "node": "/tb1/bt_navigator",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb1/scan": {
+      "publishers": [
+        {
+          "node": "/tb1/front_laserscan",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb1/global_costmap/global_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/local_costmap/local_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/fleet_rviz_relay",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb1/amcl",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/fleet_read_only_audit",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/fleet_mission_controller",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb1/robot_description": {
+      "publishers": [
+        {
+          "node": "/tb1/robot_state_publisher",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/rviz",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        }
+      ]
+    },
+    "/tb2/cmd_vel": {
+      "publishers": [
+        {
+          "node": "/fleet_mission_controller",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb2/turtlebot3_diff_drive",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb2/cmd_vel_nav": {
+      "publishers": [
+        {
+          "node": "/tb2/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/controller_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb2/velocity_smoother",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb2/cmd_vel_uncoordinated": {
+      "publishers": [
+        {
+          "node": "/tb2/velocity_smoother",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/fleet_mission_controller",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb2/goal_pose": {
+      "publishers": [],
+      "subscribers": [
+        {
+          "node": "/tb2/bt_navigator",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb2/scan": {
+      "publishers": [
+        {
+          "node": "/tb2/turtlebot3_laserscan",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb2/amcl",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/global_costmap/global_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb2/local_costmap/local_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/fleet_rviz_relay",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/fleet_read_only_audit",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/fleet_mission_controller",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb2/robot_description": {
+      "publishers": [
+        {
+          "node": "/tb2/robot_state_publisher",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/rviz",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        }
+      ]
+    },
+    "/tb3/cmd_vel": {
+      "publishers": [
+        {
+          "node": "/fleet_mission_controller",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb3/turtlebot3_diff_drive",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb3/cmd_vel_nav": {
+      "publishers": [
+        {
+          "node": "/tb3/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/controller_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb3/velocity_smoother",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb3/cmd_vel_uncoordinated": {
+      "publishers": [
+        {
+          "node": "/tb3/velocity_smoother",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/fleet_mission_controller",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb3/goal_pose": {
+      "publishers": [],
+      "subscribers": [
+        {
+          "node": "/tb3/bt_navigator",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb3/scan": {
+      "publishers": [
+        {
+          "node": "/tb3/turtlebot3_laserscan",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb3/global_costmap/global_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/amcl",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb3/local_costmap/local_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/fleet_rviz_relay",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/fleet_read_only_audit",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/fleet_mission_controller",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb3/robot_description": {
+      "publishers": [
+        {
+          "node": "/tb3/robot_state_publisher",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/rviz",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        }
+      ]
+    },
+    "/tb4/cmd_vel": {
+      "publishers": [
+        {
+          "node": "/fleet_mission_controller",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb4/turtlebot3_diff_drive",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb4/cmd_vel_nav": {
+      "publishers": [
+        {
+          "node": "/tb4/controller_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb4/velocity_smoother",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb4/cmd_vel_uncoordinated": {
+      "publishers": [
+        {
+          "node": "/tb4/velocity_smoother",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/fleet_mission_controller",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb4/goal_pose": {
+      "publishers": [],
+      "subscribers": [
+        {
+          "node": "/tb4/bt_navigator",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb4/scan": {
+      "publishers": [
+        {
+          "node": "/tb4/turtlebot3_laserscan",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb4/amcl",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/global_costmap/global_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/fleet_rviz_relay",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/fleet_read_only_audit",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb4/local_costmap/local_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/fleet_mission_controller",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb4/robot_description": {
+      "publishers": [
+        {
+          "node": "/tb4/robot_state_publisher",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/rviz",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        }
+      ]
+    },
+    "/tb5/cmd_vel": {
+      "publishers": [
+        {
+          "node": "/fleet_mission_controller",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb5/turtlebot3_diff_drive",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb5/cmd_vel_nav": {
+      "publishers": [
+        {
+          "node": "/tb5/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/behavior_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/controller_server",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb5/velocity_smoother",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb5/cmd_vel_uncoordinated": {
+      "publishers": [
+        {
+          "node": "/tb5/velocity_smoother",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/fleet_mission_controller",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb5/goal_pose": {
+      "publishers": [],
+      "subscribers": [
+        {
+          "node": "/tb5/bt_navigator",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb5/scan": {
+      "publishers": [
+        {
+          "node": "/tb5/turtlebot3_laserscan",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/tb5/local_costmap/local_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/global_costmap/global_costmap",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/fleet_rviz_relay",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/fleet_read_only_audit",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/tb5/amcl",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        },
+        {
+          "node": "/fleet_mission_controller",
+          "reliability": "ReliabilityPolicy.BEST_EFFORT",
+          "durability": "DurabilityPolicy.VOLATILE"
+        }
+      ]
+    },
+    "/tb5/robot_description": {
+      "publishers": [
+        {
+          "node": "/tb5/robot_state_publisher",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        }
+      ],
+      "subscribers": [
+        {
+          "node": "/rviz",
+          "reliability": "ReliabilityPolicy.RELIABLE",
+          "durability": "DurabilityPolicy.TRANSIENT_LOCAL"
+        }
+      ]
+    }
+  },
+  "actions": [
+    {
+      "robot": "tb1",
+      "ready": true
+    },
+    {
+      "robot": "tb2",
+      "ready": true
+    },
+    {
+      "robot": "tb3",
+      "ready": true
+    },
+    {
+      "robot": "tb4",
+      "ready": true
+    },
+    {
+      "robot": "tb5",
+      "ready": true
+    }
+  ],
+  "map_file_comparison": {
+    "file": "config/ev9_formation_test.yaml",
+    "same_shape": true,
+    "exact_match": true
+  }
+}

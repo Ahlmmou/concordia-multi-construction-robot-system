@@ -1,0 +1,26 @@
+walls:
+- name: formation_corridor_south
+  x: 25.5
+  y: -1.5
+  length_x: 19.0
+  length_y: 0.2
+- name: formation_corridor_north
+  x: 22.5
+  y: 4.7
+  length_x: 13.0
+  length_y: 0.2
+- name: formation_corridor_east
+  x: 35.1
+  y: 9.7
+  length_x: 0.2
+  length_y: 22.4
+- name: formation_corridor_west
+  x: 28.9
+  y: 11.3
+  length_x: 0.2
+  length_y: 13.4
+- name: formation_workspace_wall
+  x: 2.0
+  y: 12.0
+  length_x: 20.0
+  length_y: 0.2

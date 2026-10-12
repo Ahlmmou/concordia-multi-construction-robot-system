@@ -1,0 +1,65 @@
+[
+  {
+    "status": "fulfilled",
+    "value": {
+      "content": [
+        {
+          "type": "text",
+          "text": "[\n  {\n    \"topic_name\": \"/clock\",\n    \"topic_type\": \"rosgraph_msgs/msg/Clock\",\n    \"request_fields\": {\n      \"clock\": \"builtin_interfaces/Time\"\n    }\n  },\n  {\n    \"topic_name\": \"/gazebo/model_states\",\n    \"topic_type\": \"gazebo_msgs/msg/ModelStates\",\n    \"request_fields\": {\n      \"name\": \"sequence<string>\",\n      \"pose\": \"sequence<geometry_msgs/Pose>\",\n      \"twist\": \"sequence<geometry_msgs/Twist>\"\n    }\n  },\n  {\n    \"topic_name\": \"/parameter_events\",\n    \"topic_type\": \"rcl_interfaces/msg/ParameterEvent\",\n    \"request_fields\": {\n      \"stamp\": \"builtin_interfaces/Time\",\n      \"node\": \"string\",\n      \"new_parameters\": \"sequence<rcl_interfaces/Parameter>\",\n      \"changed_parameters\": \"sequence<rcl_interfaces/Parameter>\",\n      \"deleted_parameters\": \"sequence<rcl_interfaces/Parameter>\"\n    }\n  },\n  {\n    \"topic_name\": \"/rosout\",\n    \"topic_type\": \"rcl_interfaces/msg/Log\",\n    \"request_fields\": {\n      \"stamp\": \"builtin_interfaces/Time\",\n      \"level\": \"uint8\",\n      \"name\": \"string\",\n      \"msg\": \"string\",\n      \"file\": \"string\",\n      \"function\": \"string\",\n      \"line\": \"uint32\"\n    }\n  }\n]"
+        }
+      ],
+      "isError": false
+    }
+  },
+  {
+    "status": "fulfilled",
+    "value": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"actions\": []\n}"
+        }
+      ],
+      "isError": false
+    }
+  },
+  {
+    "status": "fulfilled",
+    "value": {
+      "content": [
+        {
+          "type": "text",
+          "text": "[\n  {\n    \"service_name\": \"/gazebo_mcp_bridge/describe_parameters\",\n    \"service_type\": \"rcl_interfaces/srv/DescribeParameters\",\n    \"request_fields\": {\n      \"names\": \"sequence<string>\"\n    }\n  },\n  {\n    \"service_name\": \"/gazebo_mcp_bridge/get_parameter_types\",\n    \"service_type\": \"rcl_interfaces/srv/GetParameterTypes\",\n    \"request_fields\": {\n      \"names\": \"sequence<string>\"\n    }\n  },\n  {\n    \"service_name\": \"/gazebo_mcp_bridge/get_parameters\",\n    \"service_type\": \"rcl_interfaces/srv/GetParameters\",\n    \"request_fields\": {\n      \"names\": \"sequence<string>\"\n    }\n  },\n  {\n    \"service_name\": \"/gazebo_mcp_bridge/list_parameters\",\n    \"service_type\": \"rcl_interfaces/srv/ListParameters\",\n    \"request_fields\": {\n      \"prefixes\": \"sequence<string>\",\n      \"depth\": \"uint64\"\n    }\n  },\n  {\n    \"service_name\": \"/gazebo_mcp_bridge/set_parameters\",\n    \"service_type\": \"rcl_interfaces/srv/SetParameters\",\n    \"request_fields\": {\n      \"parameters\": \"sequence<rcl_interfaces/Parameter>\"\n    }\n  },\n  {\n    \"service_name\": \"/gazebo_mcp_bridge/set_parameters_atomically\",\n    \"service_type\": \"rcl_interfaces/srv/SetParametersAtomically\",\n    \"request_fields\": {\n      \"parameters\": \"sequence<rcl_interfaces/Parameter>\"\n    }\n  },\n  {\n    \"service_name\": \"/mcp_service_lister/describe_parameters\",\n    \"service_type\": \"rcl_interfaces/srv/DescribeParameters\",\n    \"request_fields\": {\n      \"names\": \"sequence<string>\"\n    }\n  },\n  {\n    \"service_name\": \"/mcp_service_lister/get_parameter_types\",\n    \"service_type\": \"rcl_interfaces/srv/GetParameterTypes\",\n    \"request_fields\": {\n      \"names\": \"sequence<string>\"\n    }\n  },\n  {\n    \"service_name\": \"/mcp_service_lister/get_parameters\",\n    \"service_type\": \"rcl_interfaces/srv/GetParameters\",\n    \"request_fields\": {\n      \"names\": \"sequence<string>\"\n    }\n  },\n  {\n    \"service_name\": \"/mcp_service_lister/list_parameters\",\n    \"service_type\": \"rcl_interfaces/srv/ListParameters\",\n    \"request_fields\": {\n      \"prefixes\": \"sequence<string>\",\n      \"depth\": \"uint64\"\n    }\n  },\n  {\n    \"service_name\": \"/mcp_service_lister/set_parameters\",\n    \"service_type\": \"rcl_interfaces/srv/SetParameters\",\n    \"request_fields\": {\n      \"parameters\": \"sequence<rcl_interfaces/Parameter>\"\n    }\n  },\n  {\n    \"service_name\": \"/mcp_service_lister/set_parameters_atomically\",\n    \"service_type\": \"rcl_interfaces/srv/SetParametersAtomically\",\n    \"request_fields\": {\n      \"parameters\": \"sequence<rcl_interfaces/Parameter>\"\n    }\n  }\n]"
+        }
+      ],
+      "isError": false
+    }
+  },
+  {
+    "status": "fulfilled",
+    "value": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"ok\": true,\n  \"connected\": true,\n  \"mode\": \"mock\",\n  \"rviz_required\": false,\n  \"message\": \"Mock RViz config active \\u2014 no RViz install needed\",\n  \"fixed_frame\": \"map\",\n  \"display_count\": 3,\n  \"config_path\": \"mock://default.rviz\"\n}"
+        }
+      ],
+      "structuredContent": {
+        "result": "{\n  \"ok\": true,\n  \"connected\": true,\n  \"mode\": \"mock\",\n  \"rviz_required\": false,\n  \"message\": \"Mock RViz config active \\u2014 no RViz install needed\",\n  \"fixed_frame\": \"map\",\n  \"display_count\": 3,\n  \"config_path\": \"mock://default.rviz\"\n}"
+      },
+      "isError": false
+    }
+  },
+  {
+    "status": "fulfilled",
+    "value": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"success\": false,\n  \"data\": null,\n  \"error\": \"Model 'tb1' not found\",\n  \"error_code\": \"MODEL_NOT_FOUND\",\n  \"suggestions\": [\n    \"Check model name. Use list_models() to see available models.\"\n  ]\n}"
+        }
+      ],
+      "isError": false
+    }
+  }
+]

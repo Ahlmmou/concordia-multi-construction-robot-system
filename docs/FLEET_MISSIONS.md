@@ -325,3 +325,164 @@ test. To test motion, update the fixture along a known clear trajectory at a
 fixed rate, record each robot's scan/costmap and actual motion, and stop if its
 approach speed exceeds the tested stopping envelope. This fixture procedure has
 not been counted as tested unless the validation report records its execution.
+
+## Manual formation modes
+
+`/formation/mode_request` accepts a `std_msgs/msg/String` containing exactly one
+of `OPEN_RECTANGLE`, `COMPACT_RECTANGLE`, `SINGLE_FILE`, or `WALL_WORKSPACE`.
+`tb1` is the Hilti/Jaibot primary and `tb2`–`tb5` are auxiliary robots.
+
+```bash
+ros2 topic pub --once /formation/mode_request std_msgs/msg/String "{data: OPEN_RECTANGLE}"
+ros2 topic pub --once /formation/mode_request std_msgs/msg/String "{data: COMPACT_RECTANGLE}"
+ros2 topic pub --once /formation/mode_request std_msgs/msg/String "{data: SINGLE_FILE}"
+ros2 topic pub --once /formation/mode_request std_msgs/msg/String "{data: WALL_WORKSPACE}"
+```
+
+Open rectangle uses the configured 4.2 m longitudinal and 3.4 m lateral half
+spacings. Compact uses 2.8 m and 2.2 m. These are centres, not clearances.
+Targets must pass map/global-costmap footprint checks and the unchanged 0.4 m
+auxiliary / 0.6 m primary pair clearance. Manual assembly rejects an exact layout
+that cannot fit; it does not silently relax slots or clearance. Rectangles move
+using the existing staged boundary transit after assembly. Work-boundary
+containment and footprint collision clearance remain separate concepts.
+
+Requests stop travel, invalidate previous planning generations, wait for owned
+navigation action results (a cancel acknowledgement is insufficient), then
+assemble auxiliaries sequentially with tb1 stationary. Active mode changes only
+when all measured poses satisfy position/yaw tolerances and actions are idle.
+Timeout, invalid footprints, map obstacles, or obstructing peers lead to WAITING
+with zero permitted motor commands and a reason. A new request retries from
+current poses. `/formation/stop` is the immediate supervisor stop interface.
+
+Single-file assembly defaults to a horizontal-first approach: each auxiliary moves along map X until clear of stationary peers, then turns toward its assigned line slot. Rear robots clear a row before front robots use it. The only fallback is one configured outward clearance step followed by the same horizontal approach; if neither simple route fits, the fleet holds. Single-file assembly does not use adaptive clearance circling. `single_file_assembly_axis_yaw` (default 0 radians) and `single_file_clearance_step` configure this behavior. Each waypoint is confirmed from actual poses and action results before turning toward the slot.
+
+Single file bootstraps a verified straight line at 3 m spacing. That initial line
+is explicitly assembly geometry; subsequent breadcrumbs are tb1's actual map-TF
+travelled positions. Each follower has a monotonic path cursor and receives short
+waypoints capped at bends, rather than heading directly toward a point behind
+tb1. History persists across successive single-file goals. Leader arrival does
+not complete transit until followers settle on their travelled-path slots.
+Single file is a transit arrangement: it does **not** enclose tb1. No follower
+polygon is drawn in single-file mode. New mode requests interrupt travel; travel
+requests during formation assembly are refused. Wall workspace is stationary.
+
+Wall settings specify an occupied map point (`wall_x`, `wall_y`), an accessible
+normal (`wall_normal_yaw`, pointing from wall into free space), and a maximum
+nearby-wall distance. A free-footprint probe verifies the accessible side. tb1
+must be on that side within the configured distance. Auxiliaries form two rows
+behind tb1, outside the wall-facing workspace. Row depth, separation, and lateral
+spacing are configurable. The orange outline represents the intended wall work
+area separately from transit geometry. Default wall coordinates intentionally
+require site configuration; an unverified wall request blocks safely.
+
+`/formation/state` includes requested/active modes, transition state, progress,
+wall-clock transition duration, formation errors, action statuses, blocked
+reasons, and minimum conservative signed footprint clearance. `poses` are map
+TF; `ground_truth_poses` are Gazebo ModelStates and are recorded separately with
+localization discrepancies. The default simulation uses identity map-to-world
+localization, **not AMCL-estimated accuracy**. RViz retains the fleet TF relay,
+robot models/names, desired footprint outlines, individual Nav2 paths, and the
+requested/active/transition text marker.
+
+### Reproducible EV9 test scenario
+
+The generator reads the existing EV9 world/map and adds static test boxes to new
+files only. One box specification drives both SDF collision geometry and map
+rasterization. It adds a 6 m passage with a bend and a separate wall at y=12 m.
+
+```bash
+python3 scripts/generate_formation_scenario.py
+source /opt/ros/humble/setup.bash
+colcon --log-base /tmp/formation_build_logs build --base-paths "$PWD" \
+  --packages-select crs_multibot --build-base /tmp/formation_build \
+  --install-base /tmp/formation_install --symlink-install
+source /tmp/formation_install/setup.bash
+export ROS_DOMAIN_ID=42 RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+export ROS_LOG_DIR=/tmp/formation_ros_logs
+# Inspect processes first; run exactly one fleet simulation/controller.
+ros2 launch crs_multibot fleet_simulation.launch.py gazebo_gui:=false rviz:=true
+# To use the generated scenario instead, stop only the existing fleet launch first:
+ros2 launch crs_multibot fleet_simulation.launch.py gazebo_gui:=false rviz:=true \
+  world:="$PWD/worlds/ev9_formation_test.world" \
+  map_yaml:="$PWD/config/ev9_formation_test.yaml" \
+  mission_config:="$PWD/config/formation_scenario_mission.yaml"
+```
+
+Bounded validation commands (matching environment in every terminal):
+
+```bash
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python3 -m pytest tests -q
+python3 scripts/audit_fleet.py --seconds 40 --output /tmp/fleet_audit.json \
+  --map-yaml config/ev9_formation_test.yaml
+python3 scripts/validate_formation_modes.py --mode OPEN_RECTANGLE --timeout 620 \
+  --output validation/formations/open_rectangle.json
+python3 scripts/validate_formation_modes.py --mode COMPACT_RECTANGLE --timeout 620 \
+  --output validation/formations/compact_rectangle.json
+python3 scripts/validate_formation_modes.py --mode SINGLE_FILE --timeout 620 \
+  --output validation/formations/single_file.json
+# Goals must first be checked against the live map and current fleet positions.
+python3 scripts/validate_formation_modes.py --goal X Y YAW --timeout 900 \
+  --output validation/formations/travel.json
+python3 scripts/validate_formation_modes.py --mode WALL_WORKSPACE --timeout 620 \
+  --output validation/formations/wall_workspace.json
+```
+
+The recorder always requests supervisor stop on completion, timeout, failure, or
+interruption. It resumes an explicitly tested stationary IDLE fleet before a
+travel test. Results include physical displacements, sampled formation errors,
+minimum footprint clearance, action/transition events, and stop acknowledgement.
+See `validation/formations/RESULTS.md` for observed results and limitations.
+
+### Original behavior and optional modes
+
+The controller starts in `LEGACY`: the original configured flexible boundary,
+line transit, and destination work rectangle. The additional modes are opt-in;
+no mode request is required for existing primary-goal workflows.
+`/formation/rectangle` retains its original work-rectangle behavior and restores
+the original dimensions and flexible-boundary configuration.
+
+To return from an optional mode, stop the current mission and request:
+
+```bash
+ros2 topic pub --once /formation/mode_request std_msgs/msg/String "{data: LEGACY}"
+```
+
+This cancels owned actions and waits for their results before restoring the
+original controller configuration. It does not move the robots by itself; the
+next primary goal uses the original formation workflow.
+
+### Concurrent single-file assembly and independent recovery
+
+Single-file assembly dispatches all auxiliaries whose verified routes are clear
+in the same tick. Each robot advances its own horizontal-clearance and slot
+waypoints after its own cancellation result. Bounded detours on both sides of
+a blocked approach are checked with actual footprints through turns and travel;
+clearance limits are preserved. The primary holds during assembly.
+
+During SINGLE_FILE travel, a blocked auxiliary cancels only its owned goal,
+tries the existing checked clearance-waypoint search, and rejoins its retained
+travelled-trail slot after the detour. Healthy robots may continue during this
+recovery; collision checks still stop conflicting commands. A follower in
+recovery does not cause the coordination lag gate to hold the robot ahead.
+Final arrival still requires all actual follower trail positions. Status reports
+`recovering_robots` and `recovery_waypoints`. An auxiliary with no feasible
+detour holds individually and retries; this is not reported as goal completion.
+
+`config/single_file_navigation.xml` is used only for explicit SINGLE_FILE mode.
+It allows 2000 ms for action/service responses and replans every five seconds
+instead of each second. The original LEGACY Nav2 behavior tree is unchanged.
+
+The added L scenario can be traversed via these map-checked goals (each request
+requires READY; all followers settle before the next leg):
+
+```bash
+python3 scripts/validate_formation_modes.py --goal 17 1.6 0 --timeout 900 --output validation/formations/concurrent_corridor_entry.json
+python3 scripts/validate_formation_modes.py --goal 32 1.6 0 --timeout 900 --output validation/formations/concurrent_corridor_elbow.json
+python3 scripts/validate_formation_modes.py --goal 32 19.5 1.5707963267948966 --timeout 900 --output validation/formations/concurrent_corridor_top.json
+```
+
+The intermediate entry and elbow goals prevent Nav2 choosing a shorter route
+around the outside of the test walls. Use the matching ROS environment described
+above. These commands record observed passes or failures, and stop safely after
+each leg.

@@ -26,6 +26,7 @@ def main():
     parser=argparse.ArgumentParser();parser.add_argument('--seconds',type=float,default=40);parser.add_argument('--output',default='/tmp/fleet_audit.json');parser.add_argument('--map-yaml');args=parser.parse_args()
     rclpy.init();n=Node('fleet_read_only_audit');n.set_parameters([rclpy.parameter.Parameter('use_sim_time',value=True)])
     robots=['tb1','tb2','tb3','tb4','tb5'];report={'robots':{},'maps':{},'services':{},'clock':[]};buffers={r:Buffer() for r in robots};subs=[];clients=[];futures=[];map_arrays={};first_clock=None
+    static_qos=QoSProfile(depth=100,durability=DurabilityPolicy.TRANSIENT_LOCAL,reliability=ReliabilityPolicy.RELIABLE)
     transient=QoSProfile(depth=1,durability=DurabilityPolicy.TRANSIENT_LOCAL,reliability=ReliabilityPolicy.RELIABLE)
     def clock(msg):
         if len(report['clock'])<2:report['clock'].append(msg.clock.sec+msg.clock.nanosec*1e-9)
@@ -49,7 +50,7 @@ def main():
     def odom(msg,robot):report['robots'][robot]['odom']={'frame':msg.header.frame_id,'child':msg.child_frame_id,'x':msg.pose.pose.position.x,'y':msg.pose.pose.position.y}
     for r in robots:
         report['robots'][r]={}
-        for suffix,typ,callback,qos in [('tf',TFMessage,lambda m,r=r:tf(m,r,False),qos_profile_sensor_data),('tf_static',TFMessage,lambda m,r=r:tf(m,r,True),transient),('scan',LaserScan,lambda m,r=r:scan(m,r),qos_profile_sensor_data),('odom',Odometry,lambda m,r=r:odom(m,r),qos_profile_sensor_data)]:subs.append(n.create_subscription(typ,f'/{r}/{suffix}',callback,qos))
+        for suffix,typ,callback,qos in [('tf',TFMessage,lambda m,r=r:tf(m,r,False),qos_profile_sensor_data),('tf_static',TFMessage,lambda m,r=r:tf(m,r,True),static_qos),('scan',LaserScan,lambda m,r=r:scan(m,r),qos_profile_sensor_data),('odom',Odometry,lambda m,r=r:odom(m,r),qos_profile_sensor_data)]:subs.append(n.create_subscription(typ,f'/{r}/{suffix}',callback,qos))
         for scope in ['global_costmap','local_costmap']:
             t=f'/{r}/{scope}/costmap';subs.append(n.create_subscription(OccupancyGrid,t,lambda m,t=t:grid(m,t),transient))
         clients.append(ActionClient(n,NavigateToPose,f'/{r}/navigate_to_pose'))

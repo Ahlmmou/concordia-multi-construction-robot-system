@@ -1,0 +1,148 @@
+{
+  "passed": true,
+  "request": "OPEN_RECTANGLE",
+  "events": [
+    {
+      "elapsed": 9.18999999157677e-05,
+      "state": "READY",
+      "transition": "IDLE",
+      "reason": "Live data and Nav2 verified"
+    },
+    {
+      "elapsed": 0.2450174479999987,
+      "state": "READY",
+      "transition": "COMPLETE",
+      "reason": "Formation verified from all actual poses and action results"
+    }
+  ],
+  "samples": [],
+  "elapsed_wall": 0.24639033699986612,
+  "minimum_footprint_clearance": 3.010028200790614,
+  "last_status": {
+    "requested_mode": "OPEN_RECTANGLE",
+    "active_mode": "OPEN_RECTANGLE",
+    "transition_state": "COMPLETE",
+    "transition_seconds": 0.1559764929997982,
+    "transition_progress": 1.0,
+    "formation_error": {
+      "tb2": 0.3807755997956303,
+      "tb3": 0.1280711099524956,
+      "tb4": 0.3795615444647994,
+      "tb5": 0.29822349791189073
+    },
+    "position_source": "map TF; simulation ground truth verified separately",
+    "ground_truth_poses": {
+      "tb1": [
+        0.4502534403780125,
+        1.447297903300287,
+        -0.01767527615755683
+      ],
+      "tb2": [
+        4.4219454496676995,
+        5.021922823201135,
+        -0.3946907973325077
+      ],
+      "tb3": [
+        -3.6810781951210516,
+        -1.8783560182373937,
+        -0.3313832530868137
+      ],
+      "tb4": [
+        4.847954535271456,
+        -1.748421124844323,
+        -0.3809176867062027
+      ],
+      "tb5": [
+        -3.690845860686761,
+        4.622779380663709,
+        -0.3172036543685794
+      ]
+    },
+    "localization_error": {
+      "tb1": 2.211879532299686e-06,
+      "tb2": 4.02085709438436e-06,
+      "tb3": 3.602117148065265e-05,
+      "tb4": 8.01856128694445e-06,
+      "tb5": 5.8662586741746166e-06
+    },
+    "minimum_footprint_clearance": 3.010028200790614,
+    "state": "READY",
+    "reason": "Formation verified from all actual poses and action results",
+    "phase": "IDLE",
+    "manual_navigation": false,
+    "mission": 1,
+    "poses": {
+      "tb1": [
+        0.45025133743708834,
+        1.4472972176979717,
+        -0.017674387445026585
+      ],
+      "tb2": [
+        4.421941813091951,
+        5.021924538604468,
+        -0.3946919559817111
+      ],
+      "tb3": [
+        -3.6811119777391306,
+        -1.8783435178569767,
+        -0.33139269413741657
+      ],
+      "tb4": [
+        4.847947610183673,
+        -1.748417082507832,
+        -0.380923840436217
+      ],
+      "tb5": [
+        -3.690840542296068,
+        4.622776905242276,
+        -0.317200646468472
+      ]
+    },
+    "targets": {
+      "tb2": [
+        4.7096851368583925,
+        4.77253761627781,
+        -0.017674387445026585
+      ],
+      "tb3": [
+        -3.8091824619842156,
+        -1.8779431808818663,
+        -0.017674387445026585
+      ],
+      "tb4": [
+        4.589505559489202,
+        -2.0264003058673365,
+        -0.017674387445026585
+      ],
+      "tb5": [
+        -3.6890028846150247,
+        4.92099474126328,
+        -0.017674387445026585
+      ]
+    },
+    "blocked": [],
+    "yielding_to": {},
+    "clearance_maneuver": null,
+    "rolling_turn_active": false,
+    "obstacle_recoveries": {},
+    "waiting_for_followers": [],
+    "formation_heading": null,
+    "flexible_boundary": false,
+    "follower_slots": {},
+    "actions": {
+      "tb1": "idle",
+      "tb2": "idle",
+      "tb3": "idle",
+      "tb4": "idle",
+      "tb5": "idle"
+    }
+  },
+  "physical_displacements": {
+    "tb1": 1.0263086955688132e-06,
+    "tb2": 0.0001038899116936866,
+    "tb3": 0.00010366737504105675,
+    "tb4": 0.00010468887200350902,
+    "tb5": 0.00010174793143885945
+  },
+  "stop_acknowledged": true
+}

@@ -5,6 +5,48 @@ import numpy as np
 
 ROBOTS = ('tb1', 'tb2', 'tb3', 'tb4', 'tb5')
 OFFSETS = ((1, 1), (-1, -1), (1, -1), (-1, 1))
+MODES = ('OPEN_RECTANGLE', 'COMPACT_RECTANGLE', 'SINGLE_FILE', 'WALL_WORKSPACE')
+
+
+def formation_slots(mode, leader, dimensions, wall=None):
+    """Exact slots; wall normal points from the wall into accessible space.
+
+    Wall coordinates are map coordinates (x, y, normal yaw). The four robots
+    occupy two rows outside the leader's reserved workspace on that side.
+    Single-file static slots bootstrap assembly only, never a travelled trail.
+    """
+    if mode not in MODES:
+        raise ValueError('Unknown formation mode: '+str(mode))
+    if mode in ('OPEN_RECTANGLE', 'COMPACT_RECTANGLE'):
+        prefix = 'compact' if mode == 'COMPACT_RECTANGLE' else 'rectangle'
+        return rectangle(leader, dimensions[prefix+'_half_length'], dimensions[prefix+'_half_width'])
+    if mode == 'SINGLE_FILE':
+        return {r: (leader[0]+dx, leader[1]+dy, leader[2])
+                for i,r in enumerate(ROBOTS[1:],1)
+                for dx,dy in [rotate(-i*dimensions['transit_spacing'],0.,leader[2])]}
+    if wall is None or not all(math.isfinite(v) for v in wall):
+        raise ValueError('WALL_WORKSPACE requires a finite map wall point and accessible normal')
+    nx,ny=rotate(1.,0.,wall[2]);tx,ty=-ny,nx
+    depth=(leader[0]-wall[0])*nx+(leader[1]-wall[1])*ny
+    if depth <= 0:
+        raise ValueError('tb1 is not on the configured accessible side of the wall')
+    offset=dimensions['wall_workspace_depth']
+    spacing=dimensions['wall_row_spacing']
+    lateral=dimensions['wall_half_width']
+    return {r:(leader[0]+(offset+row*spacing)*nx+side*lateral*tx,
+               leader[1]+(offset+row*spacing)*ny+side*lateral*ty, wall[2]+math.pi)
+            for r,(row,side) in zip(ROBOTS[1:],((0,1),(0,-1),(1,1),(1,-1)))}
+
+
+def layout_clearance(poses, polygons, gap, primary_gap):
+    """Return a reason for a footprint-invalid layout, without ROS dependencies."""
+    for i,a in enumerate(ROBOTS):
+        for b in ROBOTS[i+1:]:
+            clearance=footprint_clearance(poses[a],polygons[a],poses[b],polygons[b])
+            required=pair_separation(a,b,gap,primary_gap)
+            if clearance < required:
+                return f'{a}/{b}: footprint clearance {clearance:.3f} m < {required:.3f} m'
+    return ''
 
 
 def yaw(q):
@@ -303,3 +345,105 @@ def boundary_followers_holding(poses, formation_heading, half_length, half_width
         if math.hypot(ex,ey)>tolerance and ex*vx+ey*vy<=0.:
             holding.add(robot)
     return holding
+
+
+def trail_waypoint(trail, pose, behind, lookahead=0.8, cursor=0.):
+    """Advance monotonically along a travelled polyline without skipping bends.
+
+    Cursor is metres from the start, retained for each follower. The carrot is
+    capped at the next meaningful bend so dense straight samples do not stall it.
+    """
+    if not trail:return None,cursor
+    lengths=[distance(a,b) for a,b in zip(trail,trail[1:])]
+    total=sum(lengths);limit=max(0.,total-behind)
+    arc=0.;best=None
+    for i,(a,b,length) in enumerate(zip(trail,trail[1:],lengths)):
+        if length<1e-6:continue
+        lower=max(0.,(cursor-arc)/length);upper=min(1.,(limit-arc)/length)
+        if lower<=upper:
+            projection=((pose[0]-a[0])*(b[0]-a[0])+(pose[1]-a[1])*(b[1]-a[1]))/length**2
+            t=max(lower,min(upper,projection));point=(a[0]+t*(b[0]-a[0]),a[1]+t*(b[1]-a[1]))
+            candidate=(distance(pose,point),arc+t*length,i)
+            if best is None or (candidate[0],-candidate[1],-candidate[2])<(best[0],-best[1],-best[2]):best=candidate
+        arc+=length
+    if best is None:return trail_target(trail,behind),cursor
+    cursor=max(cursor,best[1]);vertex=total
+    base=math.atan2(trail[best[2]+1][1]-trail[best[2]][1],trail[best[2]+1][0]-trail[best[2]][0])
+    arc=sum(lengths[:best[2]+1])
+    for i in range(best[2]+1,len(lengths)):
+        if lengths[i]>1e-6:
+            heading=math.atan2(trail[i+1][1]-trail[i][1],trail[i+1][0]-trail[i][0])
+            if abs(wrap(heading-base))>.35:vertex=arc;break
+        arc+=lengths[i]
+    carrot=min(limit,cursor+lookahead,vertex)
+    return trail_target(trail,max(0.,total-carrot)),cursor
+
+
+def horizontal_first_routes(start, target, axis_yaw=0., clearance_step=1.):
+    """Simple assembly candidates: horizontal, then slot; one outward step if blocked.
+
+    Horizontal means map X by default. Axis rotation is configurable. The
+    fallback first steps away from the desired line, never toward a blocking
+    robot, then uses the same horizontal-and-slot sequence.
+    """
+    sx,sy=rotate(start[0],start[1],-axis_yaw)
+    gx,gy=rotate(target[0],target[1],-axis_yaw)
+    heading=axis_yaw if gx>=sx else wrap(axis_yaw+math.pi)
+    def pose(x,y,angle):
+        px,py=rotate(x,y,axis_yaw)
+        return px,py,angle
+    yield [pose(gx,sy,heading),target]
+    direction=1. if sy>=gy else -1.
+    outward=sy+direction*clearance_step
+    yield [pose(sx,outward,wrap(axis_yaw+direction*math.pi/2)),
+           pose(gx,outward,heading),target]
+
+
+def assembly_reroute_candidates(start,target,axis_yaw=0.,clearance_step=1.,steps=3):
+    """Horizontal-first plus bounded detours on either side of a blocked route."""
+    yield from horizontal_first_routes(start,target,axis_yaw,clearance_step)
+    sx,sy=rotate(start[0],start[1],-axis_yaw);gx,gy=rotate(target[0],target[1],-axis_yaw)
+    heading=axis_yaw if gx>=sx else wrap(axis_yaw+math.pi)
+    preferred=1. if sy>=gy else -1.
+    for level in range(1,steps+1):
+        for direction in (-preferred,preferred):
+            if level==1 and direction==preferred:continue
+            offset=sy+direction*clearance_step*level
+            def pose(x,y,angle):
+                px,py=rotate(x,y,axis_yaw);return px,py,angle
+            yield [pose(sx,offset,wrap(axis_yaw+direction*math.pi/2)),
+                   pose(gx,offset,heading),target]
+
+
+def stationary_route_clear(start, route, robot, poses, polygons, gap, primary_gap,
+                           free=lambda pose:True, sample_step=.15):
+    """Check actual footprints through turns and translation, with sample margin.
+
+    Clearance limits are unchanged. The additional margin bounds motion between
+    samples; the live velocity gate still checks the commands Nav2 actually uses.
+    """
+    radius=max(math.hypot(x,y) for x,y in polygons[robot])
+    angular_step=.05
+    margin=sample_step/2+radius*angular_step/2
+    def safe(sample):
+        return free(sample) and all(peer==robot or
+            footprint_clearance(sample,polygons[robot],pose,polygons[peer])>=
+            pair_separation(robot,peer,gap,primary_gap)+margin
+            for peer,pose in poses.items())
+    def rotation(pose,angle):
+        delta=wrap(angle-pose[2]);count=max(1,math.ceil(abs(delta)/angular_step))
+        return all(safe((pose[0],pose[1],pose[2]+delta*i/count)) for i in range(count+1))
+    previous=start
+    for target in route:
+        length=distance(previous,target)
+        heading=math.atan2(target[1]-previous[1],target[0]-previous[0]) if length>1e-6 else previous[2]
+        if not rotation(previous,heading):return False
+        count=max(1,math.ceil(length/sample_step))
+        for i in range(count+1):
+            fraction=i/count
+            sample=(previous[0]+fraction*(target[0]-previous[0]),
+                    previous[1]+fraction*(target[1]-previous[1]),heading)
+            if not safe(sample):return False
+        if not rotation((target[0],target[1],heading),target[2]):return False
+        previous=target
+    return True
