@@ -45,6 +45,10 @@ def main():
         deadline=started+60
         while time.monotonic()<deadline and not latest:rclpy.spin_once(node,timeout_sec=.1)
         if not latest:result['error']='No observed supervisor status';return
+        if args.goal and latest.get('state')=='PREFLIGHT':
+            deadline=time.monotonic()+60
+            while time.monotonic()<deadline and latest.get('state')=='PREFLIGHT':
+                rclpy.spin_once(node,timeout_sec=.1)
         initial=dict(latest.get('ground_truth_poses',{}));initial_mission=latest.get('mission',0);result['start_simulation_time']=latest.get('simulation_time')
         if args.goal and latest.get('state')=='STOPPED' and latest.get('phase')=='IDLE':
             resume=node.create_client(Trigger,'/formation/resume')

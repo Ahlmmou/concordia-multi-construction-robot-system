@@ -37,14 +37,13 @@ Single-file travel to the corridor entry passed: all five moved approximately
 14.1 metres, minimum observed physical footprint clearance 1.121 metres, and
 all five zero commands were observed after stop. The elbow and earlier direct
 top trials were interrupted to follow operator routing/goal instructions.
-The replacement top goal from inside the corridor is currently being recorded
-in `corridor_top_from_inside.json`; arrival is not yet a validated pass.
+The replacement top goal from inside the corridor failed in
+`corridor_top_from_inside.json`; arrival through the bend is not validated.
 
 Independent per-auxiliary recovery and return to the retained trail have unit
-coverage. That latest recovery revision has not yet been loaded into the moving
-supervisor or live fault-tested. The running trip uses the preceding tested
-concurrent-assembly/trail-retry revision. Load the latest controller only while
-stationary. Further speed tuning and live recovery validation remain open.
+coverage. The latest recovery revision was loaded for a subsequent interrupted
+trial, but successful live fault recovery remains unvalidated. Further speed
+tuning and live recovery validation remain open.
 
 ## Operator handoff: original flexible formation restored
 
@@ -53,9 +52,10 @@ world/map and configured `fleet_spawn.yaml` positions were restored, with
 `LEGACY` active, `flexible_boundary: true`, and no mission queued.
 `flexible_restored_spawn.json` passed: READY, all five zero motor commands,
 spawn position errors below 0.025 metres, and no overhead status marker.
-The real RViz screenshot is `flexible_restored_rviz.png`. Gazebo server and
-RViz are running; no Gazebo GUI is running. Goal testing is handed back to the
-operator using RViz's 2D Goal Pose publishing `/formation/primary_goal`.
+The real RViz screenshot is `flexible_restored_rviz.png`. At that observation,
+Gazebo server and RViz were running with no Gazebo GUI. This historical spawn
+readiness check does not establish readiness of later sessions. RViz's 2D Goal
+Pose publishes `/formation/primary_goal` for flexible-formation testing.
 
 The overhead black status block is removed; blue robot names, assigned green
 slots during movement, navigation paths, primary goal and follower polygon
@@ -66,3 +66,20 @@ The earlier `corridor_top_from_inside.json` failed with a follower motion stall.
 not validate corridor arrival. The latest turn/recovery fixes have unit
 coverage (124 passing tests); successful live traversal of the bend remains
 unvalidated. No further corridor goals are running.
+
+## Archived experiments and later flexible runtime checks
+
+Normal startup remains `LEGACY` with the original flexible formation. The four
+additional modes, separate L-corridor world/map, validation scripts and recorded
+trials remain available for explicit future requests. No automatic mode
+selection is enabled.
+
+`flexible_rviz_goal_recovery.json` and
+`flexible_pending_goal_runtime_repair.json` record rejected travel tests while
+the supervisor was not ready. The retry was interrupted when these experiments
+were archived; its result is `flexible_pending_goal_runtime_repair_retry.json`.
+Missing Nav2 actions during that session prevented a completed flexible goal
+test. The cause of the disappearing navigation processes remains unresolved.
+These records are failures/interruption records, not successful navigation
+validation. The recorder now waits up to 60 seconds for normal PREFLIGHT startup
+before assessing a travel request.

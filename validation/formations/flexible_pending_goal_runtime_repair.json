@@ -1,0 +1,150 @@
+{
+  "passed": false,
+  "request": [
+    8.4375638961792,
+    1.5655345916748047,
+    0.009188739982005206
+  ],
+  "events": [],
+  "samples": [],
+  "start_simulation_time": 3533.0,
+  "error": "Travel requires READY or safely stopped replacement mission",
+  "elapsed_wall": 1.7889138260034088,
+  "minimum_footprint_clearance": null,
+  "last_status": {
+    "simulation_time": 3533.0,
+    "requested_mode": "LEGACY",
+    "active_mode": "LEGACY",
+    "assembly_stage": null,
+    "assembly_robot": null,
+    "assembly_route": null,
+    "assembly_routes": {},
+    "transition_state": "IDLE",
+    "transition_seconds": null,
+    "transition_progress": 0.0,
+    "formation_error": {},
+    "position_source": "map TF; simulation ground truth verified separately",
+    "recovering_robots": {},
+    "recovery_waypoints": {},
+    "ground_truth_poses": {
+      "tb1": [
+        0.40744032886454123,
+        1.0339109567841287,
+        -0.0810000718908587
+      ],
+      "tb2": [
+        5.8070020700955824,
+        4.966319183661791,
+        -0.06797436711226752
+      ],
+      "tb3": [
+        -2.197425403383942,
+        -1.8666471436834815,
+        -0.10283162814279286
+      ],
+      "tb4": [
+        5.806792003675612,
+        -1.8341409355543123,
+        -0.06780845231086044
+      ],
+      "tb5": [
+        -2.1977167513068845,
+        4.932112476180669,
+        -0.10429131103040933
+      ]
+    },
+    "localization_error": {
+      "tb1": 2.3895480097826654e-06,
+      "tb2": 1.240791694631892e-05,
+      "tb3": 3.123737127853605e-05,
+      "tb4": 2.026802597275275e-06,
+      "tb5": 2.9523905781931717e-05
+    },
+    "minimum_footprint_clearance": 1.9766333832772873,
+    "state": "PREFLIGHT",
+    "reason": "Graph not checked yet",
+    "phase": "IDLE",
+    "manual_navigation": false,
+    "mission": 0,
+    "poses": {
+      "tb1": [
+        0.4074379435890749,
+        1.0339108139533166,
+        -0.08100040523768981
+      ],
+      "tb2": [
+        5.80698980458032,
+        4.9663210581052555,
+        -0.06797217404774974
+      ],
+      "tb3": [
+        -2.197456505704016,
+        -1.8666442421234821,
+        -0.10282681048225542
+      ],
+      "tb4": [
+        5.806789976880661,
+        -1.8341409299871592,
+        -0.06780836628916354
+      ],
+      "tb5": [
+        -2.1977461472971878,
+        4.932115221497902,
+        -0.10428174084249199
+      ]
+    },
+    "desired_slots": {},
+    "targets": {},
+    "unresolved_pairs": [],
+    "blocked": [],
+    "yielding_to": {},
+    "clearance_maneuver": null,
+    "rolling_turn_active": false,
+    "obstacle_recoveries": {},
+    "waiting_for_followers": [],
+    "formation_heading": null,
+    "flexible_boundary": true,
+    "follower_slots": {},
+    "actions": {
+      "tb1": "idle",
+      "tb2": "idle",
+      "tb3": "idle",
+      "tb4": "idle",
+      "tb5": "idle"
+    }
+  },
+  "goal_position_error": 8.04770443390538,
+  "goal_yaw_error": 0.09018914521969501,
+  "elapsed_simulation": 0.0,
+  "physical_displacements": {
+    "tb1": 0.0,
+    "tb2": 0.0,
+    "tb3": 0.0,
+    "tb4": 0.0,
+    "tb5": 0.0
+  },
+  "stop_acknowledged": true,
+  "final_motor_commands": {
+    "tb1": [
+      0.0,
+      0.0
+    ],
+    "tb2": [
+      0.0,
+      0.0
+    ],
+    "tb3": [
+      0.0,
+      0.0
+    ],
+    "tb4": [
+      0.0,
+      0.0
+    ],
+    "tb5": [
+      0.0,
+      0.0
+    ]
+  },
+  "safe_stop_observed": true
+}

@@ -436,6 +436,14 @@ See `validation/formations/RESULTS.md` for observed results and limitations.
 
 ### Original behavior and optional modes
 
+The formation experiments are retained for future manual testing. Keep the
+default `LEGACY` mode and `flexible_boundary: true` for normal RViz goal testing.
+Request `OPEN_RECTANGLE`, `COMPACT_RECTANGLE`, `SINGLE_FILE`, or `WALL_WORKSPACE`
+explicitly on `/formation/mode_request` when resuming those experiments. Their
+saved results and unfinished live scenarios are listed in
+`validation/formations/RESULTS.md`; preserving them does not imply that every
+scenario passed.
+
 The controller starts in `LEGACY`: the original configured flexible boundary,
 line transit, and destination work rectangle. The additional modes are opt-in;
 no mode request is required for existing primary-goal workflows.
