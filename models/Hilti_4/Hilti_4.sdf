@@ -425,10 +425,16 @@
         <remapping>/tf:=tf</remapping>
       </ros>
       <update_rate>20</update_rate>
+      <!-- Drive both axle pairs; passive rear wheels resist in-place turns. -->
+      <num_wheel_pairs>2</num_wheel_pairs>
       <left_joint>right_wheel_joint_1</left_joint>
       <right_joint>left_wheel_joint_1</right_joint>
+      <left_joint>right_wheel_joint_2</left_joint>
+      <right_joint>left_wheel_joint_2</right_joint>
 
       <wheel_separation>1.17188</wheel_separation>
+      <wheel_separation>1.17188</wheel_separation>
+      <wheel_diameter>0.703125</wheel_diameter>
       <wheel_diameter>0.703125</wheel_diameter>
     
 

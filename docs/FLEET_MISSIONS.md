@@ -101,6 +101,14 @@ and local obstacle checks remain active. All five actual poses must reach their
 allocated targets before the mission reports READY. Primary navigation failures and data safety checks can
 still pause the fleet.
 
+Hilti's Gazebo differential-drive plugin drives two axle pairs (all four wheels).
+The imported CAD joint names are opposite physical robot left/right, so each
+plugin left joint uses `right_wheel_joint_*` and each plugin right joint uses
+`left_wheel_joint_*`. Both pairs use the existing 1.17188 m separation and
+0.703125 m diameter. Torque, friction, collision geometry, speed limits and the
+supervisor gate are unchanged. SDF drive changes require reloading the Gazebo
+model; changing a ROS navigation parameter does not activate a second axle.
+
 The RViz goal arrow specifies tb1's final heading, not its heading throughout
 travel. Hilti's Nav2 goal checker and supervisor `primary_yaw_tolerance` both use
 0.10 rad (about 5.7 degrees); the auxiliary supervisor tolerance remains 0.45 rad.
