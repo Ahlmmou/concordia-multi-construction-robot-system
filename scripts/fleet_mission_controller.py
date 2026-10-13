@@ -247,6 +247,14 @@ class FleetMissionController(Node):
             if self.feasible(robot,pose,reserved):return pose
         return None
 
+    def navigation_reservations(self,robot):
+        if self.p.get('flexible_boundary') and self.state in ('FORMING_BOUNDARY','BOUNDARY_TRAVELLING'):
+            # Flexible corner goals move with the leader. They need not be
+            # occupied simultaneously with the leader's final destination.
+            if robot=='tb1':return {}
+            return {**{r:t for r,t in self.targets.items() if r!='tb1'},'tb1':self.poses['tb1']}
+        return self.targets
+
     def primary_goal(self,msg):
         if msg.header.frame_id.lstrip('/')!='map':self.get_logger().error('Primary goal must use the verified shared map frame');return
         q=msg.pose.orientation
@@ -300,6 +308,7 @@ class FleetMissionController(Node):
         self.get_logger().warning(f'{robot}: {reason}; retry {slot["retries"]}/{self.p["maximum_retries"]}')
         if slot['retries']>=self.p['maximum_retries'] and self.requested_mode=='SINGLE_FILE' and self.state=='TRAVELLING' and robot!='tb1':
             self.recover_auxiliary(robot,reason);slot['retries']=0;return
+        if slot['retries']>=self.p['maximum_retries'] and self.flexible_recovery(robot,reason):return
         if slot['retries']>=self.p['maximum_retries']:
             self.cancel_all()
             self.set_state('WAITING',f'{robot}: retry limit reached; use /formation/resume or a new primary goal')
@@ -321,7 +330,7 @@ class FleetMissionController(Node):
                 self.failure(robot,'Nav2 succeeded but actual pose is outside formation tolerance');return
         interval=0. if self.requested_mode=='SINGLE_FILE' and self.state=='TRAVELLING' and robot!='tb1' else self.p['minimum_goal_interval']
         if now-slot['last_send']<interval:return
-        if not self.feasible(robot,target,self.targets):return
+        if not self.feasible(robot,target,self.navigation_reservations(robot)):return
         slot['pending']=True;slot['pending_since']=time.monotonic();slot['plan_token']+=1;token=slot['plan_token'];slot['cancel_when_accepted']=False
         request=ComputePathToPose.Goal();request.goal=self.pose_message(target);request.use_start=False
         future=self.planners[robot].send_goal_async(request)
@@ -341,7 +350,7 @@ class FleetMissionController(Node):
         try:
             result=future.result()
             if result.status!=GoalStatus.STATUS_SUCCEEDED or not result.result.path.poses:self.failure(robot,'No feasible Nav2 path');return
-            if not self.feasible(robot,target,self.targets):slot['pending']=False;return
+            if not self.feasible(robot,target,self.navigation_reservations(robot)):slot['pending']=False;return
             goal=NavigateToPose.Goal();goal.pose=self.pose_message(target)
             if self.requested_mode=='SINGLE_FILE':
                 from ament_index_python.packages import get_package_share_directory
@@ -400,6 +409,7 @@ class FleetMissionController(Node):
                 slot['cancel_when_accepted']=True
                 if self.requested_mode=='SINGLE_FILE' and self.state=='TRAVELLING' and robot!='tb1':
                     self.recover_auxiliary(robot,'action response timeout');continue
+                if self.flexible_recovery(robot,'action response timeout'):continue
                 self.set_state('WAITING',f'{robot}: action response timeout; awaiting cancellation/result')
                 self.publish_markers();return
             if slot['handle'] is not None and not slot['cancelling']:
@@ -417,6 +427,7 @@ class FleetMissionController(Node):
                 elif self.clock_value-slot.get('progress_sim',self.clock_value)>self.p['progress_timeout']:
                     if self.requested_mode=='SINGLE_FILE' and self.state=='TRAVELLING' and robot!='tb1':
                         self.recover_auxiliary(robot,'actual motion stalled');continue
+                    if self.flexible_recovery(robot,'actual motion stalled'):continue
                     self.cancel_all();self.set_state('WAITING',f'{robot}: actual motion stalled; resume after resolving obstruction')
                     self.publish_markers();return
         if self.state=='MODE_TRANSITION':
@@ -516,6 +527,21 @@ class FleetMissionController(Node):
     def recover_auxiliary(self,robot,reason):
         self.cancel(robot)
         self.trail_recovering[robot]=reason
+
+    def flexible_recovery(self,robot,reason):
+        """Recover one flexible follower without releasing action ownership."""
+        if (robot=='tb1' or not self.p.get('flexible_boundary') or
+            self.state not in ('FORMING_BOUNDARY','BOUNDARY_TRAVELLING')):return False
+        self.cancel(robot)
+        slot=self.slots[robot];slot['retries']=0;slot['cooldown']=0.
+        if robot not in self.obstacle_recoveries:
+            grid=self.grids.get(f'/{robot}/local_costmap/costmap')
+            local=self.in_frame(robot,self.poses[robot],grid.frame) if grid else None
+            mode='detour' if local is not None and grid.footprint_free(local,self.polygons[robot],self.p['footprint_padding'],98) else 'escape'
+            self.obstacle_recoveries[robot]={'target':None,'started':self.clock_value,
+                'start_pose':self.poses[robot],'mode':mode,'state':'Checking escape route','reason':reason}
+        self.get_logger().info(f'{robot}: independent flexible recovery: {reason}')
+        return True
 
     def trail_navigation_targets(self,leader,desired):
         reserved={'tb1':leader};targets={'tb1':self.primary};waiting=[]

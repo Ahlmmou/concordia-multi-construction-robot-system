@@ -98,8 +98,23 @@ An unavailable follower position does not reject tb1's route. The blue outline
 is a visualization, with its vertices ordered by actual position; tb1 may cross
 it, and enclosure is not guaranteed during movement. Physical pair clearance
 and local obstacle checks remain active. All five actual poses must reach their
-allocated targets before the mission reports READY. Navigation failures can
+allocated targets before the mission reports READY. Primary navigation failures and data safety checks can
 still pause the fleet.
+
+During flexible travel, a stalled auxiliary, exhausted auxiliary retry budget,
+or auxiliary action-response timeout starts recovery for that robot only.
+Healthy robots continue subject to the existing obstacle and peer velocity gates.
+The recovering robot retains cancellation ownership until its action result;
+then checked escape/detour motion runs and its formation target resumes after
+clearance release. Stale data, invalid localization, primary failures and operator
+stops still retain their fleet safety holds. Mission completion still requires
+all five actual poses.
+
+Moving flexible corners reserve tb1's current footprint rather than its final
+destination. A primary path request checks actual peers without reserving the
+followers' moving future corners; those corners may temporarily coincide with
+the final goal. Map checks, actual peer clearance and swept collision gates
+remain active for every robot. Rigid and optional mode reservations are unchanged.
 
 Set `flexible_boundary: false` to restore rigid corner identities, staged 1 m
 moves, whole-rectangle feasibility checks, and the follower catch-up hold.

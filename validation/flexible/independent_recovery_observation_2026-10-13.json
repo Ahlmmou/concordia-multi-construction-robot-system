@@ -1,0 +1,42 @@
+{
+  "sample_count": 235,
+  "recovery_sample_count": 0,
+  "healthy_commands_during_recovery": [],
+  "live_parameters": {
+    "leader_speed": 0.6,
+    "auxiliary_speed": 0.8,
+    "angular_speed": 0.5,
+    "minimum_separation": 0.4,
+    "primary_minimum_separation": 0.6,
+    "flexible_boundary": true,
+    "manual_navigation": false,
+    "collision_horizon": 2.0
+  },
+  "maximum_observed_commands": {
+    "tb1": [
+      0.28421052631578936,
+      0.5
+    ],
+    "tb2": [
+      0.8,
+      0.5
+    ],
+    "tb3": [
+      0.8,
+      0.5
+    ],
+    "tb4": [
+      0.8,
+      0.49999999999999994
+    ],
+    "tb5": [
+      0.12631578947368421,
+      0.5
+    ]
+  },
+  "states_observed": [
+    "BOUNDARY_TRAVELLING",
+    "PREFLIGHT",
+    "READY"
+  ]
+}
