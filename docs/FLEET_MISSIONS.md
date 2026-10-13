@@ -119,6 +119,12 @@ remain active for every robot. Rigid and optional mode reservations are unchange
 Set `flexible_boundary: false` to restore rigid corner identities, staged 1 m
 moves, whole-rectangle feasibility checks, and the follower catch-up hold.
 
+Normal fleet navigation disables DWB detailed trajectory failure logging,
+trajectory evaluation publication, debug trajectory markers and cost-grid point
+cloud publication in both Nav2 configurations. Normal paths, scans, costmaps and
+footprints remain available for RViz. These options are read when DWB is configured;
+changing parameter values on an already configured controller alone is insufficient.
+
 Launch with `gazebo_gui:=false rviz:=true` to reduce rendering load. Wait for
 READY, select **2D Goal Pose** in RViz, and click/drag a destination. The tool
 publishes `/formation/primary_goal`, which commands the whole fleet. The blue

@@ -1,0 +1,415 @@
+{
+  "initial_status": {
+    "simulation_time": 1576.2,
+    "requested_mode": "LEGACY",
+    "active_mode": "LEGACY",
+    "assembly_stage": null,
+    "assembly_robot": null,
+    "assembly_route": null,
+    "assembly_routes": {},
+    "transition_state": "STOPPED",
+    "transition_seconds": null,
+    "transition_progress": 0.8,
+    "formation_error": {
+      "tb1": 0.3277742785350974,
+      "tb2": 0.15808844253400484,
+      "tb3": 0.14367662905344988,
+      "tb4": 0.30809414138287133,
+      "tb5": 0.25361837240067514
+    },
+    "position_source": "map TF; simulation ground truth verified separately",
+    "recovering_robots": {},
+    "recovery_waypoints": {},
+    "ground_truth_poses": {
+      "tb1": [
+        38.47409901173601,
+        -15.265248771432214,
+        -0.5725315890523496
+      ],
+      "tb2": [
+        43.28795644348408,
+        -17.2204246408997,
+        -0.6950083580239299
+      ],
+      "tb3": [
+        33.408554365387886,
+        -13.14957170411273,
+        -0.9175655226608692
+      ],
+      "tb4": [
+        37.51834508804377,
+        -20.32322960196245,
+        -0.07330859248804315
+      ],
+      "tb5": [
+        39.06947405683052,
+        -9.973879586381683,
+        -1.0483279353616581
+      ]
+    },
+    "localization_error": {
+      "tb1": 2.913443437208438e-05,
+      "tb4": 2.3624127626071582e-05,
+      "tb2": 2.707710133895446e-06,
+      "tb3": 5.769409572166348e-06,
+      "tb5": 1.3139956974564234e-05
+    },
+    "minimum_footprint_clearance": 3.3710373148679977,
+    "state": "STOPPED",
+    "reason": "Operator stop; zero motor commands",
+    "phase": "IDLE",
+    "manual_navigation": false,
+    "mission": 2,
+    "poses": {
+      "tb1": [
+        38.47410786942953,
+        -15.265276526729576,
+        -0.572547792678325
+      ],
+      "tb4": [
+        37.51832150076232,
+        -20.323228283038762,
+        -0.07333737545569072
+      ],
+      "tb2": [
+        43.28795879452111,
+        -17.220425984149134,
+        -0.6950081271980193
+      ],
+      "tb3": [
+        33.4085571468416,
+        -13.149576758774147,
+        -0.9175566886463445
+      ],
+      "tb5": [
+        39.069479247646086,
+        -9.973891657583076,
+        -1.048324180893393
+      ]
+    },
+    "desired_slots": {
+      "tb1": [
+        38.75420379638672,
+        -15.435518264770508,
+        -0.7507087192110405
+      ],
+      "tb2": [
+        43.4130661026045,
+        -17.31707026554723,
+        -0.638479398251655
+      ],
+      "tb3": [
+        33.38354761733318,
+        -13.291059963324829,
+        -0.6531120705070873
+      ],
+      "tb4": [
+        37.473591417485586,
+        -20.628058103765845,
+        -0.649873986569937
+      ],
+      "tb5": [
+        39.323022302452095,
+        -9.980072125106217,
+        -0.8157706499611402
+      ]
+    },
+    "targets": {
+      "tb1": [
+        38.75420379638672,
+        -15.435518264770508,
+        -0.7507087192110405
+      ],
+      "tb2": [
+        43.4130661026045,
+        -17.31707026554723,
+        -0.638479398251655
+      ],
+      "tb3": [
+        33.38354761733318,
+        -13.291059963324829,
+        -0.6531120705070873
+      ],
+      "tb4": [
+        37.473591417485586,
+        -20.628058103765845,
+        -0.649873986569937
+      ],
+      "tb5": [
+        39.323022302452095,
+        -9.980072125106217,
+        -0.8157706499611402
+      ]
+    },
+    "unresolved_pairs": [],
+    "blocked": [],
+    "yielding_to": {},
+    "clearance_maneuver": null,
+    "rolling_turn_active": false,
+    "obstacle_recoveries": {},
+    "waiting_for_followers": [],
+    "formation_heading": -1.0622477903964385,
+    "flexible_boundary": true,
+    "follower_slots": {
+      "tb2": 0,
+      "tb3": 1,
+      "tb4": 2,
+      "tb5": 3
+    },
+    "actions": {
+      "tb1": "cancelled",
+      "tb2": "cancelled",
+      "tb3": "cancelled",
+      "tb4": "cancelled",
+      "tb5": "cancelled"
+    }
+  },
+  "parameters_before": {
+    "tb1": {
+      "FollowPath.debug_trajectory_details": true,
+      "FollowPath.publish_evaluation": true,
+      "FollowPath.publish_trajectories": true,
+      "FollowPath.publish_cost_grid_pc": false
+    },
+    "tb2": {
+      "FollowPath.debug_trajectory_details": true,
+      "FollowPath.publish_evaluation": true,
+      "FollowPath.publish_trajectories": true,
+      "FollowPath.publish_cost_grid_pc": false
+    },
+    "tb3": {
+      "FollowPath.debug_trajectory_details": true,
+      "FollowPath.publish_evaluation": true,
+      "FollowPath.publish_trajectories": true,
+      "FollowPath.publish_cost_grid_pc": false
+    },
+    "tb4": {
+      "FollowPath.debug_trajectory_details": true,
+      "FollowPath.publish_evaluation": true,
+      "FollowPath.publish_trajectories": true,
+      "FollowPath.publish_cost_grid_pc": false
+    },
+    "tb5": {
+      "FollowPath.debug_trajectory_details": true,
+      "FollowPath.publish_evaluation": true,
+      "FollowPath.publish_trajectories": true,
+      "FollowPath.publish_cost_grid_pc": false
+    }
+  },
+  "safe_stop_before": true,
+  "timing_before": {
+    "wall_seconds": 15.010806509999384,
+    "simulation_seconds": 4.300000000000182,
+    "real_time_factor": 0.2864602527662359
+  },
+  "parameters_after": {
+    "tb1": {
+      "FollowPath.debug_trajectory_details": false,
+      "FollowPath.publish_evaluation": false,
+      "FollowPath.publish_trajectories": false,
+      "FollowPath.publish_cost_grid_pc": false
+    },
+    "tb2": {
+      "FollowPath.debug_trajectory_details": false,
+      "FollowPath.publish_evaluation": false,
+      "FollowPath.publish_trajectories": false,
+      "FollowPath.publish_cost_grid_pc": false
+    },
+    "tb3": {
+      "FollowPath.debug_trajectory_details": false,
+      "FollowPath.publish_evaluation": false,
+      "FollowPath.publish_trajectories": false,
+      "FollowPath.publish_cost_grid_pc": false
+    },
+    "tb4": {
+      "FollowPath.debug_trajectory_details": false,
+      "FollowPath.publish_evaluation": false,
+      "FollowPath.publish_trajectories": false,
+      "FollowPath.publish_cost_grid_pc": false
+    },
+    "tb5": {
+      "FollowPath.debug_trajectory_details": false,
+      "FollowPath.publish_evaluation": false,
+      "FollowPath.publish_trajectories": false,
+      "FollowPath.publish_cost_grid_pc": false
+    }
+  },
+  "controller_states": {
+    "tb1": 3,
+    "tb2": 3,
+    "tb3": 3,
+    "tb4": 3,
+    "tb5": 3
+  },
+  "timing_after": {
+    "wall_seconds": 15.004302871999244,
+    "simulation_seconds": 4.0,
+    "real_time_factor": 0.26659015578959405
+  },
+  "final_status": {
+    "simulation_time": 1586.8,
+    "requested_mode": "LEGACY",
+    "active_mode": "LEGACY",
+    "assembly_stage": null,
+    "assembly_robot": null,
+    "assembly_route": null,
+    "assembly_routes": {},
+    "transition_state": "STOPPED",
+    "transition_seconds": null,
+    "transition_progress": 0.8,
+    "formation_error": {
+      "tb1": 0.32726164121113266,
+      "tb2": 0.15366952934974462,
+      "tb3": 0.14061524720116542,
+      "tb4": 0.3079798909336174,
+      "tb5": 0.251523709094536
+    },
+    "position_source": "map TF; simulation ground truth verified separately",
+    "recovering_robots": {},
+    "recovery_waypoints": {},
+    "ground_truth_poses": {
+      "tb1": [
+        38.474999217153815,
+        -15.264794688515922,
+        -0.5727699603141361
+      ],
+      "tb2": [
+        43.29132425695908,
+        -17.223203211813008,
+        -0.6952410771920108
+      ],
+      "tb3": [
+        33.410614350226794,
+        -13.153037115903075,
+        -0.9127717130411697
+      ],
+      "tb4": [
+        37.52264059962347,
+        -20.32400941080276,
+        -0.06861079337455257
+      ],
+      "tb5": [
+        39.071479632051094,
+        -9.977689221929285,
+        -1.0466684994004385
+      ]
+    },
+    "localization_error": {
+      "tb1": 2.631812909999405e-06,
+      "tb4": 3.2089347938944756e-05,
+      "tb2": 5.78303016943169e-05,
+      "tb3": 5.167610840903083e-05,
+      "tb5": 6.4759220104747e-05
+    },
+    "minimum_footprint_clearance": 3.374634479326673,
+    "state": "STOPPED",
+    "reason": "Operator stop; zero motor commands",
+    "phase": "IDLE",
+    "manual_navigation": false,
+    "mission": 2,
+    "poses": {
+      "tb1": [
+        38.475001834829115,
+        -15.264794960940625,
+        -0.5727704327173873
+      ],
+      "tb4": [
+        37.52267232516903,
+        -20.32401422910225,
+        -0.06857580282729736
+      ],
+      "tb2": [
+        43.29137027454761,
+        -17.223238236452048,
+        -0.6952516835197484
+      ],
+      "tb3": [
+        33.410643216075464,
+        -13.153079978275395,
+        -0.9127213091064469
+      ],
+      "tb5": [
+        39.07150934268626,
+        -9.977746763520734,
+        -1.0466486730089393
+      ]
+    },
+    "desired_slots": {
+      "tb1": [
+        38.75420379638672,
+        -15.435518264770508,
+        -0.7507087192110405
+      ],
+      "tb2": [
+        43.4130661026045,
+        -17.31707026554723,
+        -0.638479398251655
+      ],
+      "tb3": [
+        33.38354761733318,
+        -13.291059963324829,
+        -0.6531120705070873
+      ],
+      "tb4": [
+        37.473591417485586,
+        -20.628058103765845,
+        -0.649873986569937
+      ],
+      "tb5": [
+        39.323022302452095,
+        -9.980072125106217,
+        -0.8157706499611402
+      ]
+    },
+    "targets": {
+      "tb1": [
+        38.75420379638672,
+        -15.435518264770508,
+        -0.7507087192110405
+      ],
+      "tb2": [
+        43.4130661026045,
+        -17.31707026554723,
+        -0.638479398251655
+      ],
+      "tb3": [
+        33.38354761733318,
+        -13.291059963324829,
+        -0.6531120705070873
+      ],
+      "tb4": [
+        37.473591417485586,
+        -20.628058103765845,
+        -0.649873986569937
+      ],
+      "tb5": [
+        39.323022302452095,
+        -9.980072125106217,
+        -0.8157706499611402
+      ]
+    },
+    "unresolved_pairs": [],
+    "blocked": [],
+    "yielding_to": {},
+    "clearance_maneuver": null,
+    "rolling_turn_active": false,
+    "obstacle_recoveries": {},
+    "waiting_for_followers": [],
+    "formation_heading": -1.0622477903964385,
+    "flexible_boundary": true,
+    "follower_slots": {
+      "tb2": 0,
+      "tb3": 1,
+      "tb4": 2,
+      "tb5": 3
+    },
+    "actions": {
+      "tb1": "cancelled",
+      "tb2": "cancelled",
+      "tb3": "cancelled",
+      "tb4": "cancelled",
+      "tb5": "cancelled"
+    }
+  },
+  "passed": true
+}

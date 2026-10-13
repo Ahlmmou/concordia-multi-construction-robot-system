@@ -157,7 +157,11 @@ controller_server:
       movement_time_allowance: 60.0
     FollowPath:
       plugin: dwb_core::DWBLocalPlanner
-      debug_trajectory_details: true
+      # Keep navigation paths; omit unused DWB debug logging and publications.
+      debug_trajectory_details: false
+      publish_evaluation: false
+      publish_trajectories: false
+      publish_cost_grid_pc: false
       # Allow tb1 to reverse when Nav2 finds it easier than turning in place.
       min_vel_x: -0.60
       min_vel_y: 0.0
