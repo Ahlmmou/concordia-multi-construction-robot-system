@@ -1,0 +1,13 @@
+# Hilti final goal heading
+
+The RViz arrow defines the final map-frame yaw. The quaternion is preserved when the supervisor creates the primary target and sends Nav2 its goal. During travel, heading follows the path and need not equal the final arrow. Previously the Hilti Nav2 checker allowed 0.4 rad (22.9 degrees), while the supervisor could cancel navigation and declare arrival within 0.45 rad (25.8 degrees). This allowed visibly different final headings.
+
+Hilti's Nav2 goal_checker.yaw_goal_tolerance and the new supervisor primary_yaw_tolerance are both 0.10 rad (5.7 degrees). Auxiliaries retain the 0.45 rad supervisor tolerance. Actual position checks, collision limits, velocity gates, slot geometry and markers are preserved. The supervisor now requires Hilti's tighter heading error at every arrival check, and the formation recorder uses that same primary tolerance. Invalid nonpositive, nonfinite or looser-than-auxiliary primary settings are rejected.
+
+All 164 regression tests passed, including new primary arrival checks within/outside the heading threshold, unchanged auxiliary acceptance, wraparound across pi and position rejection despite matching heading. Git whitespace checks passed.
+
+The live Hilti parameter was updated using SimpleGoalChecker's dynamic callback, and the supervisor was safely reloaded while Gazebo, RViz and the relay remained running. Both live parameter values were independently verified at 0.10. A goal at the current position requested a 0.25 rad (14.3 degree) heading change, which the previous supervisor could have accepted without rotation. The bounded live mission completed after 146.55 wall seconds. Gazebo measured 0.15228 rad (8.7 degrees) of actual heading change, leaving 0.09778 rad (5.6 degrees) error. Both the ordinary formation recorder and the independent physical-yaw verification passed. Stop was acknowledged and zero commands were observed for all five robots. The fleet was left stopped.
+
+This verifies a tighter final-heading check and one successful small physical adjustment, not fast turning or a large-angle alignment benchmark. The 147-second small adjustment exposes slow physical turning response; changing acceptance tolerances does not resolve that performance limitation. Collision and sensing settings were not relaxed. See the live and summary JSON evidence in this directory. RViz MCP was mock; live validation used ROS CLI/rclpy and Gazebo ground-truth poses.
+
+ROS Humble SimpleGoalChecker tolerance and dynamic-parameter implementation checked at https://api.nav2.org/nav2-humble/html/simple__goal__checker_8cpp_source.html.

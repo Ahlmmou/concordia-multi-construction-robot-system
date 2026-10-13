@@ -212,7 +212,7 @@ controller_server:
     goal_checker:
       plugin: nav2_controller::SimpleGoalChecker
       xy_goal_tolerance: 0.25
-      yaw_goal_tolerance: 0.4
+      yaw_goal_tolerance: 0.10
       stateful: false
 controller_server_rclcpp_node:
   ros__parameters:

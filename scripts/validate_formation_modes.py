@@ -100,7 +100,7 @@ def main():
                 result['passed']=not args.expect_blocked
                 if args.goal:
                     pose=latest.get('poses',{}).get('tb1')
-                    result['passed']=bool(pose is not None and distance(pose,args.goal)<=params['arrival_tolerance'] and abs(wrap(pose[2]-args.goal[2]))<=params['yaw_tolerance'])
+                    result['passed']=bool(pose is not None and distance(pose,args.goal)<=params['arrival_tolerance'] and abs(wrap(pose[2]-args.goal[2]))<=params.get('primary_yaw_tolerance',params['yaw_tolerance']))
                     if not result['passed']:result['error']='Supervisor READY but actual requested goal pose not reached'
                 if args.expect_blocked:result['error']='Formation completed when rejection was expected'
                 break

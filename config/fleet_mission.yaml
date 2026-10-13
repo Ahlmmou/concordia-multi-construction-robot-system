@@ -44,6 +44,8 @@ fleet_mission_controller:
     minimum_goal_interval: 4.0
     arrival_tolerance: 0.4
     yaw_tolerance: 0.45
+    # Hilti must finish within about 6 degrees of the RViz goal arrow.
+    primary_yaw_tolerance: 0.10
     alternative_radius: 1.5
     candidate_step: 0.3
     maximum_target_cost: 70

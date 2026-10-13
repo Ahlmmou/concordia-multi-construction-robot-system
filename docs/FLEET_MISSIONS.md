@@ -101,6 +101,13 @@ and local obstacle checks remain active. All five actual poses must reach their
 allocated targets before the mission reports READY. Primary navigation failures and data safety checks can
 still pause the fleet.
 
+The RViz goal arrow specifies tb1's final heading, not its heading throughout
+travel. Hilti's Nav2 goal checker and supervisor `primary_yaw_tolerance` both use
+0.10 rad (about 5.7 degrees); the auxiliary supervisor tolerance remains 0.45 rad.
+A goal is not complete merely because tb1 reaches the requested position: the
+primary heading must also meet its tighter tolerance. Final alignment remains
+subject to the same obstacle, collision and command-ownership gates.
+
 Moving-slot updates in LEGACY flexible travel check a candidate path while the
 auxiliary retains its current owned navigation action. A valid current path
 result starts cancellation; only the old action's final result releases ownership

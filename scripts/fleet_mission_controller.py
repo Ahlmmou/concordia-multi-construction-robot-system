@@ -54,7 +54,7 @@ class FleetMissionController(Node):
             leader_speed=0.60, auxiliary_speed=0.80, angular_speed=0.50,
             leader_rolling_turn=True, rolling_turn_speed=0.22, rolling_turn_rate=0.15,
             update_distance=0.8, update_angle=0.5, minimum_goal_interval=4.0,
-            arrival_tolerance=0.4, yaw_tolerance=0.45, alternative_radius=1.5,
+            arrival_tolerance=0.4, yaw_tolerance=0.45, primary_yaw_tolerance=0.10, alternative_radius=1.5,
             candidate_step=0.3, maximum_target_cost=70, data_timeout=15.0,
             command_timeout=2.0, clock_timeout=5.0, lifecycle_timeout=30.0,
             maximum_retries=3, retry_delay=8.0, maximum_follower_lag=5.0,
@@ -74,6 +74,8 @@ class FleetMissionController(Node):
             if not math.isfinite(self.p[name]) or self.p[name]<=0.:raise ValueError(name+' must be finite and positive')
         if not all(math.isfinite(self.p[k]) for k in ('wall_x','wall_y','wall_normal_yaw')):raise ValueError('Wall coordinates must be finite')
         self.radii={r:max(math.hypot(x,y) for x,y in poly) for r,poly in self.polygons.items()}
+        if not math.isfinite(self.p['primary_yaw_tolerance']) or not 0.<self.p['primary_yaw_tolerance']<=self.p['yaw_tolerance']:
+            raise ValueError('Primary yaw tolerance must be positive and no larger than auxiliary yaw tolerance')
         if self.p['trail_lookahead']<=self.p['arrival_tolerance']:raise ValueError('trail_lookahead must exceed arrival_tolerance')
         if self.p['primary_minimum_separation']<self.p['minimum_separation']:raise ValueError('Primary clearance must be at least minimum_separation')
         if not (0.<self.p['rolling_turn_speed']<=self.p['leader_speed'] and
@@ -436,7 +438,8 @@ class FleetMissionController(Node):
 
     def arrived(self,robot,target):
         pose=self.poses.get(robot)
-        return pose is not None and distance(pose,target)<=self.p['arrival_tolerance'] and abs(wrap(pose[2]-target[2]))<=self.p['yaw_tolerance']
+        tolerance=self.p.get('primary_yaw_tolerance',self.p['yaw_tolerance']) if robot=='tb1' else self.p['yaw_tolerance']
+        return pose is not None and distance(pose,target)<=self.p['arrival_tolerance'] and abs(wrap(pose[2]-target[2]))<=tolerance
 
     def idle_actions(self):return all(not s['pending'] and s['handle'] is None for s in self.slots.values())
 
