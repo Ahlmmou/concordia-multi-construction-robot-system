@@ -101,6 +101,17 @@ and local obstacle checks remain active. All five actual poses must reach their
 allocated targets before the mission reports READY. Primary navigation failures and data safety checks can
 still pause the fleet.
 
+Moving-slot updates in LEGACY flexible travel check a candidate path while the
+auxiliary retains its current owned navigation action. A valid current path
+result starts cancellation; only the old action's final result releases ownership
+and permits immediate dispatch of the checked update. Target, mission, readiness
+and footprint feasibility are rechecked at handoff, and old cached velocity
+commands are cleared. Failed or stale background plans retain current navigation.
+Operator stops and recovery discard queued updates and cancel the owned action,
+even while a path check is pending. Normal planning throttles remain unchanged.
+Green slot arrows, labels and footprint outlines still show current formation
+targets. Other formation modes retain the original update workflow.
+
 During flexible travel, a stalled auxiliary, exhausted auxiliary retry budget,
 or auxiliary action-response timeout starts recovery for that robot only.
 Healthy robots continue subject to the existing obstacle and peer velocity gates.

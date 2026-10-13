@@ -284,7 +284,8 @@ class FleetMissionController(Node):
 
     def cancel(self,robot):
         slot=self.slots[robot]
-        if slot['pending']:slot['cancel_when_accepted']=True;return
+        slot.pop('next_target',None)
+        if slot['pending']:slot['cancel_when_accepted']=True
         if slot['handle'] is not None and not slot['cancelling']:
             slot['cancelling']=True
             future=slot['handle'].cancel_goal_async()
@@ -323,7 +324,16 @@ class FleetMissionController(Node):
         if slot['target'] is not None:
             changed=distance(slot['target'],target)>=self.p['update_distance'] or abs(wrap(slot['target'][2]-target[2]))>=self.p['update_angle']
             if slot['handle'] is not None:
-                if changed and now-slot['last_send']>=self.p['minimum_goal_interval']:self.cancel(robot)
+                if changed and now-slot['last_send']>=self.p['minimum_goal_interval']:
+                    moving_follower=(robot!='tb1' and self.p.get('flexible_boundary') and
+                        self.state=='BOUNDARY_TRAVELLING' and self.requested_mode=='LEGACY' and
+                        robot not in self.obstacle_recoveries and not self.clearance_maneuver)
+                    if moving_follower:
+                        if now-slot.get('update_last_plan',slot['last_send'])<self.p['minimum_goal_interval']:return
+                        if not self.feasible(robot,target,self.navigation_reservations(robot)):return
+                        slot['update_last_plan']=now
+                        self.start_plan(robot,target,owner=slot['handle'])
+                    else:self.cancel(robot)
                 return
             if slot['status']=='succeeded' and not changed:
                 # A Nav2 result alone is insufficient: actual pose must meet tolerance.
@@ -331,34 +341,63 @@ class FleetMissionController(Node):
         interval=0. if self.requested_mode=='SINGLE_FILE' and self.state=='TRAVELLING' and robot!='tb1' else self.p['minimum_goal_interval']
         if now-slot['last_send']<interval:return
         if not self.feasible(robot,target,self.navigation_reservations(robot)):return
+        self.start_plan(robot,target)
+
+    def start_plan(self,robot,target,owner=None):
+        slot=self.slots[robot]
         slot['pending']=True;slot['pending_since']=time.monotonic();slot['plan_token']+=1;token=slot['plan_token'];slot['cancel_when_accepted']=False
         request=ComputePathToPose.Goal();request.goal=self.pose_message(target);request.use_start=False
-        future=self.planners[robot].send_goal_async(request)
-        future.add_done_callback(partial(self.plan_accepted,robot=robot,target=target,token=token,mission=self.mission_number))
+        try:
+            future=self.planners[robot].send_goal_async(request)
+            future.add_done_callback(partial(self.plan_accepted,robot=robot,target=target,token=token,mission=self.mission_number,owner=owner))
+        except Exception as exc:self.plan_error(robot,str(exc),owner)
 
-    def plan_accepted(self,future,robot,target,token,mission):
+    def plan_error(self,robot,reason,owner=None):
+        if owner is None:self.failure(robot,reason);return
+        self.slots[robot]['pending']=False
+        self.get_logger().info(f'{robot}: moving-slot path update deferred: {reason}')
+
+    def plan_accepted(self,future,robot,target,token,mission,owner=None):
+        if token!=self.slots[robot]['plan_token']:return
         try:
             handle=future.result()
-            if not handle.accepted:self.failure(robot,'Planner rejected target');return
-            future=handle.get_result_async();future.add_done_callback(partial(self.plan_done,robot=robot,target=target,token=token,mission=mission))
-        except Exception as exc:self.failure(robot,str(exc))
+            if not handle.accepted:self.plan_error(robot,'Planner rejected target',owner);return
+            future=handle.get_result_async();future.add_done_callback(partial(self.plan_done,robot=robot,target=target,token=token,mission=mission,owner=owner))
+        except Exception as exc:self.plan_error(robot,str(exc),owner)
 
-    def plan_done(self,future,robot,target,token,mission):
+    def plan_done(self,future,robot,target,token,mission,owner=None):
         slot=self.slots[robot]
-        if token!=slot['plan_token'] or mission!=self.mission_number or slot.get('cancel_when_accepted') or self.state in ('STOPPED','WAITING'):
+        if token!=slot['plan_token']:return
+        if mission!=self.mission_number or slot.get('cancel_when_accepted') or self.state in ('STOPPED','WAITING'):
             slot['pending']=False;return
         try:
             result=future.result()
-            if result.status!=GoalStatus.STATUS_SUCCEEDED or not result.result.path.poses:self.failure(robot,'No feasible Nav2 path');return
+            if result.status!=GoalStatus.STATUS_SUCCEEDED or not result.result.path.poses:self.plan_error(robot,'No feasible Nav2 path',owner);return
             if not self.feasible(robot,target,self.navigation_reservations(robot)):slot['pending']=False;return
-            goal=NavigateToPose.Goal();goal.pose=self.pose_message(target)
-            if self.requested_mode=='SINGLE_FILE':
-                from ament_index_python.packages import get_package_share_directory
-                goal.behavior_tree=str(Path(get_package_share_directory('crs_multibot'))/'config/single_file_navigation.xml')
-            slot['pending_since']=time.monotonic();slot['target']=target;slot['last_send']=self.get_clock().now().nanoseconds*1e-9;slot['status']='sending'
-            future=self.nav[robot].send_goal_async(goal)
-            future.add_done_callback(partial(self.nav_accepted,robot=robot))
-        except Exception as exc:self.failure(robot,str(exc))
+            if owner is not None:
+                slot['pending']=False
+                desired=self.targets.get(robot)
+                if (slot['handle'] is not owner or slot['cancelling'] or
+                    robot in self.obstacle_recoveries or self.clearance_maneuver or
+                    self.state!='BOUNDARY_TRAVELLING' or self.requested_mode!='LEGACY' or
+                    desired is None or distance(desired,target)>=self.p['update_distance'] or
+                    abs(wrap(desired[2]-target[2]))>=self.p['update_angle']):return
+                self.cancel(robot)
+                slot['next_target']=(target,mission)
+                slot['updates_prepared']=slot.get('updates_prepared',0)+1
+            else:self.dispatch_navigation(robot,target)
+        except Exception as exc:self.plan_error(robot,str(exc),owner)
+
+    def dispatch_navigation(self,robot,target):
+        slot=self.slots[robot]
+        goal=NavigateToPose.Goal();goal.pose=self.pose_message(target)
+        if self.requested_mode=='SINGLE_FILE':
+            from ament_index_python.packages import get_package_share_directory
+            goal.behavior_tree=str(Path(get_package_share_directory('crs_multibot'))/'config/single_file_navigation.xml')
+        self.commands.pop(robot,None) # Require fresh output from the new action.
+        slot['pending']=True;slot['pending_since']=time.monotonic();slot['target']=target;slot['last_send']=self.get_clock().now().nanoseconds*1e-9;slot['status']='sending'
+        future=self.nav[robot].send_goal_async(goal)
+        future.add_done_callback(partial(self.nav_accepted,robot=robot))
 
     def nav_accepted(self,future,robot):
         slot=self.slots[robot];slot['pending']=False
@@ -379,6 +418,17 @@ class FleetMissionController(Node):
             if result.status==GoalStatus.STATUS_SUCCEEDED:slot['status']='succeeded';slot['retries']=0
             elif result.status==GoalStatus.STATUS_CANCELED:slot['status']='cancelled'
             else:self.failure(robot,f'NavigateToPose result status {result.status}')
+            queued=slot.pop('next_target',None)
+            if queued and result.status in (GoalStatus.STATUS_SUCCEEDED,GoalStatus.STATUS_CANCELED):
+                target,mission=queued;desired=self.targets.get(robot)
+                if (mission==self.mission_number and self.state=='BOUNDARY_TRAVELLING' and
+                    self.requested_mode=='LEGACY' and robot not in self.obstacle_recoveries and
+                    not self.clearance_maneuver and desired is not None and
+                    distance(desired,target)<self.p['update_distance'] and
+                    abs(wrap(desired[2]-target[2]))<self.p['update_angle'] and
+                    self.ready()[0] and self.feasible(robot,target,self.navigation_reservations(robot))):
+                    self.dispatch_navigation(robot,target)
+                    slot['updates_switched']=slot.get('updates_switched',0)+1
         except Exception as exc:self.failure(robot,str(exc))
 
     def pose_message(self,pose):
@@ -1218,7 +1268,7 @@ class FleetMissionController(Node):
                 point=Point();point.x=leader[0]+d*nx+side*width*tx;point.y=leader[1]+d*ny+side*width*ty;work.points.append(point)
             array.markers.append(work)
         self.markers.publish(array)
-        msg=String();msg.data=json.dumps({'simulation_time':self.clock_value,'requested_mode':self.requested_mode,'active_mode':self.active_mode,'assembly_stage':self.assembly_stage,'assembly_robot':self.transition_robot,'assembly_route':self.assembly_route,'assembly_routes':self.assembly_routes,'transition_state':self.transition_state,'transition_seconds':(time.monotonic()-self.transition_started if self.transition_started and self.transition_state in ('CANCELLING','ASSEMBLING') else self.transition_duration),'transition_progress':sum(self.arrived(r,t) for r,t in desired.items())/max(1,len(desired)),'formation_error':{r:distance(self.poses[r],t) for r,t in desired.items() if r in self.poses},'position_source':'map TF; simulation ground truth verified separately','recovering_robots':self.trail_recovering,'recovery_waypoints':self.trail_detours,'ground_truth_poses':self.physical_poses,'localization_error':{r:distance(p,self.physical_poses[r]) for r,p in self.poses.items() if r in self.physical_poses},'minimum_footprint_clearance':min((footprint_clearance(self.physical_poses[a],self.polygons[a],self.physical_poses[b],self.polygons[b]) for i,a in enumerate(ROBOTS) for b in ROBOTS[i+1:] if a in self.physical_poses and b in self.physical_poses),default=None),'state':self.state,'reason':self.reason,'phase':self.phase,'manual_navigation':self.manual,'mission':self.mission_number,'poses':self.poses,'desired_slots':desired,'targets':self.targets,'unresolved_pairs':list(self.unresolved_pairs),'blocked':sorted(self.blocked),'yielding_to':self.yielding,'clearance_maneuver':self.clearance_maneuver,'rolling_turn_active':getattr(self,'rolling_turn_active',False),'obstacle_recoveries':self.obstacle_recoveries,'waiting_for_followers':sorted(self.boundary_holds),'formation_heading':self.boundary_heading,'flexible_boundary':self.p['flexible_boundary'],'follower_slots':getattr(self,'flexible_slots',{}),'actions':{r:s['status'] for r,s in self.slots.items()}});self.status_pub.publish(msg)
+        msg=String();msg.data=json.dumps({'simulation_time':self.clock_value,'requested_mode':self.requested_mode,'active_mode':self.active_mode,'assembly_stage':self.assembly_stage,'assembly_robot':self.transition_robot,'assembly_route':self.assembly_route,'assembly_routes':self.assembly_routes,'transition_state':self.transition_state,'transition_seconds':(time.monotonic()-self.transition_started if self.transition_started and self.transition_state in ('CANCELLING','ASSEMBLING') else self.transition_duration),'transition_progress':sum(self.arrived(r,t) for r,t in desired.items())/max(1,len(desired)),'formation_error':{r:distance(self.poses[r],t) for r,t in desired.items() if r in self.poses},'position_source':'map TF; simulation ground truth verified separately','recovering_robots':self.trail_recovering,'recovery_waypoints':self.trail_detours,'ground_truth_poses':self.physical_poses,'localization_error':{r:distance(p,self.physical_poses[r]) for r,p in self.poses.items() if r in self.physical_poses},'minimum_footprint_clearance':min((footprint_clearance(self.physical_poses[a],self.polygons[a],self.physical_poses[b],self.polygons[b]) for i,a in enumerate(ROBOTS) for b in ROBOTS[i+1:] if a in self.physical_poses and b in self.physical_poses),default=None),'state':self.state,'reason':self.reason,'phase':self.phase,'manual_navigation':self.manual,'mission':self.mission_number,'poses':self.poses,'desired_slots':desired,'targets':self.targets,'unresolved_pairs':list(self.unresolved_pairs),'blocked':sorted(self.blocked),'yielding_to':self.yielding,'clearance_maneuver':self.clearance_maneuver,'rolling_turn_active':getattr(self,'rolling_turn_active',False),'obstacle_recoveries':self.obstacle_recoveries,'waiting_for_followers':sorted(self.boundary_holds),'formation_heading':self.boundary_heading,'flexible_boundary':self.p['flexible_boundary'],'follower_slots':getattr(self,'flexible_slots',{}),'slot_updates':{r:{'prepared':s.get('updates_prepared',0),'switched':s.get('updates_switched',0)} for r,s in self.slots.items()},'actions':{r:s['status'] for r,s in self.slots.items()}});self.status_pub.publish(msg)
 
     def shutdown(self):
         self.cancel_all()

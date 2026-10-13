@@ -1,0 +1,22 @@
+{
+  "observed_handoffs": 7,
+  "green_slot_labels": [
+    "tb1 slot",
+    "tb2 slot",
+    "tb3 slot",
+    "tb4 slot",
+    "tb5 slot"
+  ],
+  "minimum_clearance": 1.6410123214330596,
+  "clearance_violation_count": 0,
+  "all_zero_after_stop": true,
+  "mission_completed": false,
+  "final_yaw_errors": {
+    "tb1": 0.02732991860127787,
+    "tb2": 1.4073886517500924,
+    "tb3": 0.41191084969019753,
+    "tb4": 2.861706482871704,
+    "tb5": 3.1058616453160988
+  },
+  "handoff_feature_checks_passed": true
+}
