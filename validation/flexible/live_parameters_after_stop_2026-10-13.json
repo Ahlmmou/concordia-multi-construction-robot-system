@@ -1,0 +1,199 @@
+{
+  "live_parameters": {
+    "leader_speed": 0.6,
+    "auxiliary_speed": 0.8,
+    "angular_speed": 0.5,
+    "minimum_separation": 0.4,
+    "primary_minimum_separation": 0.6,
+    "flexible_boundary": true,
+    "manual_navigation": false,
+    "collision_horizon": 2.0
+  },
+  "maximum_observed_commands": {
+    "tb1": [
+      0.0,
+      0.0
+    ],
+    "tb2": [
+      0.0,
+      0.0
+    ],
+    "tb3": [
+      0.0,
+      0.0
+    ],
+    "tb4": [
+      0.0,
+      0.0
+    ],
+    "tb5": [
+      0.0,
+      0.0
+    ]
+  },
+  "status": {
+    "simulation_time": 160.2,
+    "requested_mode": "LEGACY",
+    "active_mode": "LEGACY",
+    "assembly_stage": null,
+    "assembly_robot": null,
+    "assembly_route": null,
+    "assembly_routes": {},
+    "transition_state": "STOPPED",
+    "transition_seconds": null,
+    "transition_progress": 1.0,
+    "formation_error": {
+      "tb1": 0.3041991158892534,
+      "tb2": 0.3650841680039293,
+      "tb3": 0.37591113370963136,
+      "tb4": 0.35515904100048756,
+      "tb5": 0.3360787009604402
+    },
+    "position_source": "map TF; simulation ground truth verified separately",
+    "recovering_robots": {},
+    "recovery_waypoints": {},
+    "ground_truth_poses": {
+      "tb1": [
+        1.6684969804937826,
+        1.5457079121120456,
+        0.0006197132978666314
+      ],
+      "tb2": [
+        5.528167431623683,
+        5.01036273029317,
+        -0.10537540137371186
+      ],
+      "tb3": [
+        -3.036191315928421,
+        -1.6778326808264519,
+        0.14798179250102245
+      ],
+      "tb4": [
+        5.382879857654483,
+        -1.8473817498872545,
+        -0.1250209009899812
+      ],
+      "tb5": [
+        -2.8725704230867035,
+        5.024387666497422,
+        0.022193410702787523
+      ]
+    },
+    "localization_error": {
+      "tb1": 1.590016315505171e-05,
+      "tb2": 1.5128659446310982e-05,
+      "tb3": 1.4871353458685527e-05,
+      "tb4": 2.457877758403086e-06,
+      "tb5": 3.3250592705207398e-06
+    },
+    "minimum_footprint_clearance": 2.3130168520319914,
+    "state": "STOPPED",
+    "reason": "Operator stop; zero motor commands",
+    "phase": "IDLE",
+    "manual_navigation": false,
+    "mission": 1,
+    "poses": {
+      "tb1": [
+        1.668481080716327,
+        1.5457080228605078,
+        0.0006198946267085744
+      ],
+      "tb2": [
+        5.528152303787371,
+        5.010362572479533,
+        -0.10537052961575562
+      ],
+      "tb3": [
+        -3.0362061842117125,
+        -1.6778329829947027,
+        0.14797069619172434
+      ],
+      "tb4": [
+        5.382882313992915,
+        -1.8473818368618833,
+        -0.12502198532231495
+      ],
+      "tb5": [
+        -2.8725737165168472,
+        5.024388124031072,
+        0.02219626897066968
+      ]
+    },
+    "desired_slots": {
+      "tb1": [
+        1.97,
+        1.586,
+        0.0
+      ],
+      "tb2": [
+        5.861813182199445,
+        4.862184072202318,
+        -0.1478286542475215
+      ],
+      "tb3": [
+        -2.6716557546095547,
+        -1.7695508368931807,
+        0.037840251857454744
+      ],
+      "tb4": [
+        5.726685565499846,
+        -1.936473186933862,
+        -0.16538987278834003
+      ],
+      "tb5": [
+        -2.536528137909956,
+        5.029106422243,
+        0.02969460948550511
+      ]
+    },
+    "targets": {
+      "tb1": [
+        1.97,
+        1.586,
+        0.0
+      ],
+      "tb2": [
+        5.861813182199445,
+        4.862184072202318,
+        -0.1478286542475215
+      ],
+      "tb3": [
+        -2.6716557546095547,
+        -1.7695508368931807,
+        0.037840251857454744
+      ],
+      "tb4": [
+        5.726685565499846,
+        -1.936473186933862,
+        -0.16538987278834003
+      ],
+      "tb5": [
+        -2.536528137909956,
+        5.029106422243,
+        0.02969460948550511
+      ]
+    },
+    "unresolved_pairs": [],
+    "blocked": [],
+    "yielding_to": {},
+    "clearance_maneuver": null,
+    "rolling_turn_active": false,
+    "obstacle_recoveries": {},
+    "waiting_for_followers": [],
+    "formation_heading": -0.019873016409868122,
+    "flexible_boundary": true,
+    "follower_slots": {
+      "tb2": 0,
+      "tb3": 1,
+      "tb4": 2,
+      "tb5": 3
+    },
+    "actions": {
+      "tb1": "cancelled",
+      "tb2": "cancelled",
+      "tb3": "cancelled",
+      "tb4": "cancelled",
+      "tb5": "cancelled"
+    }
+  }
+}
