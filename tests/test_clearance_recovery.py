@@ -79,6 +79,7 @@ def test_stalled_auxiliary_near_hilti_triggers_clearance_for_auxiliary():
         cmd_pubs={r:NS(publish=lambda m,r=r:published.update({r:(m.linear.x,m.angular.z)})) for r in ROBOTS})
     # Use a peer within the near-peer detection radius but with safe turn clearance.
     node.radii['tb1']=.8
+    node.grids.setdefault('/map',NS(frame='map',footprint_free=lambda *a:True))
     FleetMissionController.gate(node)
     assert ('tb1','tb4') in node.unresolved_pairs
     assert node.yielding['tb4']=='tb1' and published['tb1']==(0.,0.)
@@ -107,9 +108,11 @@ def test_gate_uses_physical_poses_when_tf_lag_overstates_clearance():
         grids={f'/{r}/local_costmap/costmap':NS(frame='map',footprint_free=lambda *a:True) for r in ROBOTS},
         in_frame=lambda r,p,f:p,arrived=lambda *a:False,
         cmd_pubs={r:NS(publish=lambda m,r=r:published.update({r:(m.linear.x,m.angular.z)})) for r in ROBOTS})
+    node.grids.setdefault('/map',NS(frame='map',footprint_free=lambda *a:True))
     FleetMissionController.gate(node)
     assert published['tb4']==(0.,0.) and 'tb4' in node.blocked
     node.p['verify_gazebo_localization']=False
+    node.grids.setdefault('/map',NS(frame='map',footprint_free=lambda *a:True))
     FleetMissionController.gate(node)
     assert published['tb4'][0]==-.15
 

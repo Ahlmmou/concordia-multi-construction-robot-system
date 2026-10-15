@@ -598,3 +598,27 @@ Each blocked auxiliary independently checks both lateral detours and straight
 escapes, preferring a shorter checked route to its own formation target. Equal
 left/right ties are broken independently; an unsafe side is never forced to
 make the group split. Once clear, each auxiliary resumes its formation target.
+
+### Stairwell exclusion
+
+The default shared map is `config/EVfloor9_stairs_keepout.yaml`. It fills the
+enclosed stairwell containing tb4's former goal at (41.9143, -0.6827), including
+the doorway between (37.8, -0.67) and (37.8, -1.8). The enclosed interior is
+about 25.28 m². The original `EVfloor9_outer_only` map remains unchanged.
+
+The occupied region belongs to the static map, so dynamic obstacle clearing
+does not remove it. Every robot's global planner and target checks use that
+map. The supervisor additionally checks every forward, reverse, arc, and escape
+command's swept footprint against `/map`; local lidar cannot authorize entry
+into the exclusion. Existing footprint padding and peer clearance remain active.
+
+Regenerate the protected image from the documented enclosure reference with:
+
+```bash
+python3 scripts/generate_stair_keepout.py --spec config/stair_keepout.yaml
+```
+
+The generator seals the approximate door endpoints into the existing walls and
+fills only the connected interior. It refuses an enclosure that leaks outside
+the local search boundary or exceeds the expected maximum area. No Gazebo
+physical walls or robot spawn positions are changed.

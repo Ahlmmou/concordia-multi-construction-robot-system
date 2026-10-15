@@ -954,6 +954,21 @@ class FleetMissionController(Node):
         else:
             self.phase='BOUNDARY_TRAVELLING';self.set_state(self.phase,'Moving enclosing rectangle toward primary goal')
 
+    def static_motion_safe(self,robot,pose,command):
+        """Never let lidar clearing or local recovery override mapped hazards."""
+        grid=self.grids.get('/map')
+        if grid is None:return False
+        horizon=self.p['collision_horizon']
+        # Bound the motion between samples, including the long Hilti footprint.
+        radius=max(math.hypot(x,y) for x,y in self.polygons[robot])
+        travel=(abs(command[0])+radius*abs(command[1]))*horizon
+        count=max(10,math.ceil(travel/.05))
+        for i in range(count+1):
+            projected=advance(pose,command,horizon*i/count)
+            local=self.in_frame(robot,projected,grid.frame)
+            if local is None or not grid.footprint_free(local,self.polygons[robot],self.p['footprint_padding']+.025,98):return False
+        return True
+
     def gate(self):
         now=time.monotonic();ok,_=self.ready()
         permitted=ok and (self.state in ('MODE_TRANSITION','FORMING_LINE','TRAVELLING','FORMING_RECTANGLE','FORMING_BOUNDARY','BOUNDARY_TRAVELLING') or (self.manual and self.state=='READY'))
@@ -1029,6 +1044,9 @@ class FleetMissionController(Node):
                     projected=advance(self.poses[r],(v,w),dt)
                     local=self.in_frame(r,projected,grid.frame)
                     if local is None or not grid.footprint_free(local,self.polygons[r],self.p['footprint_padding'],98):commands[r]=(0.,0.);self.blocked.add(r);self.local_blocked.add(r);break
+            for r in ROBOTS:
+                if commands[r]!=(0.,0.) and not FleetMissionController.static_motion_safe(self,r,collision_poses[r],commands[r]):
+                    commands[r]=(0.,0.);self.blocked.add(r);self.local_blocked.add(r)
             for r in ROBOTS[1:]:
                 if commands[r]!=(0.,0.) and not FleetMissionController.auxiliary_corridor_safe(self,r,collision_poses[r],commands[r],corridor):
                     commands[r]=(0.,0.);self.blocked.add(r);self.local_blocked.add(r)

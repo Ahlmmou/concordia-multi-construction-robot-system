@@ -147,5 +147,6 @@ def test_motor_gate_keeps_safe_owned_motion_during_planning_but_stops_for_cancel
     n.targets={'tb2':(30.,0.,0.)}
     published={};n.cmd_pubs={r:NS(publish=lambda m,r=r:published.update({r:(m.linear.x,m.angular.z)})) for r in ROBOTS}
     if cancel_pending:Controller.cancel(n,'tb2')
+    n.grids.setdefault('/map',NS(frame='map',footprint_free=lambda *a:True))
     Controller.gate(n)
     assert published['tb2'][0]==expected

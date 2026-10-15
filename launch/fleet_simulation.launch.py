@@ -14,7 +14,7 @@ def generate_launch_description():
     return LaunchDescription([
         DeclareLaunchArgument('mission_config',default_value=os.path.join(share,'config','fleet_mission.yaml')),
         DeclareLaunchArgument('world',default_value=os.path.join(share,'worlds','ev_9.world')),
-        DeclareLaunchArgument('map_yaml',default_value=os.path.join(share,'config','EVfloor9_outer_only.yaml')),
+        DeclareLaunchArgument('map_yaml',default_value=os.path.join(share,'config','EVfloor9_stairs_keepout.yaml')),
         DeclareLaunchArgument('rviz',default_value='true'),
         DeclareLaunchArgument('gazebo_gui',default_value='false'),
         DeclareLaunchArgument('simulation_localization',default_value='true'),

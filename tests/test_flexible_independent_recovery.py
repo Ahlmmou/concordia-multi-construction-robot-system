@@ -110,6 +110,7 @@ def test_healthy_primary_continues_during_auxiliary_recovery_unless_actual_clear
     n.clearance_maneuver=None;n.arrived=lambda *x:False
     n.grids={f'/{r}/local_costmap/costmap':NS(frame='map',footprint_free=lambda *x:True) for r in ROBOTS}
     published={};n.cmd_pubs={r:NS(publish=lambda m,r=r:published.update({r:(m.linear.x,m.angular.z)})) for r in ROBOTS}
+    n.grids.setdefault('/map',NS(frame='map',footprint_free=lambda *a:True))
     Controller.gate(n)
     assert published['tb1'][0]==expected
     assert published['tb3']==(0.,0.)

@@ -102,7 +102,7 @@ def generate_launch_description():
     ld.add_action(DeclareLaunchArgument('simulation_localization', default_value='false'))
     ld.add_action(DeclareLaunchArgument('gazebo_gui', default_value='false'))
     ld.add_action(DeclareLaunchArgument('world', default_value=world))
-    ld.add_action(DeclareLaunchArgument('map_yaml', default_value=os.path.join(s_turtlebot3_multi_robot,'config','EVfloor9_outer_only.yaml')))
+    ld.add_action(DeclareLaunchArgument('map_yaml', default_value=os.path.join(s_turtlebot3_multi_robot,'config','EVfloor9_stairs_keepout.yaml')))
     ld.add_action(DeclareLaunchArgument('enable_legacy_formation', default_value='false'))
     ld.add_action(DeclareLaunchArgument('velocity_output_topic', default_value='cmd_vel'))
     ld.add_action(DeclareLaunchArgument('auxiliary_navigation', default_value='true'))

@@ -1,0 +1,10 @@
+# Real stairwell enclosure identified by its doorway and tb4's former goal.
+source_map: EVfloor9_outer_only.yaml
+output_map: EVfloor9_stairs_keepout.yaml
+doorway: [[37.8, -0.67], [37.8, -1.8]]
+interior_reference: [41.914286597455586, -0.6826850510813038]
+# Join the approximate doorway endpoints to the existing enclosure walls.
+door_extension: 0.25
+door_thickness: 0.15
+search_bounds: [36.8, -5.0, 44.5, 2.5]
+maximum_area: 40.0
