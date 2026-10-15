@@ -242,6 +242,39 @@ def advance(pose, command, duration):
     return x+dx,y+dy,heading+w*duration
 
 
+def route_preview(start, path, lookahead, step=.15):
+    """Sample the near route, including the footprint swept through its turns."""
+    if not path:return [start]
+    nearest=min(range(len(path)),key=lambda i:distance(start,path[i]))
+    if distance(start,path[nearest])>1.:return [start]
+    result=[start];previous=start;remaining=lookahead
+    for target in path[nearest:]:
+        length=distance(previous,target)
+        if length<1e-6:continue
+        heading=math.atan2(target[1]-previous[1],target[0]-previous[0])
+        angle=wrap(heading-previous[2]);turns=max(1,math.ceil(abs(angle)/.05))
+        result.extend((previous[0],previous[1],previous[2]+angle*i/turns) for i in range(1,turns+1))
+        travel=min(length,remaining);count=max(1,math.ceil(travel/step))
+        result.extend((previous[0]+(target[0]-previous[0])*travel/length*i/count,
+                       previous[1]+(target[1]-previous[1])*travel/length*i/count,heading)
+                      for i in range(1,count+1))
+        remaining-=travel;previous=result[-1]
+        if remaining<=1e-6:break
+    return result
+
+
+def obstacle_detour_candidates(start, goal, preferred_side=1.):
+    """Independent left/right waypoints, plus straight forward/reverse escapes."""
+    heading=math.atan2(goal[1]-start[1],goal[0]-start[0]) if distance(start,goal)>.1 else start[2]
+    for radius in (.9,1.2,1.5,2.0):
+        for side in (preferred_side,-preferred_side):
+            for forward in (0.,radius*.5):
+                dx,dy=rotate(forward,side*radius,heading)
+                yield (start[0]+dx,start[1]+dy,wrap(heading+side*math.pi/2))
+        for direction in (1.,-1.):
+            yield advance(start,(direction,0.),radius)
+
+
 def rolling_turn_candidates(command, speed=.18, turn_rate=.20):
     """Replace near-stationary turning with gentle arcs; preserve reverse intent."""
     v,w=command
@@ -301,14 +334,14 @@ def pair_separation(a, b, gap, primary_gap=None):
 
 
 def yielding_gate(poses, commands, polygons, gap, horizon, primary_gap=None):
-    """Give auxiliaries right of way, rechecking against the stopped robot.
+    """Give Hilti right of way, rechecking against the stopped robot.
 
     Auxiliary ties use robot order, so the decision remains stable across ticks.
     Never authorize a priority robot to drive into its stationary peer. Return
     unresolved pairs for the supervisor to plan temporary clearance waypoints.
     """
     result=dict(commands);blocked=set();yielding={};unresolved=set()
-    order=ROBOTS[1:]+ROBOTS[:1];rank={r:i for i,r in enumerate(order)}
+    order=ROBOTS;rank={r:i for i,r in enumerate(order)}
     for _ in range(len(ROBOTS)):
         changed=False
         for i,a in enumerate(ROBOTS):

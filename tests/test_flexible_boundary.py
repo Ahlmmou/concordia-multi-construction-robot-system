@@ -41,3 +41,19 @@ def test_final_follower_positions_are_frozen_after_leader_arrival():
         set_state=lambda *a:None,send=lambda r,t:sent.append((r,t)))
     FleetMissionController.flexible_tick(node)
     assert node.targets=={'tb1':node.primary,**targets}
+
+
+def test_final_slots_use_requested_position_and_heading_despite_leader_residual_error():
+    import math
+    primary=(10.,0.,math.pi/2)
+    expected=rectangle(primary,4.2,3.4)
+    # Followers start at the final positions with unrelated headings. They must
+    # still receive the requested orientation, even without translation to do.
+    poses={'tb1':(10.12,.02,math.pi/2-.04),
+           **{r:(t[0],t[1],-.7) for r,t in expected.items()}}
+    node=NS(poses=poses,primary=primary,boundary_heading=0.,flexible_slots={},
+        flexible_final_targets=None,p={'rectangle_half_length':4.2,'rectangle_half_width':3.4,'arrival_tolerance':.15},
+        arrived=lambda r,t:r=='tb1',set_state=lambda *a:None,choose=lambda r,t,reserved:t,
+        send=lambda *a:None,cancel=lambda *a:None)
+    FleetMissionController.flexible_tick(node)
+    assert node.flexible_final_targets==expected

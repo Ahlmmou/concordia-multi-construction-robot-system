@@ -49,3 +49,15 @@ def test_primary_buffer_is_enforced_during_rolling_turn():
     assert FleetMissionController.rolling_turn_command(n,(0.,.5),c,p)==(-.18,.2)
     p['tb3']=(-1.25,0.,0.)
     assert FleetMissionController.rolling_turn_command(n,(0.,.5),c,p)==(0.,.5)
+
+
+def test_reverse_arc_can_win_even_when_forward_is_free():
+    n,c,p=node();n.primary=(-5.,2.,1.)
+    assert FleetMissionController.rolling_turn_command(n,(0.,.5),c,p)==(-.18,.2)
+    n.primary=(5.,2.,1.)
+    assert FleetMissionController.rolling_turn_command(n,(0.,.5),c,p)==(.18,.2)
+
+
+def test_goal_preference_cannot_select_an_unsafe_reverse_arc():
+    n,c,p=node(free=lambda pose:pose[0]>-.1);n.primary=(-5.,2.,1.)
+    assert FleetMissionController.rolling_turn_command(n,(0.,.5),c,p)==(.18,.2)

@@ -58,7 +58,7 @@ def test_nav2_timeout_while_yielding_does_not_pause_the_fleet():
     assert slot['retries']==0 and slot['cooldown']==0 and not cancelled and not states
 
 
-def test_rotating_without_translation_triggers_clearance_and_holds_leader():
+def test_stalled_auxiliary_near_hilti_triggers_clearance_for_auxiliary():
     import math,time
     from geometry_msgs.msg import Twist
     box=[(-.3,-.3),(-.3,.3),(.3,.3),(.3,-.3)]
@@ -80,9 +80,9 @@ def test_rotating_without_translation_triggers_clearance_and_holds_leader():
     # Use a peer within the near-peer detection radius but with safe turn clearance.
     node.radii['tb1']=.8
     FleetMissionController.gate(node)
-    assert ('tb4','tb1') in node.unresolved_pairs
-    assert node.yielding['tb1']=='tb4' and published['tb1']==(0.,0.)
-    assert published['tb4'][1]==.3
+    assert ('tb1','tb4') in node.unresolved_pairs
+    assert node.yielding['tb4']=='tb1' and published['tb1']==(0.,0.)
+    assert published['tb4']==(0.,0.)
 
 
 def test_gate_uses_physical_poses_when_tf_lag_overstates_clearance():
@@ -112,3 +112,15 @@ def test_gate_uses_physical_poses_when_tf_lag_overstates_clearance():
     node.p['verify_gazebo_localization']=False
     FleetMissionController.gate(node)
     assert published['tb4'][0]==-.15
+
+
+def test_hilti_priority_moves_blocking_auxiliary_aside_instead_of_detouring_hilti():
+    cancelled=[];chosen=[]
+    node=NS(clock_value=10.,clearance_maneuver=None,conflict_since={('tb1','tb3'):0.},
+        unresolved_pairs={('tb1','tb3')},p={'yield_recovery_delay':3.},
+        slots={'tb3':{'retries':2,'cooldown':9.}},arrived=lambda *a:False,
+        clearance_target=lambda robot,peer:chosen.append((robot,peer)) or (1.,3.,0.),
+        cancel=cancelled.append,get_logger=lambda:NS(info=lambda *a:None))
+    FleetMissionController.clearance_tick(node)
+    assert chosen==[('tb3','tb1')] and cancelled==['tb3']
+    assert node.clearance_maneuver=={'robot':'tb3','peer':'tb1','target':(1.,3.,0.)}

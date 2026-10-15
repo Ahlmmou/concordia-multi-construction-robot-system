@@ -245,6 +245,25 @@ ros2 service call /formation/stop std_srvs/srv/Trigger '{}'
 ros2 service call /formation/resume std_srvs/srv/Trigger '{}'
 ```
 
+When reconfiguring tb1 costmaps, stop the supervisor and reset/start the owning
+navigation stack through its lifecycle manager. Do not independently clean up
+and configure `/tb1/global_costmap/global_costmap` or the local costmap: the
+planner/controller can retain references to the previous costmap storage. In a
+live test this caused every plan to fail with “start position is off the global
+costmap” despite valid localization, exhausting the supervisor retry limit.
+
+```bash
+ros2 service call /formation/stop std_srvs/srv/Trigger '{}'
+ros2 service call /tb1/lifecycle_manager_navigation/manage_nodes nav2_msgs/srv/ManageLifecycleNodes '{command: 3}'
+ros2 service call /tb1/lifecycle_manager_navigation/manage_nodes nav2_msgs/srv/ManageLifecycleNodes '{command: 0}'
+```
+
+Commands 3 and 0 mean RESET and STARTUP. Require `success: true` at each step.
+This preserves Gazebo poses and leaves the supervisor stopped. Verify planning
+with `/tb1/compute_path_to_pose` before sending a fresh RViz primary goal;
+path computation alone does not command movement. A lifecycle reset reloads the
+existing node parameters; changes to YAML files require relaunching the nodes.
+
 `stop` cancels owned actions and continuously publishes zero commands. `resume`
 rechecks preflight and clears the bounded retry counters. Ctrl-C in the simulation
 launch shuts down all nodes. Ctrl-C in the standalone controller sends zero
@@ -546,3 +565,36 @@ For flexible-formation testing, RViz shows blue robot labels (`tb1` marked
 primary), green assigned slots, the primary goal, navigation paths, and the
 follower polygon. The large floating status block is removed; use Fleet Live
 Updates for goal progress, current actions, and blocked reasons.
+
+### Final goal alignment
+
+Mission completion requires position error at most 0.15 m and heading error at
+most 0.05 rad for tb1 or 0.06 rad for auxiliaries. Nav2 checks 0.10 m and
+0.04 rad and rechecks XY position during final orientation alignment. The
+flexible formation freezes final follower slots around the requested primary
+pose and uses its heading, rather than freezing each follower's travel heading.
+Feasible alternative slots remain subject to the existing footprint and peer
+clearance checks; tolerances apply to each selected target. These are acceptance
+limits, not a guarantee of achieved accuracy in every obstacle configuration.
+
+### Hilti priority and independent obstacle routes
+
+Hilti has right of way over every auxiliary for forward and reverse crossings.
+The gate still stops both robots if stopping the auxiliary would leave Hilti's
+sweep obstructed. After the clearance delay, the auxiliary receives a checked
+temporary waypoint out of the way; Hilti waits until that move is safe.
+
+During travel, auxiliary targets and commands reserve the next 2 m (or the
+configured speed times collision horizon, whichever is greater) of Hilti's
+current map-frame Nav2 path, including its turns and footprint clearance. A
+stale/missing path falls back to a preview toward the active goal. An auxiliary
+already in this corridor may move outward without reducing its existing gap;
+it may not move deeper into the corridor. This is a near-term reservation, not
+a full multi-robot space-time planner. Current peer collision checks remain active.
+
+Near-stationary Hilti turns compare safe forward and reverse arcs and prefer
+the endpoint closer to the goal; this does not force an arc near final alignment.
+Each blocked auxiliary independently checks both lateral detours and straight
+escapes, preferring a shorter checked route to its own formation target. Equal
+left/right ties are broken independently; an unsafe side is never forced to
+make the group split. Once clear, each auxiliary resumes its formation target.

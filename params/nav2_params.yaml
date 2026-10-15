@@ -184,7 +184,7 @@ controller_server:
       linear_granularity: 0.05
       angular_granularity: 0.025
       transform_tolerance: 0.2
-      xy_goal_tolerance: 0.3
+      xy_goal_tolerance: 0.10
       trans_stopped_velocity: 0.03
       short_circuit_trajectory_evaluation: true
       stateful: true
@@ -211,9 +211,9 @@ controller_server:
     goal_checker_plugin: goal_checker
     goal_checker:
       plugin: nav2_controller::SimpleGoalChecker
-      xy_goal_tolerance: 0.3
-      yaw_goal_tolerance: 0.4
-      stateful: true
+      xy_goal_tolerance: 0.10
+      yaw_goal_tolerance: 0.04
+      stateful: false
 controller_server_rclcpp_node:
   ros__parameters:
     use_sim_time: true

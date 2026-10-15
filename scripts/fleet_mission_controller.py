@@ -23,7 +23,7 @@ from rclpy.time import Time
 from rclpy.qos import QoSProfile, DurabilityPolicy, ReliabilityPolicy, qos_profile_sensor_data
 from action_msgs.msg import GoalStatus
 from geometry_msgs.msg import PoseStamped, Twist, Point
-from nav_msgs.msg import OccupancyGrid, Odometry
+from nav_msgs.msg import OccupancyGrid, Odometry, Path as NavPath
 from nav2_msgs.action import NavigateToPose, ComputePathToPose
 from sensor_msgs.msg import LaserScan
 from gazebo_msgs.msg import ModelStates
@@ -38,7 +38,7 @@ from formation_geometry import (ROBOTS, Grid, yaw, wrap, distance, rectangle,
                                 candidates, trail_target, rotate, boundary_followers_holding,
                                 flexible_assignment, boundary_order, yielding_gate,
                                 footprint_clearance, advance, pair_separation,
-                                rolling_turn_candidates, motion_conflict, inflation_escape, local_obstacle_command, MODES, formation_slots, layout_clearance, trail_waypoint, horizontal_first_routes, stationary_route_clear, assembly_reroute_candidates, follower_lag_gate)
+                                rolling_turn_candidates, obstacle_detour_candidates, route_preview, motion_conflict, inflation_escape, local_obstacle_command, MODES, formation_slots, layout_clearance, trail_waypoint, horizontal_first_routes, stationary_route_clear, assembly_reroute_candidates, follower_lag_gate)
 
 
 class FleetMissionController(Node):
@@ -54,7 +54,7 @@ class FleetMissionController(Node):
             leader_speed=0.60, auxiliary_speed=0.80, angular_speed=0.50,
             leader_rolling_turn=True, rolling_turn_speed=0.22, rolling_turn_rate=0.15,
             update_distance=0.8, update_angle=0.5, minimum_goal_interval=4.0,
-            arrival_tolerance=0.4, yaw_tolerance=0.45, primary_yaw_tolerance=0.10, alternative_radius=1.5,
+            arrival_tolerance=0.15, yaw_tolerance=0.06, primary_yaw_tolerance=0.05, alternative_radius=1.5,
             candidate_step=0.3, maximum_target_cost=70, data_timeout=15.0,
             command_timeout=2.0, clock_timeout=5.0, lifecycle_timeout=30.0,
             maximum_retries=3, retry_delay=8.0, maximum_follower_lag=5.0,
@@ -97,6 +97,7 @@ class FleetMissionController(Node):
         self.lifecycle={};self.lifecycle_requests={};self.graph_problem='Graph not checked yet'
         self.boundary_waypoint=None;self.boundary_heading=None
         self.flexible_slots={};self.flexible_final_targets=None
+        self.primary_route=[];self.primary_route_stamp=0.
         self.primary=None;self.pending_primary=None;self.targets={};self.rectangle_targets=None;self.trail=deque(maxlen=5000);self.trail_seeded=False
         self.boundary_holds=set();self.blocked=set();self.last_tick=0.;self.manual=self.p['manual_navigation'];self.mission_number=0
         self.yielding={};self.unresolved_pairs=set();self.conflict_since={};self.clearance_maneuver=None
@@ -115,6 +116,7 @@ class FleetMissionController(Node):
         self.subscriptions_kept.append(self.create_subscription(Clock,'/clock',self.clock_callback,qos_profile_sensor_data))
         if self.p['verify_gazebo_localization']:
             self.subscriptions_kept.append(self.create_subscription(ModelStates,'/gazebo/model_states',self.model_states,10))
+        self.subscriptions_kept.append(self.create_subscription(NavPath,'/tb1/plan',self.primary_plan,qos_profile_sensor_data))
         self.subscriptions_kept.append(self.create_subscription(PoseStamped,'/formation/primary_goal',self.primary_goal,10))
         self.subscriptions_kept.append(self.create_subscription(String,'/formation/mode_request',self.mode_request,10))
         for r in ROBOTS:
@@ -229,12 +231,15 @@ class FleetMissionController(Node):
             return (dx+t.transform.translation.x,dy+t.transform.translation.y,pose[2]+yaw(t.transform.rotation))
         except Exception:return None
 
-    def feasible(self,robot,pose,reserved=None,peers=True):
+    def feasible(self,robot,pose,reserved=None,peers=True,reserve_primary=True):
         for topic in ('/map',f'/{robot}/global_costmap/costmap'):
             grid=self.grids.get(topic)
             if grid is None:return False
             local=self.in_frame(robot,pose,grid.frame)
             if local is None or not grid.footprint_free(local,self.polygons[robot],self.p['footprint_padding'],self.p['maximum_target_cost']):return False
+        if robot!='tb1' and reserve_primary:
+            corridor=FleetMissionController.primary_corridor(self)
+            if FleetMissionController.primary_corridor_gap(self,robot,pose,corridor)<self.p['primary_minimum_separation']:return False
         if peers:
             for other,current in self.poses.items():
                 gap=pair_separation(robot,other,self.p['minimum_separation'],self.p['primary_minimum_separation'])
@@ -257,6 +262,44 @@ class FleetMissionController(Node):
             return {**{r:t for r,t in self.targets.items() if r!='tb1'},'tb1':self.poses['tb1']}
         return self.targets
 
+    def primary_plan(self,msg):
+        if msg.header.frame_id.lstrip('/')!='map':return
+        self.primary_route=[(p.pose.position.x,p.pose.position.y,yaw(p.pose.orientation)) for p in msg.poses]
+        self.primary_route_stamp=time.monotonic()
+
+    def primary_corridor(self):
+        goal=getattr(self,'primary',None);poses=getattr(self,'poses',{})
+        if goal is None or 'tb1' not in poses or self.state not in ('FORMING_BOUNDARY','BOUNDARY_TRAVELLING','TRAVELLING'):return []
+        start=poses['tb1']
+        if distance(start,goal)<=self.p.get('arrival_tolerance',.15):return []
+        lookahead=max(2.,self.p.get('leader_speed',.6)*self.p.get('collision_horizon',2.))
+        path=getattr(self,'primary_route',[])
+        if time.monotonic()-getattr(self,'primary_route_stamp',0.)>self.p.get('data_timeout',15.):path=[]
+        if path and distance(path[-1],goal)>max(.5,self.p.get('update_distance',.8)):path=[]
+        if not path or min(distance(start,p) for p in path)>1.:
+            heading=math.atan2(goal[1]-start[1],goal[0]-start[0])
+            length=min(lookahead,distance(start,goal))
+            path=[start,(start[0]+length*math.cos(heading),start[1]+length*math.sin(heading),heading)]
+        return route_preview(start,path,lookahead)
+
+    def primary_corridor_gap(self,robot,pose,corridor):
+        if not corridor:return float('inf')
+        gap=self.p.get('primary_minimum_separation',self.p.get('minimum_separation',.6))
+        radius=sum(max(math.hypot(x,y) for x,y in self.polygons[r]) for r in (robot,'tb1'))
+        # Circle bounds skip only poses that are certainly beyond the required
+        # gap; close passes still use the full oriented footprints. Saturating
+        # at the required gap avoids spending gate time measuring distant space.
+        nearby=(p for p in corridor if distance(pose,p)<=radius+gap)
+        return min(gap,min((footprint_clearance(pose,self.polygons[robot],p,self.polygons['tb1']) for p in nearby),default=gap))
+
+    def auxiliary_corridor_safe(self,robot,pose,command,corridor):
+        if not corridor:return True
+        initial=FleetMissionController.primary_corridor_gap(self,robot,pose,corridor)
+        gap=self.p.get('primary_minimum_separation',self.p['minimum_separation'])
+        swept=[FleetMissionController.primary_corridor_gap(self,robot,
+            advance(pose,command,self.p['collision_horizon']*i/10),corridor) for i in range(1,11)]
+        return min(swept)>=min(initial,gap)-1e-6 and (initial>=gap or swept[-1]>initial+1e-4)
+
     def primary_goal(self,msg):
         if msg.header.frame_id.lstrip('/')!='map':self.get_logger().error('Primary goal must use the verified shared map frame');return
         q=msg.pose.orientation
@@ -269,6 +312,7 @@ class FleetMissionController(Node):
         target=(msg.pose.position.x,msg.pose.position.y,yaw(q))
         if not self.feasible('tb1',target,peers=False):self.get_logger().error('Primary goal is unknown, occupied, out of bounds, or too tight for Hilti footprint');return
         self.transition_state='IDLE';self.transition_robot=None
+        self.primary_route=[];self.primary_route_stamp=0.
         self.manual=False;self.pending_primary=target;self.rectangle_targets=None;self.targets={}
         if self.requested_mode!='SINGLE_FILE':self.trail.clear();self.trail_seeded=False
         self.mission_number+=1;self.cancel_all()
@@ -393,9 +437,10 @@ class FleetMissionController(Node):
     def dispatch_navigation(self,robot,target):
         slot=self.slots[robot]
         goal=NavigateToPose.Goal();goal.pose=self.pose_message(target)
-        if self.requested_mode=='SINGLE_FILE':
+        if robot=='tb1' or self.requested_mode=='SINGLE_FILE':
             from ament_index_python.packages import get_package_share_directory
-            goal.behavior_tree=str(Path(get_package_share_directory('crs_multibot'))/'config/single_file_navigation.xml')
+            tree='hilti_navigation.xml' if robot=='tb1' else 'single_file_navigation.xml'
+            goal.behavior_tree=str(Path(get_package_share_directory('crs_multibot'))/'config'/tree)
         self.commands.pop(robot,None) # Require fresh output from the new action.
         slot['pending']=True;slot['pending_since']=time.monotonic();slot['target']=target;slot['last_send']=self.get_clock().now().nanoseconds*1e-9;slot['status']='sending'
         future=self.nav[robot].send_goal_async(goal)
@@ -658,7 +703,10 @@ class FleetMissionController(Node):
         if finished and getattr(self,'flexible_final_targets',None) is not None:
             targets.update(self.flexible_final_targets)
         else:
-            slots=list(rectangle((leader[0],leader[1],self.boundary_heading),
+            # Freeze final slots around the requested pose, rather than the
+            # leader's residual position error or the initial travel heading.
+            anchor=self.primary if finished else (leader[0],leader[1],self.boundary_heading)
+            slots=list(rectangle(anchor,
                 self.p['rectangle_half_length'],self.p['rectangle_half_width']).values())
             self.flexible_slots=flexible_assignment(self.poses,slots,getattr(self,'flexible_slots',{}))
             reserved={'tb1':leader}
@@ -669,8 +717,11 @@ class FleetMissionController(Node):
                 if maneuver and r==maneuver['robot']:
                     targets[r]=maneuver['target'];reserved[r]=maneuver['target'];continue
                 preferred=slots[i]
-                heading=(math.atan2(preferred[1]-self.poses[r][1],preferred[0]-self.poses[r][0])
-                    if distance(preferred,self.poses[r])>self.p['arrival_tolerance'] else self.poses[r][2])
+                if finished:
+                    heading=self.primary[2]
+                else:
+                    heading=(math.atan2(preferred[1]-self.poses[r][1],preferred[0]-self.poses[r][0])
+                        if distance(preferred,self.poses[r])>self.p['arrival_tolerance'] else self.poses[r][2])
                 preferred=(preferred[0],preferred[1],heading)
                 target=self.choose(r,preferred,reserved)
                 if target is None:
@@ -738,14 +789,19 @@ class FleetMissionController(Node):
         choices=[c for c in choices if all(not motion_conflict(pose,c,self.polygons[robot],
             other,(0.,0.),self.polygons[r],pair_separation(robot,r,self.p['minimum_separation'],self.p['primary_minimum_separation']),
             self.p['collision_horizon']) for r,other in poses.items() if r!=robot)]
+        corridor=FleetMissionController.primary_corridor(self) if robot!='tb1' else []
+        initial_gap=FleetMissionController.primary_corridor_gap(self,robot,pose,corridor)
         def verify(projected):
             dx,dy=rotate(projected[0]-local[0],projected[1]-local[1],pose[2]-local[2])
             world=(pose[0]+dx,pose[1]+dy,pose[2]+projected[2]-local[2])
+            if FleetMissionController.primary_corridor_gap(self,robot,world,corridor)<min(initial_gap,self.p['primary_minimum_separation'])-1e-6:return False
             for topic in ('/map',f'/{robot}/global_costmap/costmap'):
                 other=self.grids.get(topic)
                 transformed=self.in_frame(robot,world,other.frame) if other else None
                 if transformed is None or not other.footprint_free(transformed,self.polygons[robot],.02,99):return False
             return True
+        if corridor:
+            choices=[c for c in choices if FleetMissionController.auxiliary_corridor_safe(self,robot,pose,c,corridor)]
         command=inflation_escape(grid,local,self.polygons[robot],choices,self.p['footprint_padding'],self.p['collision_horizon'],verify)
         if command is not None:
             recovery['state']='Escaping obstacle buffer';recovery['command']=command;return command
@@ -758,21 +814,36 @@ class FleetMissionController(Node):
                     if all(grid.footprint_free(advance(local,candidate,self.p['collision_horizon']*i/10),self.polygons[robot],self.p['footprint_padding'],98)
                         and verify(advance(local,candidate,self.p['collision_horizon']*i/10)) for i in range(11)):
                         recovery['command']=candidate;return candidate
-            preferred=self.targets.get(robot,pose);options=[]
-            # An aligned forward/backward waypoint avoids demanding a turn
-            # inside the same tight zone that blocked the original command.
-            targets=[advance(pose,(direction,0.),radius) for radius in (.9,1.2,1.5) for direction in (1.,-1.)]
-            for target in sorted(targets,key=lambda p:distance(p,preferred)):
-                if distance(target,pose)<.5 or not self.feasible(robot,target):continue
-                clear=True
-                for i in range(11):
-                    sample=(pose[0]+(target[0]-pose[0])*i/10,pose[1]+(target[1]-pose[1])*i/10,pose[2])
-                    sample=self.in_frame(robot,sample,grid.frame)
-                    if sample is None or not grid.footprint_free(sample,self.polygons[robot],self.p['footprint_padding'],98) or not verify(sample):clear=False;break
-                if clear:options.append((distance(target,preferred),target));break
-            if options:recovery['target']=min(options,key=lambda p:p[0])[1];recovery['state']='Taking obstacle detour'
+            if self.clock_value>=recovery.get('next_detour_check',0.):
+                recovery['next_detour_check']=self.clock_value+1.
+                target=self.obstacle_detour_target(robot,poses)
+                if target is not None:
+                    recovery['target']=target;recovery['state']='Taking independent obstacle detour'
         else:recovery['state']='Waiting for a safe escape route'
         return (0.,0.)
+
+    def obstacle_detour_target(self,robot,poses):
+        """Choose each robot's own side; Nav2 retains the waypoint action."""
+        start=poses[robot];goal=self.targets.get(robot,start)
+        # Break equally short left/right ties independently, never overriding
+        # map or peer clearance to force robots onto opposite sides.
+        side=1. if ROBOTS.index(robot)%2 else -1.
+        corridor=FleetMissionController.primary_corridor(self) if robot!='tb1' else []
+        initial=FleetMissionController.primary_corridor_gap(self,robot,start,corridor)
+        def free(pose):
+            if FleetMissionController.primary_corridor_gap(self,robot,pose,corridor)<min(initial,self.p['primary_minimum_separation'])-1e-6:return False
+            for topic in ('/map',f'/{robot}/global_costmap/costmap',f'/{robot}/local_costmap/costmap'):
+                grid=self.grids.get(topic)
+                local=self.in_frame(robot,pose,grid.frame) if grid else None
+                if local is None or not grid.footprint_free(local,self.polygons[robot],self.p['footprint_padding'],98):return False
+            return True
+        targets=sorted(obstacle_detour_candidates(start,goal,side),
+            key=lambda target:distance(start,target)+distance(target,goal))
+        for target in targets:
+            if not self.feasible(robot,target):continue
+            if stationary_route_clear(start,[target],robot,poses,self.polygons,
+                self.p['minimum_separation'],self.p['primary_minimum_separation'],free=free):return target
+        return None
 
     def clearance_tick(self):
         now=self.clock_value
@@ -786,13 +857,13 @@ class FleetMissionController(Node):
         for winner,loser in sorted(self.unresolved_pairs):
             pair=(winner,loser);since=self.conflict_since.setdefault(pair,now)
             if now-since<self.p['yield_recovery_delay']:continue
-            if winner=='tb1':continue
-            target=self.clearance_target(winner,loser)
+            moving,held=(loser,winner) if winner=='tb1' else (winner,loser)
+            target=self.clearance_target(moving,held)
             if target is None:continue
-            self.clearance_maneuver={'robot':winner,'peer':loser,'target':target}
-            self.cancel(winner)
-            self.slots[winner]['retries']=0;self.slots[winner]['cooldown']=0.
-            self.get_logger().info(f'{loser} yielding: {winner} taking a temporary clearance waypoint')
+            self.clearance_maneuver={'robot':moving,'peer':held,'target':target}
+            self.cancel(moving)
+            self.slots[moving]['retries']=0;self.slots[moving]['cooldown']=0.
+            self.get_logger().info(f'{moving} taking a clearance waypoint; {held} held until safe')
             return
 
     def clearance_target(self,robot,peer):
@@ -801,6 +872,8 @@ class FleetMissionController(Node):
         initial=footprint_clearance(start,poly,other,self.polygons[peer])
         peer_gap=pair_separation(robot,peer,self.p['minimum_separation'],self.p.get('primary_minimum_separation'))
         preferred=self.targets.get(robot,start);options=[]
+        corridor=FleetMissionController.primary_corridor(self) if robot!='tb1' else []
+        initial_corridor=FleetMissionController.primary_corridor_gap(self,robot,start,corridor)
         for radius in (.6,1.,self.p['yield_clearance_distance']):
             for i in range(16):
                 angle=2*math.pi*i/16
@@ -811,7 +884,8 @@ class FleetMissionController(Node):
                 safe=True
                 for j in range(1,11):
                     sample=(start[0]+(target[0]-start[0])*j/10,start[1]+(target[1]-start[1])*j/10,start[2])
-                    if not self.feasible(robot,sample,peers=False):safe=False;break
+                    if not self.feasible(robot,sample,peers=False,reserve_primary=False):safe=False;break
+                    if FleetMissionController.primary_corridor_gap(self,robot,sample,corridor)<min(initial_corridor,self.p.get('primary_minimum_separation',self.p['minimum_separation']))-1e-6:safe=False;break
                     for r,p in self.poses.items():
                         if r==robot:continue
                         before=footprint_clearance(start,poly,p,self.polygons[r])
@@ -929,6 +1003,7 @@ class FleetMissionController(Node):
                 commands['tb1']=self.rolling_turn_command(requested,commands,collision_poses)
                 self.rolling_turn_active=commands['tb1']!=requested
             self.blocked=set()
+            corridor=FleetMissionController.primary_corridor(self)
             self.local_blocked=set();escape_commands=set()
             for r,recovery in getattr(self,'obstacle_recoveries',{}).items():
                 if recovery.get('target') is None:
@@ -954,6 +1029,9 @@ class FleetMissionController(Node):
                     projected=advance(self.poses[r],(v,w),dt)
                     local=self.in_frame(r,projected,grid.frame)
                     if local is None or not grid.footprint_free(local,self.polygons[r],self.p['footprint_padding'],98):commands[r]=(0.,0.);self.blocked.add(r);self.local_blocked.add(r);break
+            for r in ROBOTS[1:]:
+                if commands[r]!=(0.,0.) and not FleetMissionController.auxiliary_corridor_safe(self,r,collision_poses[r],commands[r],corridor):
+                    commands[r]=(0.,0.);self.blocked.add(r);self.local_blocked.add(r)
             commands,blocked,self.yielding,self.unresolved_pairs=yielding_gate(
                 collision_poses,commands,self.polygons,self.p['minimum_separation'],self.p['collision_horizon'],self.p.get('primary_minimum_separation'))
             self.blocked|=blocked
@@ -961,13 +1039,14 @@ class FleetMissionController(Node):
             # Detect those waits too, rather than waiting for the fleet watchdog.
             for i,a in enumerate(ROBOTS):
                 for b in ROBOTS[i+1:]:
-                    winner,loser=sorted((a,b),key=lambda r:(r=='tb1',r))
-                    target=self.targets.get(winner)
-                    progress_age=self.clock_value-self.slots[winner].get('progress_sim',self.clock_value)
-                    if (target is not None and self.slots[winner]['handle'] is not None
-                        and not self.arrived(winner,target)
+                    winner,loser=sorted((a,b),key=lambda r:(r!='tb1',r))
+                    watched=winner if self.slots[winner]['handle'] is not None else loser
+                    target=self.targets.get(watched)
+                    progress_age=self.clock_value-self.slots[watched].get('progress_sim',self.clock_value)
+                    if (target is not None and self.slots[watched]['handle'] is not None
+                        and not self.arrived(watched,target)
                         and (progress_age>=self.p['yield_recovery_delay'] or
-                             (abs(commands[winner][0])<1e-4 and abs(commands[winner][1])<.04))
+                             (abs(commands[watched][0])<1e-4 and abs(commands[watched][1])<.04))
                         and distance(collision_poses[a],collision_poses[b])<self.radii[a]+self.radii[b]+pair_separation(a,b,self.p['minimum_separation'],self.p.get('primary_minimum_separation'))+.5):
                         self.unresolved_pairs.add((winner,loser));self.yielding[loser]=winner
                         commands[loser]=(0.,0.)
@@ -984,6 +1063,7 @@ class FleetMissionController(Node):
 
     def rolling_turn_command(self,requested,commands,poses):
         """Prefer a rolling turn only when its entire short arc is verified free."""
+        options=[]
         for candidate in rolling_turn_candidates(requested,self.p['rolling_turn_speed'],self.p['rolling_turn_rate']):
             safe=True
             for peer in ROBOTS[1:]:
@@ -998,8 +1078,13 @@ class FleetMissionController(Node):
                     local=self.in_frame('tb1',projected,grid.frame) if grid is not None else None
                     if local is None or not grid.footprint_free(local,self.polygons['tb1'],self.p['footprint_padding'],98):safe=False;break
                 if not safe:break
-            if safe:return candidate
-        return requested
+            if safe:options.append(candidate)
+        if not options:return requested
+        goal=getattr(self,'primary',None)
+        if goal is None:return options[0]
+        # Keep angular intent, but select reverse when it gives a better
+        # position for the turn. Both complete swept arcs passed every gate.
+        return min(options,key=lambda c:distance(advance(poses['tb1'],c,self.p['collision_horizon']),goal))
 
     def stop_service(self,req,res):
         self.obstacle_recoveries={};self.obstacle_since={}

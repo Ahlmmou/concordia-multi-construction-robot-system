@@ -3,6 +3,7 @@
 - All project changes and commits must use the exact branch `test_mcp`.
 - Never commit on another branch. Check the branch before every commit.
 - Commit completed, tested changes. Do not push unless explicitly requested.
+- Use the existing `Ahlmmou/concordia-multi-construction-robot-system` GitHub repository and repository-local author `ahlam <ahlmmou@gmail.com>` for commits.
 - Preserve existing uncommitted work: never reset, discard, overwrite, or include unrelated changes in commits.
 - If switching branches endangers edits, use an isolated worktree on `test_mcp` when possible; explain genuine blockers without discarding work.
 - Run Gazebo headlessly with its simulation server active and GUI disabled.

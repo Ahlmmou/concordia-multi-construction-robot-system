@@ -13,13 +13,13 @@ def fleet():
             {r:(0.,0.) for r in ROBOTS},{r:BOX for r in ROBOTS})
 
 @pytest.mark.parametrize('aux',ROBOTS[1:])
-def test_leader_yields_to_any_crossing_auxiliary(aux):
+def test_crossing_auxiliary_yields_to_hilti(aux):
     p,c,polys=fleet();p['tb1']=(0.,0.,0.);p[aux]=(1.5,-1.5,math.pi/2)
     c['tb1']=(1.,0.);c[aux]=(1.,0.)
     gated,blocked,yields,pairs=yielding_gate(p,c,polys,.4,2.)
-    assert gated['tb1']==(0.,0.) and gated[aux]==c[aux]
-    assert blocked=={'tb1'} and yields=={'tb1':aux} and not pairs
-    # Once the auxiliary has passed, the original leader command resumes.
+    assert gated['tb1']==c['tb1'] and gated[aux]==(0.,0.)
+    assert blocked=={aux} and yields=={aux:'tb1'} and not pairs
+    # After Hilti passes the crossing, both commands are permitted.
     p[aux]=(1.5,2.,math.pi/2)
     gated,blocked,yields,_=yielding_gate(p,c,polys,.4,2.)
     assert gated['tb1']==c['tb1'] and not blocked and not yields
@@ -39,7 +39,7 @@ def test_head_on_does_not_drive_priority_robot_into_stopped_peer():
     c['tb1']=(.8,0.);c['tb4']=(.8,0.)
     gated,blocked,yields,pairs=yielding_gate(p,c,polys,.4,2.)
     assert gated['tb1']==gated['tb4']==(0.,0.)
-    assert pairs=={('tb4','tb1')} and blocked=={'tb1','tb4'}
+    assert pairs=={('tb1','tb4')} and blocked=={'tb1','tb4'}
 
 
 def test_stationary_third_robot_still_protected():
@@ -87,12 +87,12 @@ def test_reverse_escape_is_allowed_but_rear_peer_remains_protected():
     assert gated['tb1']==(0.,0.) and 'tb1' in blocked
 
 
-def test_reversing_leader_still_yields_to_crossing_auxiliary():
+def test_reversing_hilti_keeps_priority_over_crossing_auxiliary():
     p,c,polys=fleet();p['tb1']=(0.,0.,0.);p['tb3']=(-1.5,-1.5,math.pi/2)
     c['tb1']=(-1.,0.);c['tb3']=(1.,0.)
     gated,blocked,yields,pairs=yielding_gate(p,c,polys,.4,2.)
-    assert gated['tb1']==(0.,0.) and gated['tb3']==c['tb3']
-    assert yields=={'tb1':'tb3'} and not pairs
+    assert gated['tb1']==c['tb1'] and gated['tb3']==(0.,0.)
+    assert yields=={'tb3':'tb1'} and not pairs
     assert advance((0.,0.,0.),(-1.,1.),math.pi/2)==pytest.approx((-1.,-1.,math.pi/2))
 
 

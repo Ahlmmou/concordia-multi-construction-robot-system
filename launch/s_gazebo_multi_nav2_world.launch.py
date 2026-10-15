@@ -203,6 +203,12 @@ def generate_launch_description():
                 s_turtlebot3_multi_robot, 'params', 'nav2_params.yaml')
         
         
+        if robot['name'] == 'tb1':
+            params_file = RewrittenYaml(source_file=params_file, root_key='',
+                param_rewrites={'default_nav_to_pose_bt_xml': os.path.join(
+                    s_turtlebot3_multi_robot, 'config', 'hilti_navigation.xml')},
+                convert_types=True)
+
         # Initialize AMCL from the simulation spawn pose when it activates.
         # This avoids losing one-shot initialpose messages during slow startup.
         params_file = RewrittenYaml(source_file=params_file, root_key='',
