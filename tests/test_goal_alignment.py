@@ -26,5 +26,6 @@ def test_nav2_finishes_inside_supervisor_tolerances(filename):
     params=yaml.safe_load((ROOT/'params'/filename).read_text())['controller_server']['ros__parameters']
     checker=params['goal_checker']
     assert params['FollowPath']['xy_goal_tolerance']==checker['xy_goal_tolerance']<PARAMS['arrival_tolerance']
-    assert checker['yaw_goal_tolerance']<min(PARAMS['yaw_tolerance'],PARAMS['primary_yaw_tolerance'])
+    tolerance=PARAMS['primary_yaw_tolerance'] if filename=='nav2_params_hilti.yaml' else PARAMS['yaw_tolerance']
+    assert checker['yaw_goal_tolerance']<=tolerance
     assert checker['stateful'] is False

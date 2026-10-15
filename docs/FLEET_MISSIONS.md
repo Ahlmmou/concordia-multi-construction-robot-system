@@ -569,8 +569,9 @@ Updates for goal progress, current actions, and blocked reasons.
 ### Final goal alignment
 
 Mission completion requires position error at most 0.15 m and heading error at
-most 0.05 rad for tb1 or 0.06 rad for auxiliaries. Nav2 checks 0.10 m and
-0.04 rad and rechecks XY position during final orientation alignment. The
+most 0.05 rad for tb1 or 0.2618 rad (15 degrees) for auxiliaries. Nav2 checks
+0.10 m, with heading tolerances of 0.04 rad for Hilti and 15 degrees for
+auxiliaries, and rechecks XY position during final orientation alignment. The
 flexible formation freezes final follower slots around the requested primary
 pose and uses its heading, rather than freezing each follower's travel heading.
 Feasible alternative slots remain subject to the existing footprint and peer
@@ -711,3 +712,44 @@ away. If the neighborhood has no safe candidate, the auxiliary holds rather
 than entering an obstacle. Clear auxiliaries also use these adjusted slots
 while Hilti is maneuvering. Status reports `auxiliary_slot_adjustments`, with
 the nominal position, selected position, and offset in metres.
+
+### Short steering sequences in tight spaces
+
+`local_maneuver_search` incrementally compares up to three two-second steering
+segments. Both forward and reverse left/right arcs, straight motion, and
+auxiliary stationary turns are candidates. Different first steering directions
+remain in the search, allowing a forward-left arc followed by a right arc or a
+change of gear. A sequence must improve progress or obstacle-buffer clearance;
+loops without improvement are rejected. Search work is bounded per supervisor
+update, and the robot holds while its search is pending.
+
+Every segment checks swept oriented footprints against maps, stationary peers,
+and predicted commanded peer motion. Each executing segment is checked again
+against current data; a new obstruction stops it and requests another search.
+Action ownership, the final velocity gate, stair exclusion, footprint padding,
+and 0.4 m auxiliary / 0.6 m Hilti physical clearance settings remain active.
+The extra maneuvering buffer can be used temporarily during a checked sequence,
+whose endpoint must restore that preferred spacing (or improve the original
+crowded spacing). This avoids rejecting a useful first turn solely because its
+centre briefly moves closer while its actual footprint remains clear.
+Existing mapped-overlap escape checks also apply to forward arcs that shrink
+the overlap without adding any new occupied static-map cells.
+
+### Keep settled auxiliaries in place
+
+After Hilti reaches its goal, each auxiliary independently locks its accepted
+slot as soon as it meets the position and 15-degree heading tolerances. Slot
+assignment and nearby-slot searches preserve that position while the remaining
+robots finish. Clearance recovery prefers moving the unfinished neighbor rather
+than moving a settled auxiliary based on robot number. A new primary goal
+releases these locks. Otherwise only a newly detected obstacle at the held
+position releases that robot: an increase in local obstacle overlap or an
+actual peer entering its physical separation envelope. Missing sensor data,
+position-estimate drift, slot swaps, planned routes, and parking preferences
+do not release a settled robot. Its commanded linear and angular velocities
+remain zero through the final gate while held.
+
+Publishing an auxiliary name on `/formation/hold_auxiliary` explicitly accepts
+its current feasible position as its slot for the current mission. Cancellation
+retains the supervisor's action ownership until Nav2 returns its result. Status
+reports these positions in `held_auxiliary_slots`.

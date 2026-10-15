@@ -57,3 +57,12 @@ def test_final_slots_use_requested_position_and_heading_despite_leader_residual_
         send=lambda *a:None,cancel=lambda *a:None)
     FleetMissionController.flexible_tick(node)
     assert node.flexible_final_targets==expected
+
+
+def test_settled_robot_keeps_its_slot_when_other_robots_change_sides():
+    slots=[(-1.,1.,0.),(1.,1.,0.),(-1.,-1.,0.),(1.,-1.,0.)]
+    poses={'tb2':slots[1],'tb3':slots[0],'tb4':slots[3],'tb5':slots[2]}
+    previous={'tb2':0,'tb3':1,'tb4':2,'tb5':3}
+    assigned=flexible_assignment(poses,slots,previous,locked={'tb3':1})
+    assert assigned['tb3']==1
+    assert len(set(assigned.values()))==4

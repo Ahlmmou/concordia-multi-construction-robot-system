@@ -49,7 +49,8 @@ fleet_mission_controller:
     update_angle: 0.5
     minimum_goal_interval: 4.0
     arrival_tolerance: 0.15
-    yaw_tolerance: 0.06
+    # Auxiliaries may finish within 15 degrees of the requested heading.
+    yaw_tolerance: 0.2617993878
     # Finish within 15 cm; Hilti heading within about 3 degrees of the goal arrow.
     primary_yaw_tolerance: 0.05
     alternative_radius: 1.5
@@ -61,6 +62,7 @@ fleet_mission_controller:
     yield_clearance_distance: 1.5
     obstacle_recovery_delay: 3.0
     obstacle_escape_speed: 0.12
+    local_maneuver_search: true
     # Bounded checked maneuvers before replanning a blocked Hilti goal.
     primary_maneuver_delay: 0.5
     primary_maneuver_distance: 1.8

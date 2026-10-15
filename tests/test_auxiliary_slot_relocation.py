@@ -84,3 +84,23 @@ def test_stable_shifted_position_still_uses_requested_final_heading():
     selected=C.choose(n,'tb4',preferred,{})
     updated=C.choose(n,'tb4',(4.,3.,.25),{})
     assert updated[:2]==selected[:2] and updated[2]==.25
+
+
+def test_settled_auxiliary_does_not_chase_a_new_nearby_candidate():
+    n,_=node();held=(4.3,3.,.2);n.held_auxiliary_slots={'tb4':held}
+    assert C.choose(n,'tb4',(4.,3.,.2),{})==held
+    n.feasible=lambda *a:False
+    assert C.choose(n,'tb4',(4.,3.,.2),{})==held
+    assert 'tb4' in n.held_auxiliary_slots
+
+
+def test_clearance_moves_unfinished_robot_before_settled_neighbor():
+    n,_=node();requested=[]
+    n.clock_value=10.;n.p['yield_recovery_delay']=3.
+    n.clearance_maneuver=None;n.conflict_since={('tb3','tb4'):0.}
+    n.unresolved_pairs={('tb3','tb4')};n.held_auxiliary_slots={'tb3':(4.,3.,0.)}
+    n.clearance_target=lambda moving,held:(requested.append((moving,held)) or (6.,3.,0.))
+    C.clearance_tick(n)
+    assert requested==[('tb4','tb3')]
+    assert 'tb3' in n.held_auxiliary_slots
+    assert n.clearance_maneuver['robot']=='tb4'

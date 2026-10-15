@@ -73,10 +73,10 @@ def rectangle(leader, half_length, half_width):
     return result
 
 
-def flexible_assignment(poses, slots, previous=None, switch_penalty=0.8):
+def flexible_assignment(poses, slots, previous=None, switch_penalty=0.8, locked=None):
     """Choose interchangeable follower slots with assignment hysteresis."""
     previous = previous or {}
-    order = min(permutations(range(4)), key=lambda order: sum(
+    order = min((order for order in permutations(range(4)) if all(order[ROBOTS[1:].index(r)]==i for r,i in (locked or {}).items())), key=lambda order: sum(
         distance(poses[r], slots[i]) +
         (switch_penalty if r in previous and previous[r] != i else 0.)
         for r, i in zip(ROBOTS[1:], order)))
@@ -512,3 +512,32 @@ def follower_lag_gate(poses,commands,maximum_lag,recovering=(),allow_turning=Fal
         if follower not in recovering and distance(poses[robot],poses[follower])>maximum_lag:
             result[robot]=(0.,result[robot][1] if allow_turning else 0.)
     return result
+
+
+def maneuver_sequence_search(start,goal,controls,duration,safe,score,depth=3,beam_width=4,terminal=None):
+    """Incremental bounded search; yield after each checked segment.
+
+    Keeping several branches permits left/right and forward/reverse changes
+    even when a useful first segment temporarily increases goal distance.
+    The caller resumes this generator within its planning time budget.
+    """
+    beam=[(score(start),start,[])];best=None
+    for level in range(depth):
+        expanded=[]
+        for _,pose,sequence in beam:
+            for command in controls:
+                if safe(pose,command,len(sequence)*duration):
+                    end=advance(pose,command,duration)
+                    candidate=(score(end)+.01*(len(sequence)+1),end,sequence+[command])
+                    expanded.append(candidate)
+                    if len(candidate[2])>=2 and (terminal is None or terminal(end)) and (best is None or candidate[0]<best[0]):best=candidate
+                yield None
+        if not expanded:break
+        # Preserve different first steering choices instead of filling the beam
+        # with nearly identical straight trajectories.
+        ordered=sorted(expanded,key=lambda item:item[0]);beam=[];first=set()
+        for item in ordered:
+            key=item[2][0]
+            if key not in first:beam.append(item);first.add(key)
+            if len(beam)>=beam_width:break
+    return best[2] if best is not None and best[0]<score(start)-.01 else []

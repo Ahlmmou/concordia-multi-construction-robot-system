@@ -106,7 +106,8 @@ def test_healthy_primary_continues_during_auxiliary_recovery_unless_actual_clear
     command=Twist();command.linear.x=.2
     n.commands={'tb1':(command,time.monotonic())};n.manual=False;n.ready=lambda:(True,'')
     n.targets={'tb1':(50.,0.,0.)};n.slots['tb1']['handle']=object()
-    n.obstacle_recoveries={'tb3':{'target':None}};n.obstacle_escape_command=lambda *x:(0.,0.)
+    n.obstacle_recoveries={'tb3':{'target':None}};n.obstacle_escape_command=lambda *x:(.2,.3)
+    n.held_auxiliary_slots={'tb3':n.poses['tb3']}
     n.clearance_maneuver=None;n.arrived=lambda *x:False
     n.grids={f'/{r}/local_costmap/costmap':NS(frame='map',footprint_free=lambda *x:True) for r in ROBOTS}
     published={};n.cmd_pubs={r:NS(publish=lambda m,r=r:published.update({r:(m.linear.x,m.angular.z)})) for r in ROBOTS}
