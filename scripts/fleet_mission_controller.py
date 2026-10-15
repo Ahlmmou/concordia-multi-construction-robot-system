@@ -547,7 +547,10 @@ class FleetMissionController(Node):
                     slot['progress_sim']=self.clock_value
                     continue
                 previous=slot.get('progress_pose')
-                if previous is None or distance(previous,self.poses[robot])>.1:
+                final_turn=(robot=='tb1' and self.primary is not None and
+                    distance(self.poses[robot],self.primary)<=self.p['arrival_tolerance']+.1 and previous is not None and
+                    abs(wrap(previous[2]-self.primary[2]))-abs(wrap(self.poses[robot][2]-self.primary[2]))>.05)
+                if previous is None or distance(previous,self.poses[robot])>.1 or final_turn:
                     slot['progress_pose']=self.poses[robot];slot['progress_sim']=self.clock_value
                 elif self.clock_value-slot.get('progress_sim',self.clock_value)>self.p['progress_timeout']:
                     if self.requested_mode=='SINGLE_FILE' and self.state=='TRAVELLING' and robot!='tb1':
@@ -840,7 +843,11 @@ class FleetMissionController(Node):
         if not getattr(self,'primary_space_active',False):return True
         initial=distance(pose,leader);required=FleetMissionController.primary_space_radius(self,robot)
         distances=[distance(advance(pose,command,self.p['collision_horizon']*i/10),leader) for i in range(1,11)]
-        return min(distances)>=min(initial,required)-1e-6 and (initial>=required or distances[-1]>initial+1e-4 or abs(command[0])<1e-4)
+        outward=min(distances)>=min(initial,required)-1e-6 and (initial>=required or distances[-1]>initial+1e-4 or abs(command[0])<1e-4)
+        # The additional maneuvering buffer is a preference. A checked reverse
+        # out of an existing map overlap may cross it; physical peer separation
+        # and the reserved-route gate still apply independently.
+        return outward or FleetMissionController.mapped_retreat_safe(self,robot,pose,command)
 
     def flexible_tick(self):
         # The leader follows Nav2 independently of the visual polygon.
@@ -937,7 +944,8 @@ class FleetMissionController(Node):
             if reference is not None and remaining<reference-.3:
                 self.primary_maneuver_attempts=0;self.primary_maneuver_goal_distance=remaining
             slot=self.slots['tb1']
-            stalled=slot.get('handle') is not None and self.clock_value-slot.get('progress_sim',self.clock_value)>=self.p['obstacle_recovery_delay']
+            stalled=(slot.get('handle') is not None and remaining>self.p.get('arrival_tolerance',.15)+.6 and
+                self.clock_value-slot.get('progress_sim',self.clock_value)>=self.p['obstacle_recovery_delay'])
             if 'tb1' in getattr(self,'blocked',set()) or any('tb1' in pair for pair in getattr(self,'unresolved_pairs',set())) or stalled:blocked.add('tb1')
         for robot in list(self.obstacle_since):
             if robot not in blocked and robot not in self.obstacle_recoveries:self.obstacle_since.pop(robot,None)
@@ -960,7 +968,7 @@ class FleetMissionController(Node):
                 self.primary_maneuver_goal_distance=remaining if reference is None else min(reference,remaining)
                 mode='primary_maneuver'
             self.obstacle_recoveries[robot]={'target':None,'started':self.clock_value,'start_pose':self.poses[robot],'mode':mode,'state':'Checking escape route'}
-            self.get_logger().info(f'{robot}: starting checked local reverse/turn recovery' if robot=='tb1' else f'{robot}: starting local obstacle escape recovery')
+            self.get_logger().info(f'{robot}: starting checked local reverse/turn recovery (local={robot in self.local_blocked}, gate={robot in getattr(self,"blocked",set())}, peers={getattr(self,"unresolved_pairs",set())}, stalled={stalled})' if robot=='tb1' else f'{robot}: starting local obstacle escape recovery')
 
     def primary_maneuver_safe(self,command,poses,peer_commands,horizon=None):
         start=poses['tb1'];horizon=self.p['collision_horizon'] if horizon is None else horizon
@@ -1006,16 +1014,26 @@ class FleetMissionController(Node):
         forward_fits=(turn_horizon<=10. and distance(end,self.primary)<distance(current,self.primary)-.05 and
             FleetMissionController.primary_maneuver_safe(self,forward,poses,peer_commands,turn_horizon))
         reversing=recovery.get('command',(0.,0.))[0]<0
-        if (recovery.get('phase')=='forward' or (reversing and distance(start,current)>=.15)) and forward_fits:
-            recovery.setdefault('forward_start',current)
-            recovery['phase']='forward';recovery['command']=forward
-            recovery['state']='Checked forward turn toward goal'
-            if abs(error)<=.12 and distance(current,recovery['forward_start'])>=.15:
+        if recovery.get('phase')=='forward':
+            # Commit to one forward segment. Re-scoring its complete endpoint
+            # every tick used to switch gear as the goal bearing changed.
+            progress=distance(current,recovery['forward_start'])
+            if progress>=.25 or (progress>=.15 and (abs(error)<=.12 or distance(current,self.primary)<.4)):
                 recovery['forward_ready']=True
                 return (0.,0.)
+            committed=recovery['command']
+            if FleetMissionController.primary_maneuver_safe(self,committed,poses,peer_commands):
+                recovery.pop('forward_blocked_since',None)
+                return committed
+            since=recovery.setdefault('forward_blocked_since',self.clock_value)
+            recovery['state']='Forward maneuver obstructed; holding before replanning'
+            if self.clock_value-since>=1.:recovery['forward_ready']=True
+            return (0.,0.)
+        if reversing and distance(start,current)>=.15 and forward_fits:
+            recovery['forward_start']=current
+            recovery['phase']='forward';recovery['command']=forward
+            recovery['state']='Checked forward turn toward goal'
             return forward
-        if recovery.get('phase')=='forward':
-            recovery.pop('forward_start',None);recovery['phase']='reverse'
         groups=[ [(-speed,0.),(-speed,rate),(-speed,-rate)],
                  [(speed,rate),(speed,-rate),(speed,0.)] ]
         for choices in groups:
@@ -1032,6 +1050,8 @@ class FleetMissionController(Node):
                     return gap-.25*abs(wrap(heading-end[2]))
                 chosen=max(safe,key=score)
             recovery['command']=chosen
+            if chosen[0]>0:
+                recovery['phase']='forward';recovery['forward_start']=current
             recovery['state']='Checked reverse maneuver' if chosen[0]<0 else 'Checked forward/turn maneuver'
             return chosen
         recovery['state']='No verified reverse or turning route; waiting for space'
@@ -1052,10 +1072,12 @@ class FleetMissionController(Node):
             self.p['collision_horizon']) for r,other in poses.items() if r!=robot
             for other_command in ((0.,0.),(peer_commands or {}).get(r,(0.,0.))))]
         corridor=FleetMissionController.primary_corridor(self) if robot!='tb1' else []
+        mapped_retreat=False
         def verify(projected):
             dx,dy=rotate(projected[0]-local[0],projected[1]-local[1],pose[2]-local[2])
             world=(pose[0]+dx,pose[1]+dy,pose[2]+projected[2]-local[2])
             if not FleetMissionController.primary_corridor_pose_safe(self,robot,pose,world,corridor):return False
+            if mapped_retreat:return True
             for topic in ('/map',f'/{robot}/global_costmap/costmap'):
                 other=self.grids.get(topic)
                 transformed=self.in_frame(robot,world,other.frame) if other else None
@@ -1065,7 +1087,12 @@ class FleetMissionController(Node):
             choices=[c for c in choices if FleetMissionController.auxiliary_corridor_safe(self,robot,pose,c,corridor)]
         if robot!='tb1':
             choices=[c for c in choices if FleetMissionController.primary_space_command_safe(self,robot,pose,c,poses['tb1'])]
-        command=inflation_escape(grid,local,self.polygons[robot],choices,self.p['footprint_padding'],self.p['collision_horizon'],verify)
+        command=None
+        for candidate in choices:
+            mapped_retreat=FleetMissionController.mapped_retreat_safe(self,robot,pose,candidate)
+            command=inflation_escape(grid,local,self.polygons[robot],[candidate],self.p['footprint_padding'],self.p['collision_horizon'],verify)
+            if command is not None:break
+        mapped_retreat=False
         if command is not None:
             recovery['state']='Escaping obstacle buffer';recovery['command']=command;return command
         # If already physically outside the inflated zone, replan to a nearby
@@ -1216,6 +1243,44 @@ class FleetMissionController(Node):
         else:
             self.phase='BOUNDARY_TRAVELLING';self.set_state(self.phase,'Moving enclosing rectangle toward primary goal')
 
+    def mapped_retreat_safe(self,robot,pose,command):
+        """Exit an existing mapped overlap without touching any new hazard cell.
+
+        Full configured padding is retained. Only auxiliary reverse recovery
+        may use this: lidar must independently verify the physical body.
+        """
+        if robot=='tb1' or command[0]>=0 or robot not in getattr(self,'obstacle_recoveries',{}):return False
+        horizon=self.p['collision_horizon'];radius=self.radii[robot]
+        count=max(20,math.ceil((abs(command[0])+radius*abs(command[1]))*horizon/.02))
+        lidar=self.grids.get(f'/{robot}/local_costmap/costmap')
+        if lidar is None:return False
+        for i in range(count+1):
+            local=self.in_frame(robot,advance(pose,command,horizon*i/count),lidar.frame)
+            if local is None or not lidar.footprint_free(local,self.polygons[robot],.02,99):return False
+        for topic in ('/map',f'/{robot}/global_costmap/costmap'):
+            grid=self.grids.get(topic)
+            if grid is None or not hasattr(grid,'footprint_indices'):return False
+            previous=None;initial=None;previous_risk=None;initial_risk=None
+            for i in range(count+1):
+                local=self.in_frame(robot,advance(pose,command,horizon*i/count),grid.frame)
+                indices=grid.footprint_indices(local,self.polygons[robot],self.p['footprint_padding']+.025) if local is not None else None
+                if indices is None or not len(indices):return False
+                values=grid.cells.ravel()[indices]
+                if (values<0).any():return False
+                # Inflation cells may shift along a wall during the existing
+                # inflation-escape policy; lethal map cells may never be added.
+                occupied=set(indices[values>(98 if topic=='/map' else 99)].tolist())
+                if topic!='/map':
+                    risk=float((values>=99).sum())/len(values)
+                    if initial_risk is None:initial_risk=risk
+                    if risk>initial_risk+.01 or (previous_risk is not None and risk>previous_risk+.01):return False
+                    previous_risk=risk
+                if previous is not None and not occupied.issubset(previous):return False
+                if initial is None:initial=occupied
+                previous=occupied
+            if initial and len(previous)>=len(initial):return False
+        return True
+
     def static_motion_safe(self,robot,pose,command):
         """Never let lidar clearing or local recovery override mapped hazards."""
         grid=self.grids.get('/map')
@@ -1228,7 +1293,8 @@ class FleetMissionController(Node):
         for i in range(count+1):
             projected=advance(pose,command,horizon*i/count)
             local=self.in_frame(robot,projected,grid.frame)
-            if local is None or not grid.footprint_free(local,self.polygons[robot],self.p['footprint_padding']+.025,98):return False
+            if local is None or not grid.footprint_free(local,self.polygons[robot],self.p['footprint_padding']+.025,98):
+                return FleetMissionController.mapped_retreat_safe(self,robot,pose,command)
         return True
 
     def gate(self):

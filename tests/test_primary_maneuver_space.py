@@ -177,3 +177,38 @@ def test_auxiliary_detour_checks_reverse_without_waiting_for_inflation_overlap()
     assert n.obstacle_recoveries['tb3']['mode']=='escape'
     n.slots['tb3']['handle']=object()
     assert C.obstacle_escape_command(n,'tb3',n.poses,{})==(0.,0.)
+
+
+def test_mapped_overlap_retreat_retains_padding_and_never_enters_new_hazard_cells():
+    import numpy as np
+    from formation_geometry import Grid
+    n,*_=node(False);n.poses['tb3']=(0.,3.,0.)
+    g=Grid.__new__(Grid);g.frame='map';g.origin=(-10.,-10.);g.angle=0.;g.resolution=.05
+    g.cells=np.zeros((400,400),dtype=np.int8);g.cells[:,204:]=100
+    lidar=Grid.__new__(Grid);lidar.__dict__.update(g.__dict__);lidar.cells=np.zeros_like(g.cells)
+    n.grids={'/map':g,'/tb3/global_costmap/costmap':g,'/tb3/local_costmap/costmap':lidar}
+    n.obstacle_recoveries={'tb3':{'target':None,'mode':'escape'}}
+    pose=n.poses['tb3']
+    assert not g.footprint_free(pose,BOX,.145,98)
+    assert C.mapped_retreat_safe(n,'tb3',pose,(-.12,0.))
+    assert C.static_motion_safe(n,'tb3',pose,(-.12,0.))
+    assert not C.mapped_retreat_safe(n,'tb3',pose,(.12,0.))
+    g.cells[255:265,190:193]=100 # A newly encountered obstacle behind it.
+    assert not C.mapped_retreat_safe(n,'tb3',pose,(-.12,0.))
+    g.cells[255:265,190:193]=-1
+    assert not C.mapped_retreat_safe(n,'tb3',pose,(-.12,0.))
+
+
+def test_mapped_retreat_requires_owned_recovery_and_lidar_clear_body():
+    import numpy as np
+    from formation_geometry import Grid
+    n,*_=node(False);pose=(0.,0.,0.)
+    g=Grid.__new__(Grid);g.frame='map';g.origin=(-5.,-5.);g.angle=0.;g.resolution=.05
+    g.cells=np.zeros((200,200),dtype=np.int8);g.cells[:,104:]=100
+    lidar=Grid.__new__(Grid);lidar.__dict__.update(g.__dict__);lidar.cells=np.zeros_like(g.cells)
+    n.grids={'/map':g,'/tb3/global_costmap/costmap':g,'/tb3/local_costmap/costmap':lidar}
+    assert not C.mapped_retreat_safe(n,'tb3',pose,(-.12,0.))
+    n.obstacle_recoveries={'tb3':{}}
+    assert C.mapped_retreat_safe(n,'tb3',pose,(-.12,0.))
+    lidar.cells[95:105,95:105]=100
+    assert not C.mapped_retreat_safe(n,'tb3',pose,(-.12,0.))

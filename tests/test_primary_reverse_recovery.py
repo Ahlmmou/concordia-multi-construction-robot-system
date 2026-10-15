@@ -159,3 +159,30 @@ def test_replans_only_after_checked_forward_alignment_and_progress():
     assert recovery['forward_ready']
     C.obstacle_tick(n)
     assert 'tb1' not in n.obstacle_recoveries
+
+
+def test_forward_commit_does_not_reverse_when_goal_bearing_changes():
+    n,*_=node();n.p['primary_maneuver_angle']=1.2;n.p['primary_maneuver_distance']=1.8
+    r=n.obstacle_recoveries['tb1'];r.update(phase='forward',forward_start=(0.,0.,0.),command=(.12,.15))
+    n.poses['tb1']=(.1,0.,0.);n.primary=(.11,.1,0.)
+    assert C.primary_maneuver_command(n,n.poses,{})==(.12,.15)
+    n.poses['tb1']=(.26,0.,0.)
+    assert C.primary_maneuver_command(n,n.poses,{})==(0.,0.)
+    assert r['forward_ready']
+
+
+def test_obstructed_forward_commit_stops_then_replans_without_gear_switch():
+    n,*_=node(free=lambda p:False)
+    r=n.obstacle_recoveries['tb1'];r.update(phase='forward',forward_start=(0.,0.,0.),command=(.12,.15))
+    assert C.primary_maneuver_command(n,n.poses,{})==(0.,0.)
+    assert r['phase']=='forward' and not r.get('forward_ready')
+    n.clock_value=1.1
+    assert C.primary_maneuver_command(n,n.poses,{})==(0.,0.)
+    assert r['forward_ready']
+
+
+def test_final_orientation_is_not_mistaken_for_translation_stall():
+    n,cancelled,_=node();n.obstacle_recoveries={};n.primary=(.3,0.,1.)
+    n.slots['tb1'].update(handle=object(),progress_sim=0.);n.clock_value=10.
+    C.obstacle_tick(n)
+    assert not cancelled and not n.obstacle_recoveries

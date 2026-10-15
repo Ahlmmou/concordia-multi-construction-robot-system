@@ -70,3 +70,13 @@ def test_static_velocity_gate_blocks_entry_through_open_door_including_reverse(r
     assert Controller.static_motion_safe(n,robot,(36.8,-1.2,math.pi),(.2,0.))
     n.grids.pop('/map')
     assert not Controller.static_motion_safe(n,robot,(36.8,-1.2,0.),(.1,0.))
+
+
+def test_auxiliary_reverse_overlap_recovery_cannot_enter_stair_exclusion():
+    n=node_with_protected_map();robot='tb4'
+    n.polygons[robot]=[(-.1,-.1),(-.1,.1),(.1,.1),(.1,-.1)]
+    n.radii={robot:.15};n.obstacle_recoveries={robot:{'mode':'escape'}}
+    n.grids[f'/{robot}/global_costmap/costmap']=n.grids['/map']
+    n.grids[f'/{robot}/local_costmap/costmap']=NS(frame='map',footprint_free=lambda *a:True)
+    assert not Controller.mapped_retreat_safe(n,robot,(37.2,-1.2,math.pi),(-.5,0.))
+    assert not Controller.static_motion_safe(n,robot,(37.2,-1.2,math.pi),(-.5,0.))

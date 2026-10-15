@@ -664,8 +664,13 @@ checked reverse and reverse arcs, then considers forward arcs. Hilti does not fa
 in this recovery.
 After backing at least 0.15 m, it checks the complete forward heading
 correction (up to 10 simulation seconds of swept motion). It keeps backing
-until that arc is clear, then drives forward toward the goal. Nav2 resumes
-after heading alignment within 0.12 rad and 0.15 m of forward progress.
+until that arc is clear, then drives forward toward the goal. Once selected, the forward command stays committed and is rechecked against
+current maps and peers each update. Goal-bearing changes cannot switch it
+back into reverse. Nav2 resumes after 0.25 m of forward progress, or after
+0.15 m when aligned within 0.12 rad or within 0.4 m of the goal. A newly
+blocked forward segment stops and replans after one simulation second,
+without changing gear. Near-goal heading alignment is not treated as a
+translation stall; angular progress toward the final heading counts as progress.
 Each maneuver is bounded by 1.8 m displacement, 1.2 rad rotation, or 35
 simulation seconds; reaching a bound also replans the original goal. All swept-map and peer-clearance checks remain
 active; starting inside costmap inflation uses the existing inflation escape
@@ -679,3 +684,13 @@ already outside costmap inflation. Action cancellation must finish first;
 all commands retain the supervisor velocity gate and physical clearances.
 Partial outward waypoints may progressively leave the reserved route rather
 than requiring a single waypoint to clear the entire corridor.
+
+If an auxiliary starts with a mapped overlap while lidar verifies its physical
+body is clear, a checked reverse may leave that overlap. The full configured
+padding plus the normal static guard allowance is retained: occupied static-map
+cells under the footprint must form a shrinking subset at every sample, with
+no new occupied or unknown cells. Global lethal cells obey the same rule;
+inflation uses the existing non-deepening escape policy. Lidar checks the body
+throughout the swept motion. This escape may temporarily cross the extra
+maneuvering buffer, but all physical peer clearances and the reserved-route
+gate still apply. It cannot authorize entry into the stair exclusion.

@@ -119,6 +119,11 @@ class Grid:
 
     def footprint_values(self, pose, polygon, padding=0.1):
         """Cells under the padded footprint, or None when outside the map."""
+        indices=self.footprint_indices(pose,polygon,padding)
+        return None if indices is None else self.cells.ravel()[indices]
+
+    def footprint_indices(self,pose,polygon,padding=.1):
+        """Flat map cell indices covered by the same padded footprint check."""
         px, py = rotate(pose[0]-self.origin[0], pose[1]-self.origin[1], -self.angle)
         theta = pose[2]-self.angle
         vertices = np.array([rotate(x, y, theta) for x, y in polygon]) + (px, py)
@@ -137,8 +142,8 @@ class Grid:
         for a,b in zip(vertices,np.roll(vertices,-1,axis=0)):
             dx,dy=b-a
             inside &= orientation*(dx*(yy-a[1])-dy*(xx-a[0])) >= -margin*math.hypot(dx,dy)
-        values=self.cells[low[1]:high[1]+1,low[0]:high[0]+1][inside]
-        return values
+        rows,cols=np.nonzero(inside)
+        return (rows+low[1])*w+cols+low[0]
 
     def inflation_overlap(self,pose,polygon,padding=.12):
         values=self.footprint_values(pose,polygon,padding)
