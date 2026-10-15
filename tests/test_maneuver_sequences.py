@@ -76,3 +76,18 @@ def test_segment_uses_oriented_physical_peer_clearance_without_reducing_limits()
 def test_no_progress_turning_loop_is_not_selected():
     sequence=finish(maneuver_sequence_search((0.,0.,0.),(1.,0.,0.),[(0.,.5),(0.,-.5)],2.,lambda *a:True,lambda p:distance(p,(1.,0.)),depth=3))
     assert sequence==[]
+
+
+def test_parking_recovery_backs_through_a_long_arc_before_changing_gear():
+    start=(0.,0.,0.);checked=[]
+    def safe(p,c,offset):checked.append((c,offset));return True
+    sequence=finish(maneuver_sequence_search(start,(-2.,0.,0.),[(-.12,.15),(-.12,-.15),(.12,.15)],2.,safe,
+        lambda p:distance(p,(-2.,0.)),parking_distance=.65,parking_rate=.15))
+    assert sequence and sequence[0][0]<0
+    reverse_distance=0.
+    for command in sequence:
+        if command[0]>=0:break
+        reverse_distance+=abs(command[0])*2.
+    assert reverse_distance>=.65
+    assert all(abs(c[1])<=.3 for c in sequence)
+    assert all((c,i*2.) in checked for i,c in enumerate(sequence))

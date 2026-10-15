@@ -514,7 +514,7 @@ def follower_lag_gate(poses,commands,maximum_lag,recovering=(),allow_turning=Fal
     return result
 
 
-def maneuver_sequence_search(start,goal,controls,duration,safe,score,depth=3,beam_width=4,terminal=None):
+def maneuver_sequence_search(start,goal,controls,duration,safe,score,depth=3,beam_width=4,terminal=None,parking_distance=0.,parking_rate=.15):
     """Incremental bounded search; yield after each checked segment.
 
     Keeping several branches permits left/right and forward/reverse changes
@@ -522,15 +522,47 @@ def maneuver_sequence_search(start,goal,controls,duration,safe,score,depth=3,bea
     The caller resumes this generator within its planning time budget.
     """
     beam=[(score(start),start,[])];best=None
+    def trajectory_cost(end,sequence):
+        gears=sum(a[0]*b[0]<0 for a,b in zip(sequence,sequence[1:]))
+        steering=sum(a[1]*b[1]<0 for a,b in zip(sequence,sequence[1:]))
+        return score(end)+.01*len(sequence)+(.08*gears+.02*steering if parking_distance>0. else 0.)
+    if parking_distance>0.:
+        speed=max((abs(v) for v,w in controls if v<0),default=0.)
+        if speed>0.:
+            count=max(2,math.ceil(parking_distance/(speed*duration)))
+            for reverse in ((-speed,parking_rate),(-speed,-parking_rate)):
+                for forward in ((speed,parking_rate),(speed,-parking_rate),(speed,parking_rate*2),(speed,-parking_rate*2),(speed,0.)):
+                    pose=start;sequence=[];valid=True
+                    for command in [reverse]*count+[forward]*count:
+                        valid=safe(pose,command,len(sequence)*duration)
+                        if valid:pose=advance(pose,command,duration);sequence.append(command)
+                        yield None
+                        if not valid:break
+                    if valid and (terminal is None or terminal(pose)):
+                        candidate=(trajectory_cost(pose,sequence),pose,sequence)
+                        if best is None or candidate[0]<best[0]:best=candidate
     for level in range(depth):
         expanded=[]
         for _,pose,sequence in beam:
             for command in controls:
+                # Do not replace a parking arc with rapid reverse/forward
+                # shuffling. The swept checks may still stop it at any moment.
+                reverse_run=0.
+                for v,w in reversed(sequence):
+                    if v>=0.:break
+                    reverse_run+=abs(v)*duration
+                if (command[0]<0 and sequence and sequence[-1][0]<0 and
+                    command[1]*sequence[-1][1]<0 and reverse_run<parking_distance):
+                    yield None
+                    continue
+                if command[0]>0 and sequence and sequence[-1][0]<0 and reverse_run<parking_distance:
+                    yield None
+                    continue
                 if safe(pose,command,len(sequence)*duration):
                     end=advance(pose,command,duration)
-                    candidate=(score(end)+.01*(len(sequence)+1),end,sequence+[command])
+                    candidate=(trajectory_cost(end,sequence+[command]),end,sequence+[command])
                     expanded.append(candidate)
-                    if len(candidate[2])>=2 and (terminal is None or terminal(end)) and (best is None or candidate[0]<best[0]):best=candidate
+                    if len(candidate[2])>=2 and (command[0]>=0 or reverse_run+abs(command[0])*duration>=parking_distance) and (terminal is None or terminal(end)) and (best is None or candidate[0]<best[0]):best=candidate
                 yield None
         if not expanded:break
         # Preserve different first steering choices instead of filling the beam

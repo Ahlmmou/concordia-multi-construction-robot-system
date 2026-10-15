@@ -753,3 +753,23 @@ Publishing an auxiliary name on `/formation/hold_auxiliary` explicitly accepts
 its current feasible position as its slot for the current mission. Cancellation
 retains the supervisor's action ownership until Nav2 returns its result. Status
 reports these positions in `held_auxiliary_slots`.
+
+Parking-style recovery first checks broad reverse arcs of at least
+`parking_reverse_distance` (0.65 m), followed by forward steering out of the
+space. At 0.12 m/s and the normal two-second checked segments, this produces
+about 0.72 m of continuous backing. `parking_turn_rate` defaults to 0.15 rad/s
+(about 0.8 m turning radius). Consecutive identical controls execute without
+stopping between samples. Short reverse runs cannot immediately change gear
+or reverse steering direction; gear and steering changes also carry a search
+penalty. The complete maneuver is checked before execution, and current safety
+checks may still interrupt it. Nearby obstacle-buffer clearance and room for
+turning contribute to the score, so backing away from the goal can be useful.
+
+Moving auxiliary slot selection prefers the nearest feasible candidate whose
+entire padded footprint is at or below `preferred_slot_cost` (0, clear by
+default). It checks global costmap inflation and the local costmap where the
+candidate is covered. If no clear candidate exists within `alternative_radius`,
+it chooses the lowest-cost feasible nearby candidate. Held final slots remain
+locked. Supervisor reloads can restore the prior mission and accepted holds
+atomically through `/formation/restore_mission`, without publishing a new goal
+that briefly releases those robots.

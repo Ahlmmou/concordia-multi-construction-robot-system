@@ -60,3 +60,20 @@ def test_all_arrived_auxiliaries_stay_locked_despite_later_pose_estimate_drift()
     C.flexible_tick(n)
     assert n.primary_goal_reached and set(n.held_auxiliary_slots)==set(targets)
     assert not set(sent)&set(targets)
+
+
+def test_supervisor_reload_restores_settled_locks_before_mission_motion():
+    import json
+    n,risk,_=node();n.state='READY';n.phase='IDLE';n.idle_actions=lambda:True
+    n.mission_number=0;n.p['maximum_localization_error']=.35
+    n.pose_message=lambda goal:goal;n.feasible=lambda *a,**kw:False
+    def primary(goal):
+        n.mission_number+=1;n.held_auxiliary_slots={};n.primary_goal_reached=False
+    n.primary_goal=primary
+    saved={'targets':{'tb1':[10.,0.,0.]},'held_auxiliary_slots':{'tb3':[0.,0.,0.]},'primary_goal_reached':True}
+    C.restore_mission(n,NS(data=json.dumps(saved)))
+    assert n.mission_number==1 and n.primary_goal_reached
+    assert n.held_auxiliary_slots=={'tb3':[0.,0.,0.]}
+    n.phase='BOUNDARY_TRAVELLING'
+    C.restore_mission(n,NS(data=json.dumps(saved)))
+    assert n.mission_number==1

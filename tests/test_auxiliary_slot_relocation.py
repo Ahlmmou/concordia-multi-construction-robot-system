@@ -104,3 +104,16 @@ def test_clearance_moves_unfinished_robot_before_settled_neighbor():
     assert requested==[('tb4','tb3')]
     assert 'tb3' in n.held_auxiliary_slots
     assert n.clearance_maneuver['robot']=='tb4'
+
+
+def test_moving_slot_prefers_clear_footprint_over_nearer_inflated_candidate():
+    import numpy as np
+    n,_=node();n.polygons={'tb4':[]};n.in_frame=lambda r,p,f:p
+    n.p.update(footprint_padding=.12,preferred_slot_cost=0)
+    grid=NS(frame='map',footprint_values=lambda p,*a:np.array([40 if p[0]<4.2 else 0]))
+    n.grids={'/tb4/global_costmap/costmap':grid}
+    selected=C.choose(n,'tb4',(4.,3.,.2),{})
+    assert selected[0]>=4.2 and C.auxiliary_slot_cost(n,'tb4',selected)==0
+    # A settled robot stays locked even if a clearer nearby candidate exists.
+    n.held_auxiliary_slots={'tb4':(4.,3.,.2)}
+    assert C.choose(n,'tb4',(4.,3.,.2),{})==(4.,3.,.2)
