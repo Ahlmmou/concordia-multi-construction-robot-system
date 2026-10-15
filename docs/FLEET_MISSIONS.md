@@ -652,3 +652,15 @@ Formation chasing resumes only after Hilti has remained clear for 5 simulation
 seconds. If its final pose remains tight, the auxiliaries continue holding clear
 rather than forcing a crowded final formation. Status includes
 `primary_space_active` and the temporary `primary_space_targets`.
+
+Hilti starts a local recovery after a persistent velocity-gate or peer-conflict
+block for `primary_maneuver_delay` (0.5 simulation seconds). A Nav2 action that
+stalls without translation also triggers recovery. The supervisor first cancels
+its owned action and waits for cancellation before commanding motion. It prefers
+checked reverse and reverse arcs, then considers forward arcs and bounded turns.
+Each maneuver is limited to 0.6 m, 0.35 rad, or 12 simulation seconds before
+replanning the original goal. All swept-map and peer-clearance checks remain
+active; starting inside costmap inflation uses the existing inflation escape
+policy. An unverified escape produces zero velocity. Three attempts without
+0.3 m of actual progress toward the goal enter an explicit waiting state;
+backing away does not reset that budget.

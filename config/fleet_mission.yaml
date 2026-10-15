@@ -61,6 +61,11 @@ fleet_mission_controller:
     yield_clearance_distance: 1.5
     obstacle_recovery_delay: 3.0
     obstacle_escape_speed: 0.12
+    # Bounded checked maneuvers before replanning a blocked Hilti goal.
+    primary_maneuver_delay: 0.5
+    primary_maneuver_distance: 0.6
+    primary_maneuver_angle: 0.35
+    primary_maneuver_timeout: 12.0
     # Gain steering room before requesting a fresh formation path.
     obstacle_release_padding: 0.20
     verify_gazebo_localization: true
