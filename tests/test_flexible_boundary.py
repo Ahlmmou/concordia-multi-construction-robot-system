@@ -37,7 +37,7 @@ def test_leader_outside_blue_polygon_moves_even_with_unavailable_corner():
 def test_final_follower_positions_are_frozen_after_leader_arrival():
     targets=rectangle((10.,0.,0.),4.2,3.4);sent=[]
     node=NS(poses={'tb1':(10.,0.,0.)},primary=(10.,0.,0.),boundary_heading=0.,
-        flexible_final_targets=targets,arrived=lambda r,t:r=='tb1',
+        p={},flexible_final_targets=targets,arrived=lambda r,t:r=='tb1',
         set_state=lambda *a:None,send=lambda r,t:sent.append((r,t)))
     FleetMissionController.flexible_tick(node)
     assert node.targets=={'tb1':node.primary,**targets}

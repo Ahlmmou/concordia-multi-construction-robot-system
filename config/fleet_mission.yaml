@@ -36,6 +36,12 @@ fleet_mission_controller:
     auxiliary_speed: 0.80
     angular_speed: 0.50
     # Gentle moving turns reduce the leader's struggle with in-place rotation.
+    # In tight spaces, park auxiliaries outward instead of crowding Hilti.
+    primary_space_enabled: true
+    primary_space_margin: 1.2
+    primary_space_probe_padding: 0.6
+    primary_space_release_delay: 5.0
+    primary_space_search_radius: 3.0
     leader_rolling_turn: true
     rolling_turn_speed: 0.22
     rolling_turn_rate: 0.15

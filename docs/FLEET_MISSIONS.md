@@ -622,3 +622,31 @@ The generator seals the approximate door endpoints into the existing walls and
 fills only the connected interior. It refuses an enclosure that leaks outside
 the local search boundary or exceeds the expected maximum area. No Gazebo
 physical walls or robot spawn positions are changed.
+
+### Give Hilti extra maneuvering room
+
+During flexible fleet travel, `primary_space_enabled` temporarily suspends
+formation chasing when Hilti's padded map footprint has little surrounding
+space, its motion is blocked, or its progress stalls while auxiliaries are close.
+Auxiliaries seek outward parking positions rather than approaching their normal
+formation slots. The preferred buffer reserves Hilti's full rotation radius,
+the auxiliary radius, normal primary separation, and an additional 1.2 m.
+
+Parking candidates prefer the greatest available separation within a 3 m local
+search, stay out of Hilti's next 6 m of planned route, and check swept footprints
+against all three maps, stationary peers, and already selected parking positions.
+A checked partial retreat is allowed when it gains space but the full buffer
+cannot fit. A robot already clear holds its position; one with no safe outward
+route holds rather than squeezing toward Hilti. Targets remain stable while the
+robot moves. Expensive new route searches are spread over four supervisor ticks.
+
+The velocity gate rejects inward auxiliary motion inside this buffer, including
+local recovery commands. Auxiliaries can turn in place to depart when the normal
+physical collision and map checks permit it. Future-route reservations allow an
+already intruding robot to depart without decreasing its centre distance to the
+route; all original physical footprint and separation limits still apply.
+
+Formation chasing resumes only after Hilti has remained clear for 5 simulation
+seconds. If its final pose remains tight, the auxiliaries continue holding clear
+rather than forcing a crowded final formation. Status includes
+`primary_space_active` and the temporary `primary_space_targets`.

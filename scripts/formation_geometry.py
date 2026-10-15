@@ -242,6 +242,17 @@ def advance(pose, command, duration):
     return x+dx,y+dy,heading+w*duration
 
 
+def polyline_distance(pose,route):
+    """Continuous centre distance, unaffected by route sample spacing."""
+    best=min((distance(pose,p) for p in route),default=float('inf'))
+    for a,b in zip(route,route[1:]):
+        dx,dy=b[0]-a[0],b[1]-a[1];length2=dx*dx+dy*dy
+        if length2<1e-12:continue
+        fraction=max(0.,min(1.,((pose[0]-a[0])*dx+(pose[1]-a[1])*dy)/length2))
+        best=min(best,math.hypot(pose[0]-a[0]-fraction*dx,pose[1]-a[1]-fraction*dy))
+    return best
+
+
 def route_preview(start, path, lookahead, step=.15):
     """Sample the near route, including the footprint swept through its turns."""
     if not path:return [start]
