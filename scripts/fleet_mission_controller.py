@@ -63,7 +63,7 @@ class FleetMissionController(Node):
             action_response_timeout=30.0, progress_timeout=90.0,
             collision_horizon=2.0, yield_recovery_delay=3.0, yield_clearance_distance=1.5,
             obstacle_recovery_delay=3.0, obstacle_escape_speed=0.12,
-            primary_maneuver_delay=.5, primary_maneuver_distance=.6, primary_maneuver_angle=.35, primary_maneuver_timeout=12.,
+            primary_maneuver_delay=.5, primary_maneuver_distance=1.8, primary_maneuver_angle=1.2, primary_maneuver_timeout=35.,
             obstacle_release_padding=0.20,
             manual_navigation=False, auto_form_rectangle=False,
             maintain_boundary=True, flexible_boundary=True, boundary_step=1.0, boundary_tolerance=0.8,
@@ -891,7 +891,7 @@ class FleetMissionController(Node):
             if recovery.get('mode')=='primary_maneuver':
                 moved=distance(self.poses[robot],recovery['start_pose'])
                 turned=abs(wrap(self.poses[robot][2]-recovery['start_pose'][2]))
-                if (self.primary is None or self.arrived('tb1',self.primary) or
+                if (recovery.get('forward_ready',False) or self.primary is None or self.arrived('tb1',self.primary) or
                     moved>=self.p['primary_maneuver_distance']-.03 or
                     turned>=self.p['primary_maneuver_angle']-.02 or
                     self.clock_value-recovery['started']>=self.p['primary_maneuver_timeout']):
@@ -947,8 +947,8 @@ class FleetMissionController(Node):
             self.obstacle_recoveries[robot]={'target':None,'started':self.clock_value,'start_pose':self.poses[robot],'mode':mode,'state':'Checking escape route'}
             self.get_logger().info(f'{robot}: starting checked local reverse/turn recovery' if robot=='tb1' else f'{robot}: starting local obstacle escape recovery')
 
-    def primary_maneuver_safe(self,command,poses,peer_commands):
-        start=poses['tb1'];horizon=self.p['collision_horizon']
+    def primary_maneuver_safe(self,command,poses,peer_commands,horizon=None):
+        start=poses['tb1'];horizon=self.p['collision_horizon'] if horizon is None else horizon
         radius=self.radii['tb1'];travel=(abs(command[0])+radius*abs(command[1]))*horizon
         count=max(10,math.ceil(travel/.05))
         for topic in ('/map','/tb1/global_costmap/costmap','/tb1/local_costmap/costmap'):
@@ -981,6 +981,26 @@ class FleetMissionController(Node):
         if remaining<=.03 or angle<=.02:return (0.,0.)
         speed=min(self.p['obstacle_escape_speed'],remaining/horizon)
         rate=min(self.p['rolling_turn_rate'],angle/horizon)
+        # Reverse until a complete forward heading correction fits, rather than
+        # treating a fixed backing distance as proof that Nav2 can turn.
+        heading=math.atan2(self.primary[1]-current[1],self.primary[0]-current[0])
+        error=wrap(heading-current[2])
+        forward=(speed,math.copysign(rate,error) if abs(error)>.12 else 0.)
+        turn_horizon=max(horizon,abs(error)/max(rate,.001))
+        end=advance(current,forward,turn_horizon)
+        forward_fits=(turn_horizon<=10. and distance(end,self.primary)<distance(current,self.primary)-.05 and
+            FleetMissionController.primary_maneuver_safe(self,forward,poses,peer_commands,turn_horizon))
+        reversing=recovery.get('command',(0.,0.))[0]<0
+        if (recovery.get('phase')=='forward' or (reversing and distance(start,current)>=.15)) and forward_fits:
+            recovery.setdefault('forward_start',current)
+            recovery['phase']='forward';recovery['command']=forward
+            recovery['state']='Checked forward turn toward goal'
+            if abs(error)<=.12 and distance(current,recovery['forward_start'])>=.15:
+                recovery['forward_ready']=True
+                return (0.,0.)
+            return forward
+        if recovery.get('phase')=='forward':
+            recovery.pop('forward_start',None);recovery['phase']='reverse'
         groups=[ [(-speed,0.),(-speed,rate),(-speed,-rate)],
                  [(speed,rate),(speed,-rate),(speed,0.)],[(0.,rate),(0.,-rate)] ]
         for choices in groups:

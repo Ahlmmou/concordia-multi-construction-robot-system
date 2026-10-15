@@ -129,3 +129,33 @@ def test_recovery_budget_is_not_reset_by_backtracking_away_from_the_goal():
     n.obstacle_recoveries={};n.unresolved_pairs=set();n.poses['tb1']=(.4,0.,0.)
     C.obstacle_tick(n)
     assert n.primary_maneuver_attempts==0
+
+
+def test_reverse_continues_until_full_forward_turn_fits(monkeypatch):
+    n,*_=node();n.p['primary_maneuver_distance']=1.8;n.p['primary_maneuver_angle']=1.2
+    n.primary=(5.,4.,0.);n.poses['tb1']=(-.3,0.,0.)
+    n.obstacle_recoveries['tb1']['command']=(-.12,0.)
+    checks=[]
+    def safe(self,command,poses,peers,horizon=None):
+        checks.append(horizon)
+        return command[0]<0 or (horizon is not None and poses['tb1'][0]<-.7)
+    monkeypatch.setattr(C,'primary_maneuver_safe',safe)
+    assert C.primary_maneuver_command(n,n.poses,{})[0]<0
+    assert any(h is not None and h>n.p['collision_horizon'] for h in checks)
+    n.poses['tb1']=(-.8,0.,0.)
+    command=C.primary_maneuver_command(n,n.poses,{})
+    assert command[0]>0 and command[1]>0
+    assert n.obstacle_recoveries['tb1']['phase']=='forward'
+
+
+def test_replans_only_after_checked_forward_alignment_and_progress():
+    n,*_=node();n.p['primary_maneuver_distance']=1.8
+    recovery=n.obstacle_recoveries['tb1'];recovery.update(command=(-.12,0.))
+    n.poses['tb1']=(-.3,0.,0.)
+    assert C.primary_maneuver_command(n,n.poses,{})[0]>0
+    assert not recovery.get('forward_ready')
+    n.poses['tb1']=(-.13,0.,0.)
+    assert C.primary_maneuver_command(n,n.poses,{})==(0.,0.)
+    assert recovery['forward_ready']
+    C.obstacle_tick(n)
+    assert 'tb1' not in n.obstacle_recoveries
