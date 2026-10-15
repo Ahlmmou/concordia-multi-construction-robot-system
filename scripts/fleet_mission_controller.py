@@ -783,10 +783,8 @@ class FleetMissionController(Node):
 
     def primary_space_tick(self):
         targets={'tb1':self.primary};reserved={'tb1':self.poses['tb1']};waiting=[]
-        # Bound expensive route searches per tick, while every auxiliary gets
-        # a turn within four ticks. The velocity gate keeps running at 20 Hz.
-        cursor=getattr(self,'primary_space_search_cursor',0)%4
-        search_robot=ROBOTS[1:][cursor];self.primary_space_search_cursor=cursor+1
+        # Select every available parking goal in this update. Dispatch below
+        # is asynchronous per robot; no follower waits for a peer to arrive.
         corridor=FleetMissionController.primary_corridor(self)
         parking_corridor=FleetMissionController.primary_corridor(self,lookahead=max(6.,self.p['primary_space_search_radius']*2))
         for robot in ROBOTS[1:]:
@@ -803,7 +801,7 @@ class FleetMissionController(Node):
                 self.primary_space_targets.pop(robot,None)
                 if (distance(current,self.poses['tb1'])>=FleetMissionController.primary_space_radius(self,robot) and
                     FleetMissionController.primary_corridor_gap(self,robot,current,parking_corridor)>=self.p['primary_minimum_separation'] and self.feasible(robot,current,reserved)):saved=current
-                elif robot==search_robot:saved=FleetMissionController.primary_space_target(self,robot,reserved)
+                else:saved=FleetMissionController.primary_space_target(self,robot,reserved)
             if saved is None:
                 self.cancel(robot);targets[robot]=current;reserved[robot]=current;waiting.append(robot);continue
             self.primary_space_targets[robot]=saved;targets[robot]=saved;reserved[robot]=saved

@@ -638,7 +638,9 @@ against all three maps, stationary peers, and already selected parking positions
 A checked partial retreat is allowed when it gains space but the full buffer
 cannot fit. A robot already clear holds its position; one with no safe outward
 route holds rather than squeezing toward Hilti. Targets remain stable while the
-robot moves. Expensive new route searches are spread over four supervisor ticks.
+robot moves. All available parking goals are selected in the same supervisor
+update and sent through independent asynchronous Nav2 actions; no auxiliary
+waits for another to arrive. Conflicting routes still yield through the gate.
 
 The velocity gate rejects inward auxiliary motion inside this buffer, including
 local recovery commands. Auxiliaries can turn in place to depart when the normal

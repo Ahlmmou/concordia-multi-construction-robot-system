@@ -88,9 +88,10 @@ def test_no_safe_retreat_holds_instead_of_returning_to_nearby_formation_slot():
     assert all(n.targets[r]==n.poses[r] for r in ROBOTS[1:])
 
 
-def test_fair_search_gives_each_auxiliary_a_stable_outward_goal():
+def test_all_auxiliaries_receive_parking_goals_in_the_same_update():
     n,cancelled,sent,logs=node();n.primary_space_active=True
-    for _ in range(4):C.primary_space_tick(n)
+    C.primary_space_tick(n)
+    assert {r for r,target in sent}==set(ROBOTS)
     assert set(n.primary_space_targets)==set(ROBOTS[1:])
     saved=dict(n.primary_space_targets)
     C.primary_space_tick(n)
@@ -105,7 +106,7 @@ def test_a_robot_parked_further_ahead_still_moves_off_the_future_primary_lane():
 
 def test_partial_retreat_is_revisited_after_arrival_to_gain_more_room():
     n,*_=node();n.primary_space_active=True;n.primary_space_targets={'tb3':(-2.1,0.,0.)}
-    n.poses['tb3']=(-2.1,0.,0.);n.primary_space_search_cursor=1
+    n.poses['tb3']=(-2.1,0.,0.)
     C.primary_space_tick(n)
     assert n.primary_space_targets['tb3'][0]<-2.4
 
