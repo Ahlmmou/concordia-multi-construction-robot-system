@@ -143,3 +143,37 @@ def test_normal_clearance_maneuvers_do_not_compete_with_outward_parking_targets(
     n.unresolved_pairs={('tb1','tb2')};n.clearance_target=lambda *a:pytest.fail('competing clearance plan')
     C.clearance_tick(n)
     assert n.clearance_maneuver is None
+
+
+def test_clear_auxiliary_advances_toward_final_slot_while_hilti_recovers():
+    n,*_=node(False);n.primary_space_active=True;n.poses['tb3']=(-6.,3.,0.)
+    n.primary_space_desired={'tb3':(5.,3.,0.)}
+    target=C.primary_space_target(n,'tb3',{'tb1':n.poses['tb1']})
+    assert target is not None and target[0]>-6.
+    assert math.dist(target[:2],(0.,0.))>=C.primary_space_radius(n,'tb3')
+
+
+def test_auxiliary_recovery_is_preserved_while_peers_get_concurrent_goals():
+    n,cancelled,sent,_=node();n.primary_space_active=True
+    recovery={'target':None,'mode':'escape'};n.obstacle_recoveries['tb4']=recovery
+    C.primary_space_tick(n)
+    assert n.obstacle_recoveries['tb4'] is recovery
+    assert 'tb4' not in [r for r,t in sent]
+    assert {'tb2','tb3','tb5'} <= {r for r,t in sent}
+
+
+def test_auxiliary_detour_checks_reverse_without_waiting_for_inflation_overlap():
+    import numpy as np
+    from formation_geometry import Grid
+    n,*_=node(False);n.primary_space_active=True;n.poses['tb3']=(-4.,3.,0.)
+    n.slots['tb3']={'pending':False,'handle':None}
+    g=Grid.__new__(Grid);g.frame='map';g.origin=(-20.,-20.);g.angle=0.;g.resolution=.1
+    g.cells=np.zeros((400,400),dtype=np.int8)
+    n.grids={t:g for t in n.grids}
+    n.p['obstacle_escape_speed']=.12
+    n.obstacle_recoveries={'tb3':{'target':None,'mode':'detour','started':n.clock_value}}
+    command=C.obstacle_escape_command(n,'tb3',n.poses,{})
+    assert command[0]<0
+    assert n.obstacle_recoveries['tb3']['mode']=='escape'
+    n.slots['tb3']['handle']=object()
+    assert C.obstacle_escape_command(n,'tb3',n.poses,{})==(0.,0.)

@@ -636,8 +636,11 @@ Parking candidates prefer the greatest available separation within a 3 m local
 search, stay out of Hilti's next 6 m of planned route, and check swept footprints
 against all three maps, stationary peers, and already selected parking positions.
 A checked partial retreat is allowed when it gains space but the full buffer
-cannot fit. A robot already clear holds its position; one with no safe outward
-route holds rather than squeezing toward Hilti. Targets remain stable while the
+cannot fit. A robot already clear continues toward its final formation slot through
+checked waypoints outside Hilti's reserved space. One without a complete
+outward route tries its own checked reverse or reverse-arc recovery rather
+than cancelling that recovery on every parking update. When no checked
+motion is available, it holds rather than squeezing toward Hilti. Targets remain stable while the
 robot moves. All available parking goals are selected in the same supervisor
 update and sent through independent asynchronous Nav2 actions; no auxiliary
 waits for another to arrive. Conflicting routes still yield through the gate.
@@ -657,7 +660,8 @@ Hilti starts a local recovery after a persistent velocity-gate or peer-conflict
 block for `primary_maneuver_delay` (0.5 simulation seconds). A Nav2 action that
 stalls without translation also triggers recovery. The supervisor first cancels
 its owned action and waits for cancellation before commanding motion. It prefers
-checked reverse and reverse arcs, then considers forward arcs and bounded turns.
+checked reverse and reverse arcs, then considers forward arcs. Hilti does not fall back to a stationary turn
+in this recovery.
 After backing at least 0.15 m, it checks the complete forward heading
 correction (up to 10 simulation seconds of swept motion). It keeps backing
 until that arc is clear, then drives forward toward the goal. Nav2 resumes
@@ -668,3 +672,10 @@ active; starting inside costmap inflation uses the existing inflation escape
 policy. An unverified escape produces zero velocity. Three attempts without
 0.3 m of actual progress toward the goal enter an explicit waiting state;
 backing away does not reset that budget.
+
+Auxiliary escape checks include both stationary and commanded peer motion.
+Reverse and reverse arcs are considered even when the current footprint is
+already outside costmap inflation. Action cancellation must finish first;
+all commands retain the supervisor velocity gate and physical clearances.
+Partial outward waypoints may progressively leave the reserved route rather
+than requiring a single waypoint to clear the entire corridor.

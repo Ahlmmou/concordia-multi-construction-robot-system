@@ -760,56 +760,71 @@ class FleetMissionController(Node):
         initial=distance(start,leader);required=FleetMissionController.primary_space_radius(self,robot)
         parking_corridor=FleetMissionController.primary_corridor(self,lookahead=max(6.,self.p['primary_space_search_radius']*2))
         lane_clear=lambda pose:FleetMissionController.primary_corridor_gap(self,robot,pose,parking_corridor)>=self.p['primary_minimum_separation']
-        if initial>=required and lane_clear(start) and self.feasible(robot,start,reserved):return start
+        preferred=getattr(self,'primary_space_desired',{}).get(robot)
+        if preferred is None and initial>=required and lane_clear(start) and self.feasible(robot,start,reserved):return start
         corridor=FleetMissionController.primary_corridor(self)
         def free(pose):
-            if distance(pose,leader)<initial-1e-6:return False
+            if distance(pose,leader)<min(initial,required)-1e-6:return False
             for topic in ('/map',f'/{robot}/global_costmap/costmap',f'/{robot}/local_costmap/costmap'):
                 grid=self.grids.get(topic)
                 local=self.in_frame(robot,pose,grid.frame) if grid else None
                 if local is None or not grid.footprint_free(local,self.polygons[robot],self.p['footprint_padding'],98):return False
             return FleetMissionController.primary_corridor_pose_safe(self,robot,start,pose,corridor)
         angle=math.atan2(start[1]-leader[1],start[0]-leader[0]);options=[]
-        for fraction in (1.,.75,.5,.25):
+        for fraction in (1.,.75,.5,.25,.1):
             radius=self.p['primary_space_search_radius']*fraction
-            for offset in (0.,math.pi/6,-math.pi/6,math.pi/3,-math.pi/3,math.pi/2,-math.pi/2):
+            for offset in (0.,math.pi/6,-math.pi/6,math.pi/3,-math.pi/3,math.pi/2,-math.pi/2,2*math.pi/3,-2*math.pi/3,math.pi):
                 target=(start[0]+radius*math.cos(angle+offset),start[1]+radius*math.sin(angle+offset),start[2])
                 # If the full buffer cannot fit, accept only a meaningful gain;
                 # never pick a closer parking point to keep a rigid formation.
-                if distance(target,leader)<initial+.3 or not lane_clear(target):continue
+                if parking_corridor and not lane_clear(start):
+                    a,b=parking_corridor[0],parking_corridor[-1]
+                    dx,dy=b[0]-a[0],b[1]-a[1];length=math.hypot(dx,dy)
+                    if length>1e-6 and abs(dx*(target[1]-start[1])-dy*(target[0]-start[0]))/length<.3:continue
+                outside=initial>=required and distance(target,leader)>=required
+                gain=distance(target,leader)>=initial+.1
+                lane_gain=FleetMissionController.primary_corridor_gap(self,robot,target,parking_corridor)>=FleetMissionController.primary_corridor_gap(self,robot,start,parking_corridor)+.1
+                if not (outside or gain) or not (lane_clear(target) or (lane_gain and polyline_distance(target,parking_corridor)>polyline_distance(start,parking_corridor)+.1)):continue
+                if outside and preferred is not None and distance(target,preferred)>=distance(start,preferred)-.1:continue
                 if not self.feasible(robot,target,reserved,reserve_primary=False):continue
                 options.append(target)
-        for target in sorted(options,key=lambda p:-distance(p,leader)):
+        for target in sorted(options,key=lambda p:distance(p,preferred) if initial>=required and preferred is not None else -distance(p,leader)):
             if stationary_route_clear(start,[target],robot,self.poses,self.polygons,
                 self.p['minimum_separation'],self.p['primary_minimum_separation'],free=free):return target
+        if initial>=required and lane_clear(start) and self.feasible(robot,start,reserved):return start
         return None
 
     def primary_space_tick(self):
         targets={'tb1':self.primary};reserved={'tb1':self.poses['tb1']};waiting=[]
         # Select every available parking goal in this update. Dispatch below
         # is asynchronous per robot; no follower waits for a peer to arrive.
+        if hasattr(self,'work_positions'):self.primary_space_desired=self.work_positions(self.primary)
         corridor=FleetMissionController.primary_corridor(self)
         parking_corridor=FleetMissionController.primary_corridor(self,lookahead=max(6.,self.p['primary_space_search_radius']*2))
         for robot in ROBOTS[1:]:
             current=self.poses[robot];saved=self.primary_space_targets.get(robot)
+            recovery=self.obstacle_recoveries.get(robot)
+            if recovery is not None:
+                target=recovery.get('target')
+                targets[robot]=target if target is not None else current;reserved[robot]=targets[robot]
+                if target is None:waiting.append(robot)
+                continue
             # Hold a selected parking pose rather than chasing the formation.
-            if saved is not None and (distance(saved,self.poses['tb1'])<distance(current,self.poses['tb1'])-.1 or
+            if saved is not None and (distance(saved,self.poses['tb1'])<min(distance(current,self.poses['tb1']),FleetMissionController.primary_space_radius(self,robot))-.1 or
                 not self.feasible(robot,saved,reserved,reserve_primary=False)):saved=None
-            if saved is not None and FleetMissionController.primary_corridor_gap(self,robot,saved,parking_corridor)<self.p['primary_minimum_separation']:saved=None
-            if saved is not None and self.arrived(robot,saved) and distance(current,self.poses['tb1'])<FleetMissionController.primary_space_radius(self,robot):saved=None
+            if saved is not None and FleetMissionController.primary_corridor_gap(self,robot,saved,parking_corridor)<min(self.p['primary_minimum_separation'],FleetMissionController.primary_corridor_gap(self,robot,current,parking_corridor)+.05):saved=None
+            if saved is not None and self.arrived(robot,saved):saved=None
             if saved is not None:
                 initial_gap=FleetMissionController.primary_corridor_gap(self,robot,current,corridor)
                 if FleetMissionController.primary_corridor_gap(self,robot,saved,corridor)<min(initial_gap,self.p['primary_minimum_separation'])-1e-6:saved=None
             if saved is None:
                 self.primary_space_targets.pop(robot,None)
-                if (distance(current,self.poses['tb1'])>=FleetMissionController.primary_space_radius(self,robot) and
-                    FleetMissionController.primary_corridor_gap(self,robot,current,parking_corridor)>=self.p['primary_minimum_separation'] and self.feasible(robot,current,reserved)):saved=current
-                else:saved=FleetMissionController.primary_space_target(self,robot,reserved)
+                saved=FleetMissionController.primary_space_target(self,robot,reserved)
             if saved is None:
-                self.cancel(robot);targets[robot]=current;reserved[robot]=current;waiting.append(robot);continue
+                self.cancel(robot);targets[robot]=current;reserved[robot]=current;waiting.append(robot)
+                FleetMissionController.flexible_recovery(self,robot,'No complete outward parking route; checking reverse and arcs')
+                continue
             self.primary_space_targets[robot]=saved;targets[robot]=saved;reserved[robot]=saved
-            if robot in self.obstacle_recoveries:
-                self.cancel(robot);self.obstacle_recoveries.pop(robot,None)
         primary_recovery=self.obstacle_recoveries.get('tb1')
         if primary_recovery and primary_recovery.get('target') is not None:targets['tb1']=primary_recovery['target']
         self.targets=targets
@@ -1002,7 +1017,7 @@ class FleetMissionController(Node):
         if recovery.get('phase')=='forward':
             recovery.pop('forward_start',None);recovery['phase']='reverse'
         groups=[ [(-speed,0.),(-speed,rate),(-speed,-rate)],
-                 [(speed,rate),(speed,-rate),(speed,0.)],[(0.,rate),(0.,-rate)] ]
+                 [(speed,rate),(speed,-rate),(speed,0.)] ]
         for choices in groups:
             safe=[c for c in choices if FleetMissionController.primary_maneuver_safe(self,c,poses,peer_commands)]
             if not safe:continue
@@ -1033,8 +1048,9 @@ class FleetMissionController(Node):
         choices=[(-speed,0.),(speed,0.),(-speed,.25),(-speed,-.25),(speed,.25),(speed,-.25),(0.,.25),(0.,-.25)]
         if recovery.get('command') in choices:choices.remove(recovery['command']);choices.insert(0,recovery['command'])
         choices=[c for c in choices if all(not motion_conflict(pose,c,self.polygons[robot],
-            other,(0.,0.),self.polygons[r],pair_separation(robot,r,self.p['minimum_separation'],self.p['primary_minimum_separation']),
-            self.p['collision_horizon']) for r,other in poses.items() if r!=robot)]
+            other,other_command,self.polygons[r],pair_separation(robot,r,self.p['minimum_separation'],self.p['primary_minimum_separation']),
+            self.p['collision_horizon']) for r,other in poses.items() if r!=robot
+            for other_command in ((0.,0.),(peer_commands or {}).get(r,(0.,0.))))]
         corridor=FleetMissionController.primary_corridor(self) if robot!='tb1' else []
         def verify(projected):
             dx,dy=rotate(projected[0]-local[0],projected[1]-local[1],pose[2]-local[2])
@@ -1055,12 +1071,12 @@ class FleetMissionController(Node):
         # If already physically outside the inflated zone, replan to a nearby
         # free position instead of repeatedly trying the obstructed trajectory.
         if grid.footprint_free(local,self.polygons[robot],self.p['footprint_padding'],98):
-            if recovery.get('mode')=='escape':
+            if recovery.get('mode') in ('escape','detour'):
                 for candidate in choices:
                     if abs(candidate[0])<1e-4:continue
                     if all(grid.footprint_free(advance(local,candidate,self.p['collision_horizon']*i/10),self.polygons[robot],self.p['footprint_padding'],98)
                         and verify(advance(local,candidate,self.p['collision_horizon']*i/10)) for i in range(11)):
-                        recovery['command']=candidate;return candidate
+                        recovery['command']=candidate;recovery['mode']='escape';recovery['state']='Checked reverse obstacle escape' if candidate[0]<0 else 'Checked moving obstacle escape';return candidate
             if self.clock_value>=recovery.get('next_detour_check',0.):
                 recovery['next_detour_check']=self.clock_value+1.
                 target=self.obstacle_detour_target(robot,poses)

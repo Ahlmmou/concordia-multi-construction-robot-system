@@ -46,7 +46,7 @@ def test_forward_or_turn_alternatives_are_checked_when_every_reverse_is_blocked(
     assert command[0]>0
     n,*_=node(free=lambda p:abs(p[0])<.001 and abs(p[1])<.001)
     command=C.primary_maneuver_command(n,n.poses,{})
-    assert command[0]==0 and 0<abs(command[1])<=.15
+    assert command==(0.,0.)
 
 
 def test_no_free_maneuver_or_missing_maps_never_force_movement():
