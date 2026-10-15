@@ -694,3 +694,20 @@ inflation uses the existing non-deepening escape policy. Lidar checks the body
 throughout the swept motion. This escape may temporarily cross the extra
 maneuvering buffer, but all physical peer clearances and the reserved-route
 gate still apply. It cannot authorize entry into the stair exclusion.
+
+### Nearby alternatives for obstructed auxiliary slots
+
+Auxiliary formation slots can move within `alternative_radius` (1.5 m by
+default), searched from the nominal slot outward in `candidate_step` increments
+(0.3 m). Each candidate keeps the slot heading and passes full map, footprint,
+peer, and Hilti-reservation checks. Nav2 must produce a path before it receives
+a navigation goal. A failed path or stalled auxiliary goal rejects that local
+candidate and tries a nearby position instead of repeatedly retrying it.
+Rejected positions are remembered for the current mission; a new primary goal
+resets them. Final slots are revalidated against current maps and peers.
+A selected alternative stays stable while it remains feasible. The nominal
+anchor stays fixed, so repeated failures cannot drift the slot arbitrarily far
+away. If the neighborhood has no safe candidate, the auxiliary holds rather
+than entering an obstacle. Clear auxiliaries also use these adjusted slots
+while Hilti is maneuvering. Status reports `auxiliary_slot_adjustments`, with
+the nominal position, selected position, and offset in metres.

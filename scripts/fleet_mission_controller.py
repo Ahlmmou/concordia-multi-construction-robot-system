@@ -104,6 +104,7 @@ class FleetMissionController(Node):
         self.lifecycle={};self.lifecycle_requests={};self.graph_problem='Graph not checked yet'
         self.boundary_waypoint=None;self.boundary_heading=None
         self.flexible_slots={};self.flexible_final_targets=None
+        self.rejected_auxiliary_slots={};self.auxiliary_slot_choices={}
         self.primary_route=[];self.primary_route_stamp=0.
         self.primary=None;self.pending_primary=None;self.targets={};self.rectangle_targets=None;self.trail=deque(maxlen=5000);self.trail_seeded=False
         self.boundary_holds=set();self.blocked=set();self.last_tick=0.;self.manual=self.p['manual_navigation'];self.mission_number=0
@@ -263,9 +264,37 @@ class FleetMissionController(Node):
             if other!=robot and footprint_clearance(pose,self.polygons[robot],target,self.polygons[other])<gap:return False
         return True
 
+    def auxiliary_slot_rejected(self,robot,pose):
+        radius=max(.15,self.p.get('candidate_step',.3)*.75)
+        return any(distance(pose,p)<radius for p in getattr(self,'rejected_auxiliary_slots',{}).get(robot,[]))
+
+    def reject_auxiliary_slot(self,robot,reason):
+        if (robot=='tb1' or not self.p.get('flexible_boundary') or
+            self.state not in ('FORMING_BOUNDARY','BOUNDARY_TRAVELLING') or
+            getattr(self,'primary_space_active',False)):return False
+        target=self.slots[robot].get('planning_target') or self.slots[robot].get('target') or getattr(self,'targets',{}).get(robot)
+        if target is None or FleetMissionController.auxiliary_slot_rejected(self,robot,target):return False
+        if not hasattr(self,'rejected_auxiliary_slots'):self.rejected_auxiliary_slots={}
+        self.rejected_auxiliary_slots.setdefault(robot,[]).append(target)
+        self.flexible_final_targets=None
+        self.get_logger().info(f'{robot}: shifting unreachable formation slot nearby: {reason}')
+        return True
+
     def choose(self,robot,preferred,reserved):
+        flexible=robot!='tb1' and self.p.get('flexible_boundary',False)
+        if flexible:
+            if not hasattr(self,'auxiliary_slot_choices'):self.auxiliary_slot_choices={}
+            saved=self.auxiliary_slot_choices.get(robot)
+            stable=(saved[1][0],saved[1][1],preferred[2]) if saved else None
+            if (saved and distance(saved[0],preferred)<.1 and distance(stable,preferred)<=self.p['alternative_radius']+1e-6 and
+                not FleetMissionController.auxiliary_slot_rejected(self,robot,stable) and self.feasible(robot,stable,reserved)):
+                self.auxiliary_slot_choices[robot]=(preferred,stable)
+                return stable
         for pose in candidates(preferred,self.p['alternative_radius'],self.p['candidate_step']):
-            if self.feasible(robot,pose,reserved):return pose
+            if flexible and FleetMissionController.auxiliary_slot_rejected(self,robot,pose):continue
+            if self.feasible(robot,pose,reserved):
+                if flexible:self.auxiliary_slot_choices[robot]=(preferred,pose)
+                return pose
         return None
 
     def navigation_reservations(self,robot):
@@ -343,9 +372,11 @@ class FleetMissionController(Node):
         self.manual=False;self.pending_primary=target;self.rectangle_targets=None;self.targets={}
         if self.requested_mode!='SINGLE_FILE':self.trail.clear();self.trail_seeded=False
         self.mission_number+=1;self.cancel_all()
-        for slot in self.slots.values():slot['retries']=0;slot['cooldown']=0.;slot['target']=None
+        for slot in self.slots.values():
+            slot['retries']=0;slot['cooldown']=0.;slot['target']=None;slot.pop('planning_target',None)
         self.boundary_waypoint=None;self.boundary_heading=None
         self.flexible_slots={};self.flexible_final_targets=None
+        self.rejected_auxiliary_slots={};self.auxiliary_slot_choices={}
         self.yielding={};self.unresolved_pairs=set();self.conflict_since={};self.clearance_maneuver=None
         self.obstacle_recoveries={};self.obstacle_since={}
         self.phase=('TRAVELLING' if self.active_mode=='SINGLE_FILE' and self.trail_seeded else 'FORMING_LINE') if self.requested_mode=='SINGLE_FILE' else ('FORMING_BOUNDARY' if self.p['maintain_boundary'] else 'FORMING_LINE')
@@ -378,6 +409,9 @@ class FleetMissionController(Node):
         if robot in self.yielding or robot in self.local_blocked or robot in self.obstacle_recoveries:
             slot['retries']=0;slot['cooldown']=0.
             self.get_logger().info(f'{robot}: navigation paused for clearance recovery; retry automatically when clear')
+            return
+        if FleetMissionController.reject_auxiliary_slot(self,robot,reason):
+            slot['retries']=0;slot['cooldown']=0.;slot['target']=None;slot.pop('planning_target',None)
             return
         self.get_logger().warning(f'{robot}: {reason}; retry {slot["retries"]}/{self.p["maximum_retries"]}')
         if slot['retries']>=self.p['maximum_retries'] and self.requested_mode=='SINGLE_FILE' and self.state=='TRAVELLING' and robot!='tb1':
@@ -418,6 +452,7 @@ class FleetMissionController(Node):
 
     def start_plan(self,robot,target,owner=None):
         slot=self.slots[robot]
+        if owner is None:slot['planning_target']=target
         slot['pending']=True;slot['pending_since']=time.monotonic();slot['plan_token']+=1;token=slot['plan_token'];slot['cancel_when_accepted']=False
         request=ComputePathToPose.Goal();request.goal=self.pose_message(target);request.use_start=False
         try:
@@ -662,6 +697,9 @@ class FleetMissionController(Node):
             self.state not in ('FORMING_BOUNDARY','BOUNDARY_TRAVELLING')):return False
         self.cancel(robot)
         slot=self.slots[robot];slot['retries']=0;slot['cooldown']=0.
+        if FleetMissionController.reject_auxiliary_slot(self,robot,reason):
+            slot['target']=None;slot.pop('planning_target',None)
+            return True
         if robot not in self.obstacle_recoveries:
             grid=self.grids.get(f'/{robot}/local_costmap/costmap')
             local=self.in_frame(robot,self.poses[robot],grid.frame) if grid else None
@@ -801,7 +839,13 @@ class FleetMissionController(Node):
         targets={'tb1':self.primary};reserved={'tb1':self.poses['tb1']};waiting=[]
         # Select every available parking goal in this update. Dispatch below
         # is asynchronous per robot; no follower waits for a peer to arrive.
-        if hasattr(self,'work_positions'):self.primary_space_desired=self.work_positions(self.primary)
+        if hasattr(self,'work_positions'):
+            self.primary_space_desired=self.work_positions(self.primary)
+            reserved_slots={'tb1':self.poses['tb1']}
+            for robot,preferred in list(self.primary_space_desired.items()):
+                nearby=self.choose(robot,preferred,reserved_slots)
+                if nearby is not None:
+                    self.primary_space_desired[robot]=nearby;reserved_slots[robot]=nearby
         corridor=FleetMissionController.primary_corridor(self)
         parking_corridor=FleetMissionController.primary_corridor(self,lookahead=max(6.,self.p['primary_space_search_radius']*2))
         for robot in ROBOTS[1:]:
@@ -859,6 +903,11 @@ class FleetMissionController(Node):
         self.set_state(self.phase,'Flexible followers adjusting around tb1; blue line is visual only')
         targets={'tb1':self.primary}
         maneuver=getattr(self,'clearance_maneuver',None)
+        frozen=getattr(self,'flexible_final_targets',None)
+        if finished and frozen is not None and hasattr(self,'feasible'):
+            if any(FleetMissionController.auxiliary_slot_rejected(self,r,t) or
+                not self.feasible(r,t,{'tb1':leader,**frozen}) for r,t in frozen.items()):
+                self.flexible_final_targets=None
         if finished and getattr(self,'flexible_final_targets',None) is not None:
             targets.update(self.flexible_final_targets)
         else:
@@ -1710,7 +1759,7 @@ class FleetMissionController(Node):
                 point=Point();point.x=leader[0]+d*nx+side*width*tx;point.y=leader[1]+d*ny+side*width*ty;work.points.append(point)
             array.markers.append(work)
         self.markers.publish(array)
-        msg=String();msg.data=json.dumps({'simulation_time':self.clock_value,'requested_mode':self.requested_mode,'active_mode':self.active_mode,'assembly_stage':self.assembly_stage,'assembly_robot':self.transition_robot,'assembly_route':self.assembly_route,'assembly_routes':self.assembly_routes,'transition_state':self.transition_state,'transition_seconds':(time.monotonic()-self.transition_started if self.transition_started and self.transition_state in ('CANCELLING','ASSEMBLING') else self.transition_duration),'transition_progress':sum(self.arrived(r,t) for r,t in desired.items())/max(1,len(desired)),'formation_error':{r:distance(self.poses[r],t) for r,t in desired.items() if r in self.poses},'position_source':'map TF; simulation ground truth verified separately','recovering_robots':self.trail_recovering,'recovery_waypoints':self.trail_detours,'ground_truth_poses':self.physical_poses,'localization_error':{r:distance(p,self.physical_poses[r]) for r,p in self.poses.items() if r in self.physical_poses},'minimum_footprint_clearance':min((footprint_clearance(self.physical_poses[a],self.polygons[a],self.physical_poses[b],self.polygons[b]) for i,a in enumerate(ROBOTS) for b in ROBOTS[i+1:] if a in self.physical_poses and b in self.physical_poses),default=None),'state':self.state,'reason':self.reason,'phase':self.phase,'manual_navigation':self.manual,'mission':self.mission_number,'poses':self.poses,'desired_slots':desired,'targets':self.targets,'unresolved_pairs':list(self.unresolved_pairs),'blocked':sorted(self.blocked),'yielding_to':self.yielding,'clearance_maneuver':self.clearance_maneuver,'primary_maneuver_attempts':getattr(self,'primary_maneuver_attempts',0),'primary_space_active':getattr(self,'primary_space_active',False),'primary_space_targets':getattr(self,'primary_space_targets',{}),'rolling_turn_active':getattr(self,'rolling_turn_active',False),'obstacle_recoveries':self.obstacle_recoveries,'waiting_for_followers':sorted(self.boundary_holds),'formation_heading':self.boundary_heading,'flexible_boundary':self.p['flexible_boundary'],'follower_slots':getattr(self,'flexible_slots',{}),'slot_updates':{r:{'prepared':s.get('updates_prepared',0),'switched':s.get('updates_switched',0)} for r,s in self.slots.items()},'actions':{r:s['status'] for r,s in self.slots.items()}});self.status_pub.publish(msg)
+        msg=String();msg.data=json.dumps({'simulation_time':self.clock_value,'requested_mode':self.requested_mode,'active_mode':self.active_mode,'assembly_stage':self.assembly_stage,'assembly_robot':self.transition_robot,'assembly_route':self.assembly_route,'assembly_routes':self.assembly_routes,'transition_state':self.transition_state,'transition_seconds':(time.monotonic()-self.transition_started if self.transition_started and self.transition_state in ('CANCELLING','ASSEMBLING') else self.transition_duration),'transition_progress':sum(self.arrived(r,t) for r,t in desired.items())/max(1,len(desired)),'formation_error':{r:distance(self.poses[r],t) for r,t in desired.items() if r in self.poses},'position_source':'map TF; simulation ground truth verified separately','recovering_robots':self.trail_recovering,'recovery_waypoints':self.trail_detours,'ground_truth_poses':self.physical_poses,'localization_error':{r:distance(p,self.physical_poses[r]) for r,p in self.poses.items() if r in self.physical_poses},'minimum_footprint_clearance':min((footprint_clearance(self.physical_poses[a],self.polygons[a],self.physical_poses[b],self.polygons[b]) for i,a in enumerate(ROBOTS) for b in ROBOTS[i+1:] if a in self.physical_poses and b in self.physical_poses),default=None),'state':self.state,'reason':self.reason,'phase':self.phase,'manual_navigation':self.manual,'mission':self.mission_number,'poses':self.poses,'desired_slots':desired,'targets':self.targets,'unresolved_pairs':list(self.unresolved_pairs),'blocked':sorted(self.blocked),'yielding_to':self.yielding,'clearance_maneuver':self.clearance_maneuver,'primary_maneuver_attempts':getattr(self,'primary_maneuver_attempts',0),'primary_space_active':getattr(self,'primary_space_active',False),'primary_space_targets':getattr(self,'primary_space_targets',{}),'rolling_turn_active':getattr(self,'rolling_turn_active',False),'obstacle_recoveries':self.obstacle_recoveries,'waiting_for_followers':sorted(self.boundary_holds),'formation_heading':self.boundary_heading,'flexible_boundary':self.p['flexible_boundary'],'follower_slots':getattr(self,'flexible_slots',{}),'auxiliary_slot_adjustments':{r:{'nominal':preferred,'selected':selected,'offset':distance(preferred,selected)} for r,(preferred,selected) in getattr(self,'auxiliary_slot_choices',{}).items()},'slot_updates':{r:{'prepared':s.get('updates_prepared',0),'switched':s.get('updates_switched',0)} for r,s in self.slots.items()},'actions':{r:s['status'] for r,s in self.slots.items()}});self.status_pub.publish(msg)
 
     def shutdown(self):
         self.cancel_all()
