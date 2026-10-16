@@ -1,0 +1,19 @@
+{
+  "scan": {
+    "topic": "/elevator_validation/scan",
+    "ranges_m": [
+      12.36904525756836,
+      1.8131177425384521,
+      null,
+      1.6544851064682007
+    ],
+    "stamp": 1351.236,
+    "null_range_meaning": "No hit within the 20 m sensor range"
+  },
+  "camera": {
+    "width": 1024,
+    "height": 1024,
+    "encoding": "rgb8",
+    "stamp": 1351.356
+  }
+}
