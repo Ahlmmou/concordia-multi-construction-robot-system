@@ -1,0 +1,9 @@
+image: EVfloor9_formation_aligned.png
+resolution: 0.02551200315342095
+origin:
+- -36.748513534724125
+- -33.690327890042596
+- 0.0
+negate: 0
+occupied_thresh: 0.65
+free_thresh: 0.196

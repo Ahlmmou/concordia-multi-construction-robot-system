@@ -6,6 +6,7 @@ from PIL import Image
 import pytest,yaml
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
 from generate_stair_keepout import build
+from generate_aligned_formation_map import build as build_aligned
 from fleet_mission_controller import FleetMissionController as Controller
 from formation_geometry import ROBOTS,Grid
 ROOT=Path(__file__).resolve().parents[1]
@@ -38,8 +39,8 @@ def test_open_enclosure_is_rejected_instead_of_filling_unrelated_floor(tmp_path)
     with pytest.raises(ValueError,match='leaks'):build(temporary)
 
 
-def node_with_protected_map():
-    metadata=yaml.safe_load((ROOT/'config/EVfloor9_stairs_keepout.yaml').read_text())
+def node_with_protected_map(map_name='EVfloor9_stairs_keepout.yaml'):
+    metadata=yaml.safe_load((ROOT/'config'/map_name).read_text())
     pixels=np.array(Image.open(ROOT/'config'/metadata['image']))
     grid=Grid.__new__(Grid);grid.frame='map';grid.origin=tuple(metadata['origin'][:2]);grid.angle=0.;grid.resolution=metadata['resolution']
     grid.cells=np.flipud(np.where(pixels<90,100,np.where(pixels>205,0,-1))).astype(np.int8)
@@ -50,16 +51,31 @@ def node_with_protected_map():
     return NS(p=p,polygons=polygons,grids={'/map':grid,**{f'/{r}/global_costmap/costmap':free for r in ROBOTS}},poses={},targets={},in_frame=lambda r,p,f:p)
 
 
+@pytest.fixture(params=['EVfloor9_stairs_keepout.yaml', 'EVfloor9_formation_aligned.yaml'])
+def protected_map(request):
+    return node_with_protected_map(request.param)
+
+
+def test_aligned_map_keeps_reference_walls_and_all_existing_stair_exclusion_cells():
+    metadata,aligned,result=build_aligned(ROOT/'config')
+    old_metadata,source,protected,*_=build(ROOT/'config/stair_keepout.yaml')
+    assert np.all(result[source!=protected]==0)
+    assert np.all(result[aligned==0]==0)
+    assert np.array_equal(result,np.array(Image.open(ROOT/'config'/metadata['image'])))
+    assert metadata==yaml.safe_load((ROOT/'config/EVfloor9_formation_aligned.yaml').read_text())
+    assert all(metadata[k]==old_metadata[k] for k in ('origin','resolution','negate','occupied_thresh','free_thresh'))
+
+
 @pytest.mark.parametrize('robot',ROBOTS)
-def test_every_robot_rejects_stair_goal_even_with_completely_clear_lidar_costmaps(robot):
-    n=node_with_protected_map()
+def test_every_robot_rejects_stair_goal_even_with_completely_clear_lidar_costmaps(robot,protected_map):
+    n=protected_map
     assert not Controller.feasible(n,robot,(41.9142866,-.682685,0.),peers=False)
     assert Controller.feasible(n,robot,(35.,-1.2,0.),peers=False)
 
 
 @pytest.mark.parametrize('robot',ROBOTS)
-def test_static_velocity_gate_blocks_entry_through_open_door_including_reverse(robot):
-    n=node_with_protected_map()
+def test_static_velocity_gate_blocks_entry_through_open_door_including_reverse(robot,protected_map):
+    n=protected_map
     # A small footprint fits the doorway geometrically; the mapped hazard still
     # rejects entry. Use both signed velocities to test reverse maneuvers too.
     n.polygons[robot]=[(-.1,-.1),(-.1,.1),(.1,.1),(.1,-.1)]
@@ -72,8 +88,8 @@ def test_static_velocity_gate_blocks_entry_through_open_door_including_reverse(r
     assert not Controller.static_motion_safe(n,robot,(36.8,-1.2,0.),(.1,0.))
 
 
-def test_auxiliary_reverse_overlap_recovery_cannot_enter_stair_exclusion():
-    n=node_with_protected_map();robot='tb4'
+def test_auxiliary_reverse_overlap_recovery_cannot_enter_stair_exclusion(protected_map):
+    n=protected_map;robot='tb4'
     n.polygons[robot]=[(-.1,-.1),(-.1,.1),(.1,.1),(.1,-.1)]
     n.radii={robot:.15};n.obstacle_recoveries={robot:{'mode':'escape'}}
     n.grids[f'/{robot}/global_costmap/costmap']=n.grids['/map']

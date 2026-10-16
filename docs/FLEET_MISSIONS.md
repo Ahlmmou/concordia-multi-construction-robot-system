@@ -602,7 +602,13 @@ make the group split. Once clear, each auxiliary resumes its formation target.
 
 ### Stairwell exclusion
 
-The default shared map is `config/EVfloor9_stairs_keepout.yaml`. It fills the
+The default shared map is `config/EVfloor9_formation_aligned.yaml`. It uses the
+GIMP map aligned to the fixed Gazebo reference, with the existing stairwell
+exclusion retained. The standalone RViz launcher displays the running map server's
+`/map`; starting RViz alone does not start or reload the map server. Both formation
+and shared navigation launches default to this map unless `map_yaml` is overridden.
+
+The original protected map, `config/EVfloor9_stairs_keepout.yaml`, fills the
 enclosed stairwell containing tb4's former goal at (41.9143, -0.6827), including
 the doorway between (37.8, -0.67) and (37.8, -1.8). The enclosed interior is
 about 25.28 m². The original `EVfloor9_outer_only` map remains unchanged.
@@ -617,6 +623,7 @@ Regenerate the protected image from the documented enclosure reference with:
 
 ```bash
 python3 scripts/generate_stair_keepout.py --spec config/stair_keepout.yaml
+python3 scripts/generate_aligned_formation_map.py
 ```
 
 The generator seals the approximate door endpoints into the existing walls and
