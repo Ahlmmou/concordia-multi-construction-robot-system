@@ -604,7 +604,11 @@ make the group split. Once clear, each auxiliary resumes its formation target.
 
 The default shared map is `config/EVfloor9_formation_aligned.yaml`. It uses the
 GIMP map aligned to the fixed Gazebo reference, with the existing stairwell
-exclusion retained. The standalone RViz launcher displays the running map server's
+exclusion retained and six traced elevator shafts in front of the stair entrance.
+The elevator wall layer is `config/EVfloor9_elevator_walls.png`; its unequal shaft
+shapes and shared partitions are included by the aligned-map generator, while
+the passage between the two banks remains clear.
+The standalone RViz launcher displays the running map server's
 `/map`; starting RViz alone does not start or reload the map server. Both formation
 and shared navigation launches default to this map unless `map_yaml` is overridden.
 

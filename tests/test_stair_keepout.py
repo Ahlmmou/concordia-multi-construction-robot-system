@@ -66,6 +66,25 @@ def test_aligned_map_keeps_reference_walls_and_all_existing_stair_exclusion_cell
     assert all(metadata[k]==old_metadata[k] for k in ('origin','resolution','negate','occupied_thresh','free_thresh'))
 
 
+def test_six_elevator_shafts_are_enclosed_and_the_passage_remains_clear():
+    from scipy.ndimage import label
+    _,_,result=build_aligned(ROOT/'config')
+    crop=result[1490:1930,2420:2870]
+    regions,_=label(crop>200)
+    shafts=[(2530,1580),(2650,1580),(2800,1580),
+            (2550,1830),(2660,1830),(2780,1830)]
+    ids={regions[y-1490,x-2420] for x,y in shafts}
+    assert len(ids)==6 and 0 not in ids
+    edge_ids=set(np.concatenate((regions[0],regions[-1],regions[:,0],regions[:,-1])))
+    assert ids.isdisjoint(edge_ids)
+    assert np.all(result[1660:1750,2500:2800]==255)
+    walls=np.array(Image.open(ROOT/'config/EVfloor9_elevator_walls.png').convert('RGBA'))
+    occupied=(walls[:,:,3]>=128)&(walls[:,:,:3].max(axis=2)<90)
+    assert np.all(result[occupied]==0)
+    y,x=np.where(occupied)
+    assert x.min()>=2480 and x.max()<=2845 and y.min()>=1520 and y.max()<=1905
+
+
 @pytest.mark.parametrize('robot',ROBOTS)
 def test_every_robot_rejects_stair_goal_even_with_completely_clear_lidar_costmaps(robot,protected_map):
     n=protected_map

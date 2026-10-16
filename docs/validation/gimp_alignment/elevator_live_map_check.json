@@ -1,0 +1,82 @@
+{
+  "topics": {
+    "/tb3/global_costmap/costmap": {
+      "shape": [
+        2980,
+        4215
+      ],
+      "resolution": 0.025512002408504486,
+      "origin": [
+        -36.748513534724125,
+        -33.690327890042596
+      ],
+      "wall_cells": 16652,
+      "all_elevator_walls_occupied": true,
+      "matches_export": false,
+      "frame": "map"
+    },
+    "/tb5/global_costmap/costmap": {
+      "shape": [
+        2980,
+        4215
+      ],
+      "resolution": 0.025512002408504486,
+      "origin": [
+        -36.748513534724125,
+        -33.690327890042596
+      ],
+      "wall_cells": 16652,
+      "all_elevator_walls_occupied": true,
+      "matches_export": false,
+      "frame": "map"
+    },
+    "/tb1/global_costmap/costmap": {
+      "shape": [
+        2980,
+        4215
+      ],
+      "resolution": 0.025512002408504486,
+      "origin": [
+        -36.748513534724125,
+        -33.690327890042596
+      ],
+      "wall_cells": 16652,
+      "all_elevator_walls_occupied": true,
+      "matches_export": false,
+      "frame": "map"
+    },
+    "/map": {
+      "shape": [
+        2980,
+        4215
+      ],
+      "resolution": 0.025512002408504486,
+      "origin": [
+        -36.748513534724125,
+        -33.690327890042596
+      ],
+      "wall_cells": 16652,
+      "all_elevator_walls_occupied": true,
+      "matches_export": true,
+      "frame": "map"
+    },
+    "/tb2/global_costmap/costmap": {
+      "shape": [
+        2980,
+        4215
+      ],
+      "resolution": 0.025512002408504486,
+      "origin": [
+        -36.748513534724125,
+        -33.690327890042596
+      ],
+      "wall_cells": 16652,
+      "all_elevator_walls_occupied": true,
+      "matches_export": false,
+      "frame": "map"
+    }
+  },
+  "clock_start": 182.4,
+  "clock_end": 212.3,
+  "simulation_clock_advancing": true
+}
